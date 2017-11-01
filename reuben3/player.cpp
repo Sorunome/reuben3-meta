@@ -35,7 +35,7 @@ void Player::focus() {
 	camera.centerOn(x + 4, y + 4);
 }
 
-bool Player::isWalkable(int8_t dx, int8_t dy) {
+bool Player::isWalkable(float dx, float dy) {
 	int8_t _x = (x + dx) / 8;
 	int8_t _y = (y + dy) / 8;
 	if (_x < 0 || _y < 0 || _x > 11 || _y > 7) {
@@ -49,38 +49,46 @@ void Player::update() {
 	/*
 	 *  The player has a 4x4 hitbox on the bottom
 	 */
+	int8_t _dx = gb.buttons.repeat(BUTTON_RIGHT, 0) - gb.buttons.repeat(BUTTON_LEFT, 0);
+	int8_t _dy = gb.buttons.repeat(BUTTON_DOWN, 0) - gb.buttons.repeat(BUTTON_UP, 0);
+	if (!_dx && !_dy) {
+		// nothing to do
+		return;
+	}
+	float v = 1.5f;
+	if (_dx && _dy) {
+		v *= 0.707f; // 1/sqrt(2)
+	}
+	float dx = _dx*v;
+	float dy = _dy*v;
+	float _x = x;
+	float _y = y;
+	if (dx) {
+		if (isWalkable(2 + dx, 4) && isWalkable(2 + dx, 7) && isWalkable(5 + dx, 4) && isWalkable(5 + dx, 7)) {
+			x += dx;
+		}
+	}
+	if (dy) {
+		if (isWalkable(2, 4 + dy) && isWalkable(5, 4 + dy) && isWalkable(2, 7 + dy) && isWalkable(5, 7 + dy)) {
+			y += dy;
+		}
+	}
+	if (x < -2) {
+		board.scrollLeft();
+		return;
+	}
+	if (x >= 11*8 + 2) {
+		board.scrollRight();
+		return;
+	}
+	if (y < -2) {
+		board.scrollUp();
+		return;
+	}
 	
-	if (gb.buttons.repeat(BUTTON_LEFT, 0)) {
-		if (isWalkable(1, 4) && isWalkable(1, 7)) {
-			x--;
-			if (x < -2) {
-				board.scrollLeft();
-			}
-		}
-	}
-	if (gb.buttons.repeat(BUTTON_RIGHT, 0)) {
-		if (isWalkable(6, 4) && isWalkable(6, 7)) {
-			x++;
-			if (x >= 11*8 + 2) {
-				board.scrollRight();
-			}
-		}
-	}
-	if (gb.buttons.repeat(BUTTON_UP, 0)) {
-		if (isWalkable(2, 3) && isWalkable(5, 3)) {
-			y--;
-			if (y < -2) {
-				board.scrollUp();
-			}
-		}
-	}
-	if (gb.buttons.repeat(BUTTON_DOWN, 0)) {
-		if (isWalkable(2, 8) && isWalkable(5, 8)) {
-			y++;
-			if (y >= 7*8 + 2) {
-				board.scrollDown();
-			}
-		}
+	if (y >= 7*8 + 2) {
+		board.scrollDown();
+		return;
 	}
 	focus();
 }

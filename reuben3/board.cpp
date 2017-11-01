@@ -51,7 +51,6 @@ void Board::scrollLeft() {
 	// scroll animation
 	
 	for (uint8_t i = 0; i < 12; i++) {
-		while(!gb.update());
 		for (uint8_t y = 0; y < height; y++) {
 			for (uint8_t x = 0; x < width; x++) {
 				if (i <= x) {
@@ -68,8 +67,8 @@ void Board::scrollLeft() {
 		player.moveX(i*8);
 		player.render();
 		camera.moveTo(camera.x + 2, camera.y);
+		while(!gb.update());
 	}
-	while(!gb.update());
 	
 	postload();
 	player.moveX(width*8 - 8);
@@ -83,7 +82,6 @@ void Board::scrollRight() {
 	// scroll animation
 	
 	for (int8_t i = 11; i >= 0; i--) {
-		while(!gb.update());
 		for (uint8_t y = 0; y < height; y++) {
 			for (uint8_t x = 0; x < width; x++) {
 				if (i > x) {
@@ -100,8 +98,8 @@ void Board::scrollRight() {
 		player.moveX(i*8);
 		player.render();
 		camera.moveTo(camera.x - 2, camera.y);
+		while(!gb.update());
 	}
-	while(!gb.update());
 	
 	postload();
 	player.moveX(0);
@@ -114,7 +112,6 @@ void Board::scrollUp() {
 	// scroll animation
 	
 	for (uint8_t i = 0; i < 8; i++) {
-		while(!gb.update());
 		for (uint8_t y = 0; y < height; y++) {
 			for (uint8_t x = 0; x < width; x++) {
 				if (i <= y) {
@@ -130,8 +127,8 @@ void Board::scrollUp() {
 		}
 		player.moveY(i*8);
 		player.render();
+		while(!gb.update());
 	}
-	while(!gb.update());
 	
 	postload();
 	player.moveY(height*8 - 8);
@@ -143,7 +140,6 @@ void Board::scrollDown() {
 	// scroll animation
 	
 	for (int8_t i = 7; i >= 0; i--) {
-		while(!gb.update());
 		for (uint8_t y = 0; y < height; y++) {
 			for (uint8_t x = 0; x < width; x++) {
 				if (i > y) {
@@ -159,8 +155,8 @@ void Board::scrollDown() {
 		}
 		player.moveY(i*8);
 		player.render();
+		while(!gb.update());
 	}
-	while(!gb.update());
 	
 	postload();
 	player.moveY(0);

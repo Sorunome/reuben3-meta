@@ -4,9 +4,9 @@
 
 class Player {
 	private:
-		int8_t x = 0;
-		int8_t y = 0;
-		bool isWalkable(int8_t dx, int8_t dy);
+		float x = 0;
+		float y = 0;
+		bool isWalkable(float dx, float dy);
 	public:
 		void moveTo(int8_t _x, int8_t _y);
 		void moveX(int8_t _x);

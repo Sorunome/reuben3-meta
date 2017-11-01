@@ -23,7 +23,7 @@ void loop() {
 	
 	board.render();
 	player.render();
-//	gb.display.setCursor(0, 0);
-//	gb.display.setColor(BLACK, WHITE);
-//	gb.display.print(gb.getCpuLoad());
+	gb.display.setCursor(0, 0);
+	gb.display.setColor(BLACK, WHITE);
+	gb.display.print(gb.getCpuLoad());
 }
