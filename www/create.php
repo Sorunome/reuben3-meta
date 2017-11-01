@@ -6,6 +6,7 @@ if((!$security->isLoggedIn() || !($user_info['power']&32)) && $_GET['pwd']!='voh
 }
 $sql->switchDb('soru_reuben3_meta');
 include_once(realpath(dirname(__FILE__)).'/functions.php');
+include_once(realpath(dirname(__FILE__)).'/script.php');
 
 chdir(realpath(dirname(__FILE__)));
 
