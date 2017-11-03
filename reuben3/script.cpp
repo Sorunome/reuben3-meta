@@ -3,12 +3,13 @@
 #include <Gamebuino-Meta.h>
 #include "player.h"
 #include "camera.h"
+#include "board.h"
 
 #define SCRIPT_NOP 0x00
 #define SCRIPT_FADE_TO_WHITE 0x01
 #define SCRIPT_FADE_FROM_WHITE 0x02
-#define SCRIPT_SET_MAP 0x03
-#define SCRIPT_TEXT 0x04
+#define SCRIPT_TRANSITION_MAP_AND_WORLD 0x03
+#define SCRIPT_TRANSITION_MAP 0x04
 #define SCRIPT_ADD_ENEMY 0x05
 #define SCRIPT_FOCUS_CAM 0x06
 #define SCRIPT_UPDATE_SCREEN 0x07
@@ -52,16 +53,17 @@ uint8_t* Script::getVar() {
 	}
 }
 
-void Script::getNum(uint8_t* var) {
-	*var = *script++;
-	if (*var == 0x80) {
-		*var = *script;
-		if (*var == 0x80) {
-			script++;
-			return;
-		}
-		*var = *getVar();
+uint8_t Script::getNum() {
+	uint8_t i = *script++;
+	if (i != 0x80) {
+		return i;
 	}
+	i = *script;
+	if (i == 0x80) {
+		script++;
+		return i;
+	}
+	return *getVar();
 }
 
 void Script::jump() {
@@ -76,13 +78,13 @@ void Script::jump() {
 bool Script::condition() {
 	switch(*script++) {
 		case SCRIPT_LT:
-			uint8_t i;
-			uint8_t j;
-			getNum(&i);
-			getNum(&j);
-			return i < j;
+			return getNum() < getNum();
 	}
 	return false;
+}
+
+bool Script::run(const uint8_t* _script) {
+	return run((uint8_t*) _script);
 }
 
 bool Script::run(uint8_t* _script) {
@@ -94,9 +96,15 @@ bool Script::run(uint8_t* _script) {
 				continue;
 			case SCRIPT_FADE_FROM_WHITE:
 				continue;
-			case SCRIPT_SET_MAP:
-				continue;
-			case SCRIPT_TEXT:
+			case SCRIPT_TRANSITION_MAP_AND_WORLD:
+				board.setWorld(getNum());
+				// no continue as from now on it is the same as just setting the map
+			case SCRIPT_TRANSITION_MAP:
+				board.load(getNum());
+				// TODO: neat transitions
+				board.postload();
+				player.moveTo(getNum(), getNum());
+				player.focus();
 				continue;
 			case SCRIPT_ADD_ENEMY:
 				continue;
@@ -106,7 +114,8 @@ bool Script::run(uint8_t* _script) {
 			case SCRIPT_UPDATE_SCREEN:
 				continue;
 			case SCRIPT_SET_VAR:
-				getNum(getVar());
+				ptr = getVar();
+				*ptr = getNum();
 				continue;
 			case SCRIPT_JUMP:
 				jump();
@@ -126,10 +135,8 @@ bool Script::run(uint8_t* _script) {
 				script += 4;
 				continue;
 			case SCRIPT_ADD:
-				uint8_t i;
 				ptr = getVar();
-				getNum(&i);
-				*ptr += i;
+				*ptr += getNum();
 				continue;
 			case SCRIPT_INC:
 				(*getVar())++;

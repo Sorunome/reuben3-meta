@@ -9,10 +9,21 @@ struct Tilemaps_Data {
 	const uint8_t* block;
 };
 
+struct Actiontiles_LUT {
+	const uint8_t offset;
+	const uint8_t* script;
+};
+
+struct Actiontiles_LUTLUT {
+	const uint8_t mapId;
+	const uint8_t amount;
+	const Actiontiles_LUT* lut;
+};
+
 struct World_Data {
 	const Tilemaps_Data* maps;
 	const uint8_t a;
-	const uint8_t b;
+	const Actiontiles_LUTLUT* actionTiles;
 };
 
 class Board {
@@ -29,11 +40,13 @@ class Board {
 		void scrollRight();
 		void scrollUp();
 		void scrollDown();
+		void setWorld(uint8_t _world);
 		void load(uint8_t _world, uint8_t _map);
 		void load(uint8_t _map);
 		void postload();
 		void render();
 		uint16_t getTile(uint8_t x, uint8_t y);
+		void runScript(uint8_t x, uint8_t y, uint8_t trigger);
 };
 
 extern Board board;

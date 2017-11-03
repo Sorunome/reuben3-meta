@@ -2,17 +2,19 @@
 #define _SCRIPT_H_
 
 #include <Arduino.h>
+#include "data/defines.h"
 
 class Script {
 	private:
-		int8_t vars[10]; // SCRIPT_NUM_VARS
+		int8_t vars[SCRIPT_NUM_VARS];
 		bool condition();
 		uint8_t* getVar();
-		void getNum(uint8_t* var);
+		uint8_t getNum();
 		void jump();
 		uint8_t* script;
 		uint8_t* script_entry;
 	public:
+		bool run(const uint8_t* _script);
 		bool run(uint8_t* _script);
 };
 

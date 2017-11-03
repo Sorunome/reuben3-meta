@@ -1,9 +1,9 @@
 <?php
 
-$defines['script_num_vars'] = 1;
-
+if (!function_exists('dechexpad')) {
 function dechexpad($i, $size){
 	return str_pad(dechex($i),$size,'0',STR_PAD_LEFT);
+}
 }
 
 class Parser{
@@ -42,7 +42,7 @@ class Parser{
 		if(($i = array_search($var,$this->extra_vars)) !== false){
 			return dechexpad(0xFF - $i, 2);
 		}
-		var_dump("._:");
+		return false;
 	}
 	private function getVar($var){
 		if(($s = $this->getVarNum($var))){
@@ -58,6 +58,7 @@ class Parser{
 		return dechexpad($var, 2);
 	}
 	private function parseLine($line,$convertToBytes = true){
+		global $defines;
 		$out = '';
 		$line = trim($line);
 		$matches = [];
@@ -69,10 +70,10 @@ class Parser{
 		if(isset($matches[2])){
 			preg_match_all('/(?:\\(|,)([^(),]*(?:\\([^)]+[^),]*\\))?)/',$matches[2],$matches,PREG_SET_ORDER);
 			foreach($matches as $m){
-				$m[1] = strtr($m[1],$this->defines);
-				if(isset($this->functions[$function]) && isset($this->functions[$function]['unparsed_args']) && $this->functions[$function]['unparsed_args']){
-				}else{
-					if(preg_match('/^[\d\s*+\\/\\-()]+$/',$m[1])){
+				if (isset($this->functions[$function]) && isset($this->functions[$function]['unparsed_args']) && $this->functions[$function]['unparsed_args']) {
+				} else {
+					$m[1] = strtr(trim($m[1]), $this->defines);
+					if (preg_match('/^[\d\s*+\\/\\-()a-eA-Exo ]+$/', $m[1]) && !preg_match('/^[a-eA-Exo]+$/', $m[1])) {
 						$m[1] = eval("return $m[1];");
 					}
 				}
@@ -108,11 +109,20 @@ class Parser{
 					return '02';
 				}
 			],
-			'set_map' => [
-				'args_min' => 1,
-				'args_max' => 1,
+			'transition_map' => [
+				'args_min' => 3,
+				'args_max' => 4,
 				'fn' => function($args){
-					return '03'.$this->getVar($args[0]);
+					$s = '';
+					if (sizeof($args) == 4) {
+						$s = '03';
+					} else {
+						$s = '04';
+					}
+					foreach($args as $a) {
+						$s .= $this->getVar($a);
+					}
+					return $s;
 				}
 			],
 			'focus_cam' => [
@@ -134,7 +144,6 @@ class Parser{
 				'args_max' => 2,
 				'fn' => function($args){
 					$s = '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
-					var_dump($s);
 					return '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
 				}
 			],
@@ -439,6 +448,9 @@ class Parser{
 			$this->bytes = strlen($out);
 		}
 		global $defines;
+		if (!isset($defines['script_num_vars'])) {
+			$defines['script_num_vars'] = 1;
+		}
 		if(sizeof($this->variables) > $defines['script_num_vars']){
 			$defines['script_num_vars'] = sizeof($this->variables);
 		}

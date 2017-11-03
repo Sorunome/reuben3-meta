@@ -5,6 +5,7 @@
 
 #include "depack.h"
 #include "player.h"
+#include "script.h"
 
 
 #include "data/defines.h"
@@ -13,6 +14,10 @@
 const uint16_t mapsize_bytes = 12*8*2;
 
 uint8_t decompression_buffer[mapsize_bytes*8];
+
+void Board::setWorld(uint8_t _world) {
+	worldId = _world;
+}
 
 void Board::load(uint8_t _world, uint8_t _map) {
 	worldId = _world;
@@ -46,7 +51,6 @@ uint16_t Board::getTile(uint8_t x, uint8_t y) {
 
 void Board::scrollLeft() {
 	mapId--;
-	player.moveX(0);
 	load();
 	// scroll animation
 	
@@ -77,7 +81,6 @@ void Board::scrollLeft() {
 
 void Board::scrollRight() {
 	mapId++;
-	player.moveX(width*8 - 8);
 	load();
 	// scroll animation
 	
@@ -107,7 +110,6 @@ void Board::scrollRight() {
 
 void Board::scrollUp() {
 	mapId -= TILEMAPS_WIDTH;
-	player.moveY(0);
 	load();
 	// scroll animation
 	
@@ -169,6 +171,34 @@ void Board::render() {
 			sprites.setFrame(board[y*width + x]);
 			gb.display.drawImage(x*8 - camera.x, y*8 - camera.y, sprites);
 		}
+	}
+}
+
+void Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
+	uint8_t amount = 0;
+	uint8_t i = 0;
+	uint8_t offset = y*12 + x;
+	
+	while(1) {
+		uint8_t id = worlds[worldId].actionTiles[i].mapId;
+		if (id == mapId) {
+			amount = worlds[worldId].actionTiles[i].amount;
+			if (!amount) {
+				return;
+			}
+			const Actiontiles_LUT* lut = worlds[worldId].actionTiles[i].lut;
+			for (i = 0; i < amount; i++) {
+				if (lut[i].offset == offset) {
+					script.run(lut[i].script);
+					return;
+				}
+			}
+			return;
+		}
+		if (id == 0xFF) {
+			return;
+		}
+		i++;
 	}
 }
 

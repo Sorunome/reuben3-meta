@@ -448,7 +448,7 @@ if(isset($_GET['getData'])){
 																$('<span>').text(v)
 															]
 														}),'<br>',
-														$('<label>').append('Add Jump: ',$('<input>').attr('type','checkbox').attr(parseInt(newTile.add_jump,10)?'checked':'false','checked').change(function(e){
+														$('<label>').append('Add Return: ',$('<input>').attr('type','checkbox').attr(parseInt(newTile.add_jump,10)?'checked':'false','checked').change(function(e){
 															newTile.add_jump = this.checked?1:0;
 														})),'<br>',
 														$('<textarea>').val(newTile.code).keydown(function(e){

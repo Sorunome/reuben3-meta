@@ -1,4 +1,2447 @@
 /* tilemap data */
+const uint8_t event_tile_routine_1[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_2[] = {
+	0x03, 0x05, 0x56, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_3[] = {
+	0x03, 0x05, 0x55, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_4[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_6[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_8[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_9[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_11[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_12[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_13[] = {
+	0x03, 0x05, 0x44, 0x38, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_14[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_16[] = {
+	0x03, 0x05, 0x46, 0x40, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_17[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_18[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_20[] = {
+	0x03, 0x05, 0x54, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_21[] = {
+	0x03, 0x05, 0x43, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_31[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_41[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_42[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_44[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_46[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_47[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_48[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_49[] = {
+	0x03, 0x05, 0x36, 0x48, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_54[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_55[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_57[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_58[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_59[] = {
+	0x03, 0x04, 0x34, 0x2c, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_60[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_61[] = {
+	0x03, 0x00, 0x57, 0x40, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_62[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_63[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_64[] = {
+	0x03, 0x00, 0x4e, 0x38, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_65[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_66[] = {
+	0x03, 0x00, 0x5e, 0x28, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_67[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_68[] = {
+	0x03, 0x00, 0x5e, 0x18, 0x38, 0xff, 
+};
+const uint8_t event_tile_routine_69[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_70[] = {
+	0x03, 0x00, 0x5d, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_71[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_72[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_73[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_74[] = {
+	0x03, 0x00, 0x6e, 0x30, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_75[] = {
+	0x11, 0x11, 0xff, 
+};
+const uint8_t event_tile_routine_76[] = {
+	0x03, 0x00, 0x7e, 0x20, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_77[] = {
+	0x03, 0x00, 0x48, 0x48, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_78[] = {
+	0x03, 0x05, 0x35, 0x48, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_79[] = {
+	0x03, 0x00, 0x48, 0x38, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_80[] = {
+	0x03, 0x05, 0x33, 0x10, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_81[] = {
+	0x03, 0x05, 0x34, 0x38, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_82[] = {
+	0x03, 0x00, 0x48, 0x40, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_83[] = {
+	0x03, 0x00, 0x48, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_84[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_85[] = {
+	0x03, 0x00, 0x38, 0x40, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_86[] = {
+	0x03, 0x05, 0x26, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_87[] = {
+	0x03, 0x00, 0x38, 0x00, 0x38, 0xff, 
+};
+const uint8_t event_tile_routine_88[] = {
+	0x03, 0x05, 0x25, 0x38, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_89[] = {
+	0x03, 0x05, 0x16, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_90[] = {
+	0x03, 0x05, 0x15, 0x40, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_91[] = {
+	0x03, 0x00, 0x47, 0x48, 0x38, 0xff, 
+};
+const uint8_t event_tile_routine_92[] = {
+	0x03, 0x00, 0x48, 0x00, 0x38, 0xff, 
+};
+const uint8_t event_tile_routine_93[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_94[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_95[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_96[] = {
+	0x03, 0x05, 0x14, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_97[] = {
+	0x03, 0x05, 0x23, 0x10, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_98[] = {
+	0x03, 0x06, 0x37, 0x20, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_99[] = {
+	0x03, 0x00, 0x47, 0x38, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_101[] = {
+	0x03, 0x05, 0x23, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_103[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_104[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_105[] = {
+	0x03, 0x00, 0x67, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_106[] = {
+	0x03, 0x05, 0x13, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_107[] = {
+	0x03, 0x00, 0x67, 0x48, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_108[] = {
+	0x03, 0x05, 0x06, 0x38, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_109[] = {
+	0x03, 0x00, 0x58, 0x30, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_111[] = {
+	0x03, 0x05, 0x03, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_112[] = {
+	0x03, 0x05, 0x04, 0x40, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_113[] = {
+	0x03, 0x00, 0x58, 0x48, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_114[] = {
+	0x03, 0x00, 0x68, 0x48, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_116[] = {
+	0x03, 0x05, 0x32, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_117[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_118[] = {
+	0x03, 0x00, 0x68, 0x10, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_120[] = {
+	0x03, 0x05, 0x22, 0x18, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_121[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_122[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_123[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_125[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_126[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_127[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_128[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_129[] = {
+	0x11, 0x11, 0xff, 
+};
+const uint8_t event_tile_routine_130[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_131[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_132[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_133[] = {
+	0x11, 0x11, 0xff, 
+};
+const uint8_t event_tile_routine_134[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_135[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_136[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_137[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_138[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_139[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_140[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_141[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_142[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_143[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_144[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_145[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_146[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_147[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_148[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_149[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_150[] = {
+	0x03, 0x04, 0x13, 0x50, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_152[] = {
+	0x03, 0x04, 0x25, 0x50, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_153[] = {
+	0x03, 0x06, 0x56, 0x58, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_154[] = {
+	0x03, 0x04, 0x22, 0x50, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_155[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_156[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_157[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_158[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_159[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_161[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_162[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_163[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_164[] = {
+	0x03, 0x04, 0x21, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_165[] = {
+	0x03, 0x04, 0x20, 0x38, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_166[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_167[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_169[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_170[] = {
+	0x03, 0x04, 0x54, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_171[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_172[] = {
+	0x03, 0x04, 0x24, 0x2c, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_173[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_174[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_175[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_176[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_177[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_178[] = {
+	0x03, 0x01, 0x53, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_179[] = {
+	0x03, 0x00, 0x00, 0x38, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_180[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_181[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_184[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_185[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_186[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_187[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_188[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_189[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_190[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_191[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_193[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_194[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_196[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_198[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_199[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_200[] = {
+	0x03, 0x05, 0x53, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_201[] = {
+	0x03, 0x00, 0x0e, 0x48, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_202[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_203[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_204[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_205[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_206[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_207[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_208[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_209[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_212[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_213[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_214[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_215[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_216[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_217[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_218[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_219[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_220[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_221[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_222[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_224[] = {
+	0x03, 0x03, 0x24, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_225[] = {
+	0x03, 0x00, 0xb9, 0x48, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_227[] = {
+	0x03, 0x03, 0x00, 0x28, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_228[] = {
+	0x03, 0x00, 0xa8, 0x28, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_229[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_231[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_232[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_233[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_234[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_235[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_236[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_237[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_238[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_239[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_240[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_241[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_242[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_243[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_244[] = {
+	0x03, 0x00, 0xa9, 0x38, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_245[] = {
+	0x03, 0x05, 0x52, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_246[] = {
+	0x03, 0x00, 0xa9, 0x18, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_248[] = {
+	0x03, 0x05, 0x42, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_250[] = {
+	0x03, 0x00, 0xa8, 0x58, 0x38, 0xff, 
+};
+const uint8_t event_tile_routine_251[] = {
+	0x03, 0x05, 0x51, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_252[] = {
+	0x03, 0x00, 0x6c, 0x18, 0x38, 0xff, 
+};
+const uint8_t event_tile_routine_253[] = {
+	0x03, 0x05, 0x41, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_254[] = {
+	0x03, 0x05, 0x31, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_255[] = {
+	0x03, 0x00, 0x6c, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_256[] = {
+	0x03, 0x00, 0x7c, 0x20, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_257[] = {
+	0x03, 0x05, 0x21, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_258[] = {
+	0x03, 0x00, 0x6b, 0x50, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_259[] = {
+	0x03, 0x05, 0x12, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_260[] = {
+	0x03, 0x06, 0x36, 0x38, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_262[] = {
+	0x03, 0x05, 0x21, 0x48, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_263[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_264[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_265[] = {
+	0x03, 0x06, 0x27, 0x18, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_266[] = {
+	0x03, 0x06, 0x27, 0x48, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_267[] = {
+	0x03, 0x00, 0x5c, 0x10, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_268[] = {
+	0x03, 0x00, 0x5b, 0x58, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_269[] = {
+	0x03, 0x06, 0x38, 0x30, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_270[] = {
+	0x03, 0x06, 0x19, 0x38, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_271[] = {
+	0x03, 0x06, 0x39, 0x28, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_272[] = {
+	0x03, 0x00, 0x4d, 0x10, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_274[] = {
+	0x03, 0x06, 0x44, 0x28, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_275[] = {
+	0x03, 0x06, 0x18, 0x20, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_276[] = {
+	0x03, 0x06, 0x29, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_277[] = {
+	0x03, 0x06, 0x55, 0x38, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_278[] = {
+	0x03, 0x06, 0x23, 0x28, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_279[] = {
+	0x03, 0x06, 0x43, 0x28, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_280[] = {
+	0x03, 0x00, 0x5c, 0x58, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_281[] = {
+	0x03, 0x06, 0x54, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_283[] = {
+	0x03, 0x00, 0x5c, 0x28, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_284[] = {
+	0x03, 0x06, 0x33, 0x28, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_285[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_286[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_287[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_289[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_290[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_291[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_292[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_293[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_294[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_295[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_296[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_297[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_298[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_299[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_300[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_301[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_302[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_303[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_304[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_305[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_306[] = {
+	0x03, 0x08, 0x45, 0x2c, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_308[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_309[] = {
+	0x03, 0x07, 0x14, 0x18, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_310[] = {
+	0x03, 0x08, 0x21, 0x30, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_311[] = {
+	0x03, 0x08, 0x34, 0x18, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_312[] = {
+	0x03, 0x08, 0x36, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_313[] = {
+	0x03, 0x08, 0x32, 0x38, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_314[] = {
+	0x03, 0x08, 0x16, 0x50, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_315[] = {
+	0x03, 0x08, 0x36, 0x50, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_316[] = {
+	0x03, 0x08, 0x06, 0x28, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_317[] = {
+	0x03, 0x08, 0x26, 0x28, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_318[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_319[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_320[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_321[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_322[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_323[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_324[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_325[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_326[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_327[] = {
+	0x03, 0x07, 0x56, 0x38, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_328[] = {
+	0x03, 0x05, 0x11, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_329[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_330[] = {
+	0x03, 0x07, 0x69, 0x18, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_333[] = {
+	0x03, 0x05, 0x02, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_334[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_335[] = {
+	0x03, 0x05, 0x01, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_336[] = {
+	0x03, 0x07, 0x17, 0x48, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_338[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_340[] = {
+	0x03, 0x07, 0x07, 0x18, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_341[] = {
+	0x03, 0x05, 0x00, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_342[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_343[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_344[] = {
+	0x03, 0x06, 0x31, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_345[] = {
+	0x03, 0x07, 0x27, 0x20, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_346[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_348[] = {
+	0x03, 0x00, 0x59, 0x40, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_349[] = {
+	0x03, 0x06, 0x05, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_350[] = {
+	0x03, 0x06, 0x04, 0x30, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_351[] = {
+	0x03, 0x00, 0x49, 0x40, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_352[] = {
+	0x03, 0x06, 0x14, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_353[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_354[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_355[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_356[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_357[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_358[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_359[] = {
+	0x03, 0x07, 0x07, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_360[] = {
+	0x03, 0x05, 0x10, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_361[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_362[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_363[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_364[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_366[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_367[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_368[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_369[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_370[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_371[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_372[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_373[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_374[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_375[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_376[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_378[] = {
+	0x03, 0x00, 0xc5, 0x20, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_379[] = {
+	0x03, 0x06, 0x74, 0x20, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_381[] = {
+	0x03, 0x00, 0xa4, 0x18, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_382[] = {
+	0x03, 0x06, 0x53, 0x20, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_383[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_384[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_385[] = {
+	0x03, 0x00, 0xb7, 0x08, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_389[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_390[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_391[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_392[] = {
+	0x03, 0x05, 0x20, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_394[] = {
+	0x03, 0x00, 0xa4, 0x38, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_395[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_396[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_397[] = {
+	0x03, 0x00, 0x55, 0x48, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_399[] = {
+	0x03, 0x05, 0x30, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_400[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_401[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_402[] = {
+	0x03, 0x06, 0x62, 0x30, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_403[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_404[] = {
+	0x03, 0x05, 0x20, 0x50, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_405[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_407[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_418[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_420[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_421[] = {
+	0x03, 0x00, 0x73, 0x20, 0x38, 0xff, 
+};
+const uint8_t event_tile_routine_423[] = {
+	0x03, 0x05, 0x40, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_424[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_425[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_427[] = {
+	0x03, 0x00, 0x71, 0x28, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_428[] = {
+	0x03, 0x09, 0x91, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_429[] = {
+	0x03, 0x09, 0x81, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_430[] = {
+	0x03, 0x09, 0x81, 0x20, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_431[] = {
+	0x03, 0x09, 0x71, 0x20, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_432[] = {
+	0x03, 0x09, 0x61, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_433[] = {
+	0x03, 0x09, 0x71, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_434[] = {
+	0x03, 0x09, 0x61, 0x20, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_435[] = {
+	0x03, 0x09, 0x51, 0x20, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_436[] = {
+	0x03, 0x09, 0x21, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_437[] = {
+	0x03, 0x09, 0x70, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_438[] = {
+	0x03, 0x09, 0x51, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_440[] = {
+	0x03, 0x09, 0x70, 0x20, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_442[] = {
+	0x03, 0x09, 0x21, 0x20, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_443[] = {
+	0x03, 0x09, 0x60, 0x30, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_444[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_445[] = {
+	0x03, 0x09, 0x14, 0x18, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_447[] = {
+	0x03, 0x09, 0x64, 0x28, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_448[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_449[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_450[] = {
+	0x03, 0x09, 0x91, 0x18, 0x18, 0xff, 
+};
+const uint8_t event_tile_routine_451[] = {
+	0x03, 0x09, 0x04, 0x08, 0x10, 0xff, 
+};
+const uint8_t event_tile_routine_453[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_454[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_455[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_456[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_457[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_458[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_459[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_461[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_462[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_463[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_464[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_465[] = {
+	0x03, 0x07, 0x31, 0x28, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_466[] = {
+	0x03, 0x0a, 0x81, 0x28, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_467[] = {
+	0x03, 0x0a, 0x91, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_468[] = {
+	0x03, 0x0a, 0x81, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_469[] = {
+	0x03, 0x0a, 0x71, 0x20, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_470[] = {
+	0x03, 0x0a, 0x81, 0x20, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_471[] = {
+	0x03, 0x0a, 0x61, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_472[] = {
+	0x03, 0x0a, 0x71, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_473[] = {
+	0x03, 0x0a, 0x61, 0x20, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_474[] = {
+	0x03, 0x0a, 0x51, 0x20, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_475[] = {
+	0x03, 0x0a, 0x21, 0x30, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_476[] = {
+	0x03, 0x0a, 0x51, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_477[] = {
+	0x03, 0x0a, 0x21, 0x20, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_478[] = {
+	0x03, 0x0a, 0x70, 0x20, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_479[] = {
+	0x03, 0x0a, 0x60, 0x30, 0x20, 0xff, 
+};
+const uint8_t event_tile_routine_480[] = {
+	0x03, 0x0a, 0x70, 0x30, 0x08, 0xff, 
+};
+const uint8_t event_tile_routine_481[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_482[] = {
+	0x03, 0x0a, 0x42, 0x10, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_483[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_484[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_485[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_486[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_488[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_489[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_490[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_491[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_492[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_493[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_494[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_495[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_496[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_497[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_498[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_499[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_501[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_502[] = {
+	0x03, 0x0a, 0x07, 0x08, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_503[] = {
+	0x03, 0x0a, 0x07, 0x30, 0x28, 0xff, 
+};
+const uint8_t event_tile_routine_504[] = {
+	0x03, 0x0a, 0x50, 0x38, 0x30, 0xff, 
+};
+const uint8_t event_tile_routine_505[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_506[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_507[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_508[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_509[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_510[] = {
+	0x11, 0xff, 
+};
+const uint8_t event_tile_routine_511[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_512[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_513[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_514[] = {
+	0xff, 
+};
+const uint8_t event_tile_routine_515[] = {
+	0xff, 
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_37[] = {
+	{ 25, event_tile_routine_1 },
+	{ 29, event_tile_routine_2 },
+	{ 75, event_tile_routine_3 },
+	{ 66, event_tile_routine_4 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_39[] = {
+	{ 67, event_tile_routine_16 },
+	{ 63, event_tile_routine_17 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_40[] = {
+	{ 14, event_tile_routine_18 },
+	{ 42, event_tile_routine_20 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_41[] = {
+	{ 32, event_tile_routine_12 },
+	{ 65, event_tile_routine_13 },
+	{ 56, event_tile_routine_14 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_43[] = {
+	{ 65, event_tile_routine_11 },
+	{ 6, event_tile_routine_46 },
+	{ 14, event_tile_routine_271 },
+	{ 50, event_tile_routine_293 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_45[] = {
+	{ 52, event_tile_routine_21 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_50[] = {
+	{ 54, event_tile_routine_6 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_51[] = {
+	{ 27, event_tile_routine_148 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_55[] = {
+	{ 53, event_tile_routine_8 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_60[] = {
+	{ 27, event_tile_routine_44 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_63[] = {
+	{ 29, event_tile_routine_42 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_65[] = {
+	{ 45, event_tile_routine_54 },
+	{ 32, event_tile_routine_346 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_66[] = {
+	{ 32, event_tile_routine_352 },
+	{ 56, event_tile_routine_353 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_68[] = {
+	{ 58, event_tile_routine_47 },
+	{ 68, event_tile_routine_48 },
+	{ 42, event_tile_routine_111 },
+	{ 45, event_tile_routine_112 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_69[] = {
+	{ 21, event_tile_routine_49 },
+	{ 70, event_tile_routine_58 },
+	{ 19, event_tile_routine_78 },
+	{ 65, event_tile_routine_80 },
+	{ 68, event_tile_routine_81 },
+	{ 72, event_tile_routine_89 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_70[] = {
+	{ 9, event_tile_routine_116 },
+	{ 2, event_tile_routine_120 },
+	{ 29, event_tile_routine_125 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_71[] = {
+	{ 81, event_tile_routine_90 },
+	{ 31, event_tile_routine_101 },
+	{ 42, event_tile_routine_104 },
+	{ 90, event_tile_routine_128 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_72[] = {
+	{ 68, event_tile_routine_59 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_73[] = {
+	{ 41, event_tile_routine_106 },
+	{ 45, event_tile_routine_108 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_78[] = {
+	{ 30, event_tile_routine_227 },
+	{ 83, event_tile_routine_251 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_79[] = {
+	{ 43, event_tile_routine_245 },
+	{ 51, event_tile_routine_248 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_84[] = {
+	{ 70, event_tile_routine_224 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_86[] = {
+	{ 29, event_tile_routine_285 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_88[] = {
+	{ 69, event_tile_routine_390 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_94[] = {
+	{ 61, event_tile_routine_343 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_95[] = {
+	{ 41, event_tile_routine_55 },
+	{ 56, event_tile_routine_86 },
+	{ 72, event_tile_routine_88 },
+	{ 34, event_tile_routine_180 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_96[] = {
+	{ 63, event_tile_routine_407 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_97[] = {
+	{ 56, event_tile_routine_130 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_98[] = {
+	{ 57, event_tile_routine_177 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_102[] = {
+	{ 57, event_tile_routine_200 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_103[] = {
+	{ 19, event_tile_routine_178 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_105[] = {
+	{ 42, event_tile_routine_9 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_106[] = {
+	{ 47, event_tile_routine_265 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_107[] = {
+	{ 26, event_tile_routine_266 },
+	{ 11, event_tile_routine_281 },
+	{ 29, event_tile_routine_284 },
+	{ 22, event_tile_routine_290 },
+	{ 40, event_tile_routine_294 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_108[] = {
+	{ 58, event_tile_routine_259 },
+	{ 40, event_tile_routine_296 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_109[] = {
+	{ 75, event_tile_routine_253 },
+	{ 66, event_tile_routine_254 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_111[] = {
+	{ 40, event_tile_routine_257 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_200[] = {
+	{ 69, event_tile_routine_376 },
+	{ 40, event_tile_routine_391 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_202[] = {
+	{ 13, event_tile_routine_384 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_208[] = {
+	{ 63, event_tile_routine_382 },
+	{ 74, event_tile_routine_383 },
+	{ 43, event_tile_routine_392 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_214[] = {
+	{ 45, event_tile_routine_399 },
+	{ 54, event_tile_routine_401 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_426[] = {
+	{ 40, event_tile_routine_405 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_433[] = {
+	{ 76, event_tile_routine_423 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_444[] = {
+	{ 45, event_tile_routine_512 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_445[] = {
+	{ 53, event_tile_routine_425 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_448[] = {
+	{ 51, event_tile_routine_379 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_136[] = {
+	{ 44, event_tile_routine_364 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_143[] = {
+	{ 45, event_tile_routine_185 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_149[] = {
+	{ 22, event_tile_routine_184 },
+	{ 73, event_tile_routine_196 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_166[] = {
+	{ 14, event_tile_routine_31 },
+	{ 70, event_tile_routine_194 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_268[] = {
+	{ 31, event_tile_routine_186 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_269[] = {
+	{ 90, event_tile_routine_179 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_422[] = {
+	{ 29, event_tile_routine_366 },
+	{ 89, event_tile_routine_367 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_153[] = {
+	{ 51, event_tile_routine_193 },
+	{ 21, event_tile_routine_207 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_161[] = {
+	{ 53, event_tile_routine_41 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_163[] = {
+	{ 39, event_tile_routine_190 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_167[] = {
+	{ 52, event_tile_routine_370 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_168[] = {
+	{ 22, event_tile_routine_209 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_174[] = {
+	{ 70, event_tile_routine_208 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_270[] = {
+	{ 53, event_tile_routine_189 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_271[] = {
+	{ 42, event_tile_routine_188 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_272[] = {
+	{ 54, event_tile_routine_187 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_273[] = {
+	{ 91, event_tile_routine_191 },
+	{ 45, event_tile_routine_206 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_423[] = {
+	{ 89, event_tile_routine_368 },
+	{ 29, event_tile_routine_369 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_318[] = {
+	{ 52, event_tile_routine_225 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_320[] = {
+	{ 30, event_tile_routine_238 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_321[] = {
+	{ 40, event_tile_routine_234 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_323[] = {
+	{ 6, event_tile_routine_212 },
+	{ 5, event_tile_routine_213 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_324[] = {
+	{ 77, event_tile_routine_214 },
+	{ 50, event_tile_routine_215 },
+	{ 52, event_tile_routine_216 },
+	{ 54, event_tile_routine_217 },
+	{ 56, event_tile_routine_218 },
+	{ 38, event_tile_routine_219 },
+	{ 40, event_tile_routine_220 },
+	{ 42, event_tile_routine_221 },
+	{ 44, event_tile_routine_222 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_325[] = {
+	{ 53, event_tile_routine_229 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_326[] = {
+	{ 61, event_tile_routine_232 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_327[] = {
+	{ 61, event_tile_routine_237 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_328[] = {
+	{ 32, event_tile_routine_235 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_330[] = {
+	{ 54, event_tile_routine_371 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_332[] = {
+	{ 40, event_tile_routine_228 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_334[] = {
+	{ 44, event_tile_routine_231 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_335[] = {
+	{ 41, event_tile_routine_233 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_336[] = {
+	{ 22, event_tile_routine_236 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_424[] = {
+	{ 29, event_tile_routine_372 },
+	{ 89, event_tile_routine_373 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_194[] = {
+	{ 89, event_tile_routine_60 },
+	{ 90, event_tile_routine_61 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_196[] = {
+	{ 34, event_tile_routine_62 },
+	{ 22, event_tile_routine_150 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_197[] = {
+	{ 30, event_tile_routine_146 },
+	{ 29, event_tile_routine_147 },
+	{ 18, event_tile_routine_169 },
+	{ 17, event_tile_routine_170 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_246[] = {
+	{ 22, event_tile_routine_152 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_247[] = {
+	{ 69, event_tile_routine_149 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_249[] = {
+	{ 34, event_tile_routine_153 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_255[] = {
+	{ 55, event_tile_routine_155 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_258[] = {
+	{ 83, event_tile_routine_158 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_259[] = {
+	{ 33, event_tile_routine_159 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_261[] = {
+	{ 19, event_tile_routine_157 },
+	{ 7, event_tile_routine_161 },
+	{ 6, event_tile_routine_162 },
+	{ 5, event_tile_routine_163 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_262[] = {
+	{ 54, event_tile_routine_164 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_263[] = {
+	{ 54, event_tile_routine_165 },
+	{ 31, event_tile_routine_166 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_264[] = {
+	{ 53, event_tile_routine_171 },
+	{ 89, event_tile_routine_375 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_265[] = {
+	{ 89, event_tile_routine_172 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_266[] = {
+	{ 57, event_tile_routine_174 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_193[] = {
+	{ 33, event_tile_routine_57 },
+	{ 93, event_tile_routine_77 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_217[] = {
+	{ 50, event_tile_routine_63 },
+	{ 92, event_tile_routine_64 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_218[] = {
+	{ 55, event_tile_routine_71 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_219[] = {
+	{ 32, event_tile_routine_65 },
+	{ 90, event_tile_routine_66 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_220[] = {
+	{ 25, event_tile_routine_67 },
+	{ 89, event_tile_routine_68 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_221[] = {
+	{ 53, event_tile_routine_69 },
+	{ 91, event_tile_routine_70 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_222[] = {
+	{ 49, event_tile_routine_72 },
+	{ 50, event_tile_routine_73 },
+	{ 90, event_tile_routine_74 },
+	{ 28, event_tile_routine_198 },
+	{ 30, event_tile_routine_199 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_223[] = {
+	{ 42, event_tile_routine_75 },
+	{ 90, event_tile_routine_76 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_224[] = {
+	{ 93, event_tile_routine_79 },
+	{ 31, event_tile_routine_167 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_225[] = {
+	{ 91, event_tile_routine_82 },
+	{ 51, event_tile_routine_144 },
+	{ 50, event_tile_routine_145 },
+	{ 29, event_tile_routine_203 },
+	{ 31, event_tile_routine_204 },
+	{ 33, event_tile_routine_205 },
+	{ 58, event_tile_routine_514 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_226[] = {
+	{ 86, event_tile_routine_83 },
+	{ 51, event_tile_routine_129 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_227[] = {
+	{ 31, event_tile_routine_84 },
+	{ 90, event_tile_routine_85 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_228[] = {
+	{ 91, event_tile_routine_87 },
+	{ 26, event_tile_routine_131 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_230[] = {
+	{ 90, event_tile_routine_92 },
+	{ 75, event_tile_routine_132 },
+	{ 74, event_tile_routine_133 },
+	{ 27, event_tile_routine_134 },
+	{ 42, event_tile_routine_135 },
+	{ 56, event_tile_routine_136 },
+	{ 81, event_tile_routine_137 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_231[] = {
+	{ 92, event_tile_routine_91 },
+	{ 27, event_tile_routine_138 },
+	{ 30, event_tile_routine_139 },
+	{ 33, event_tile_routine_140 },
+	{ 49, event_tile_routine_141 },
+	{ 53, event_tile_routine_142 },
+	{ 82, event_tile_routine_143 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_232[] = {
+	{ 41, event_tile_routine_93 },
+	{ 42, event_tile_routine_94 },
+	{ 53, event_tile_routine_95 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_238[] = {
+	{ 51, event_tile_routine_98 },
+	{ 90, event_tile_routine_99 },
+	{ 32, event_tile_routine_103 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_239[] = {
+	{ 90, event_tile_routine_105 },
+	{ 37, event_tile_routine_127 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_240[] = {
+	{ 91, event_tile_routine_107 },
+	{ 31, event_tile_routine_126 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_242[] = {
+	{ 92, event_tile_routine_113 },
+	{ 45, event_tile_routine_121 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_243[] = {
+	{ 89, event_tile_routine_109 },
+	{ 52, event_tile_routine_122 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_244[] = {
+	{ 90, event_tile_routine_114 },
+	{ 67, event_tile_routine_117 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_245[] = {
+	{ 87, event_tile_routine_118 },
+	{ 51, event_tile_routine_123 },
+	{ 62, event_tile_routine_175 },
+	{ 65, event_tile_routine_176 },
+	{ 67, event_tile_routine_181 },
+	{ 69, event_tile_routine_264 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_296[] = {
+	{ 90, event_tile_routine_201 },
+	{ 39, event_tile_routine_202 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_337[] = {
+	{ 52, event_tile_routine_239 },
+	{ 51, event_tile_routine_240 },
+	{ 29, event_tile_routine_241 },
+	{ 31, event_tile_routine_242 },
+	{ 33, event_tile_routine_243 },
+	{ 90, event_tile_routine_244 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_338[] = {
+	{ 90, event_tile_routine_246 },
+	{ 54, event_tile_routine_287 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_339[] = {
+	{ 90, event_tile_routine_250 },
+	{ 25, event_tile_routine_295 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_340[] = {
+	{ 90, event_tile_routine_252 },
+	{ 27, event_tile_routine_300 },
+	{ 29, event_tile_routine_301 },
+	{ 31, event_tile_routine_302 },
+	{ 69, event_tile_routine_303 },
+	{ 68, event_tile_routine_304 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_341[] = {
+	{ 90, event_tile_routine_255 },
+	{ 50, event_tile_routine_297 },
+	{ 53, event_tile_routine_298 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_342[] = {
+	{ 90, event_tile_routine_256 },
+	{ 82, event_tile_routine_260 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_343[] = {
+	{ 90, event_tile_routine_258 },
+	{ 43, event_tile_routine_299 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_402[] = {
+	{ 90, event_tile_routine_327 },
+	{ 39, event_tile_routine_329 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_403[] = {
+	{ 90, event_tile_routine_330 },
+	{ 39, event_tile_routine_334 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_404[] = {
+	{ 90, event_tile_routine_336 },
+	{ 30, event_tile_routine_338 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_405[] = {
+	{ 90, event_tile_routine_340 },
+	{ 44, event_tile_routine_342 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_421[] = {
+	{ 33, event_tile_routine_354 },
+	{ 31, event_tile_routine_355 },
+	{ 29, event_tile_routine_356 },
+	{ 51, event_tile_routine_357 },
+	{ 50, event_tile_routine_358 },
+	{ 90, event_tile_routine_359 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_511[] = {
+	{ 90, event_tile_routine_394 },
+	{ 57, event_tile_routine_395 },
+	{ 58, event_tile_routine_396 },
+	{ 82, event_tile_routine_402 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_512[] = {
+	{ 90, event_tile_routine_397 },
+	{ 41, event_tile_routine_400 },
+	{ 34, event_tile_routine_513 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_787[] = {
+	{ 90, event_tile_routine_421 },
+	{ 50, event_tile_routine_424 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_233[] = {
+	{ 53, event_tile_routine_96 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_235[] = {
+	{ 46, event_tile_routine_289 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_237[] = {
+	{ 51, event_tile_routine_97 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_251[] = {
+	{ 34, event_tile_routine_154 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_252[] = {
+	{ 76, event_tile_routine_173 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_253[] = {
+	{ 44, event_tile_routine_156 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_344[] = {
+	{ 54, event_tile_routine_262 },
+	{ 32, event_tile_routine_374 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_349[] = {
+	{ 32, event_tile_routine_263 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_350[] = {
+	{ 41, event_tile_routine_292 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_351[] = {
+	{ 56, event_tile_routine_291 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_352[] = {
+	{ 77, event_tile_routine_272 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_353[] = {
+	{ 55, event_tile_routine_270 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_354[] = {
+	{ 42, event_tile_routine_269 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_355[] = {
+	{ 54, event_tile_routine_277 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_357[] = {
+	{ 93, event_tile_routine_267 },
+	{ 87, event_tile_routine_268 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_359[] = {
+	{ 53, event_tile_routine_274 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_360[] = {
+	{ 54, event_tile_routine_276 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_362[] = {
+	{ 16, event_tile_routine_275 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_363[] = {
+	{ 89, event_tile_routine_280 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_364[] = {
+	{ 64, event_tile_routine_278 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_365[] = {
+	{ 28, event_tile_routine_279 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_366[] = {
+	{ 77, event_tile_routine_283 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_406[] = {
+	{ 52, event_tile_routine_345 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_410[] = {
+	{ 26, event_tile_routine_363 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_412[] = {
+	{ 49, event_tile_routine_362 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_413[] = {
+	{ 31, event_tile_routine_361 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_415[] = {
+	{ 89, event_tile_routine_348 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_417[] = {
+	{ 53, event_tile_routine_349 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_418[] = {
+	{ 54, event_tile_routine_350 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_420[] = {
+	{ 90, event_tile_routine_351 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_449[] = {
+	{ 63, event_tile_routine_381 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_452[] = {
+	{ 51, event_tile_routine_378 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_453[] = {
+	{ 87, event_tile_routine_385 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_455[] = {
+	{ 41, event_tile_routine_389 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_513[] = {
+	{ 41, event_tile_routine_404 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_517[] = {
+	{ 34, event_tile_routine_403 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_274[] = {
+	{ 51, event_tile_routine_286 },
+	{ 68, event_tile_routine_305 },
+	{ 33, event_tile_routine_335 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_275[] = {
+	{ 51, event_tile_routine_341 },
+	{ 66, event_tile_routine_360 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_285[] = {
+	{ 27, event_tile_routine_344 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_292[] = {
+	{ 51, event_tile_routine_333 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_368[] = {
+	{ 39, event_tile_routine_326 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_376[] = {
+	{ 51, event_tile_routine_306 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_401[] = {
+	{ 43, event_tile_routine_328 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_790[] = {
+	{ 53, event_tile_routine_466 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_793[] = {
+	{ 44, event_tile_routine_463 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_377[] = {
+	{ 90, event_tile_routine_308 },
+	{ 89, event_tile_routine_309 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_380[] = {
+	{ 15, event_tile_routine_310 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_381[] = {
+	{ 13, event_tile_routine_324 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_382[] = {
+	{ 18, event_tile_routine_320 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_384[] = {
+	{ 51, event_tile_routine_325 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_385[] = {
+	{ 65, event_tile_routine_313 },
+	{ 22, event_tile_routine_314 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_386[] = {
+	{ 5, event_tile_routine_316 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_388[] = {
+	{ 39, event_tile_routine_323 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_389[] = {
+	{ 7, event_tile_routine_312 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_390[] = {
+	{ 54, event_tile_routine_318 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_392[] = {
+	{ 42, event_tile_routine_311 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_393[] = {
+	{ 57, event_tile_routine_319 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_394[] = {
+	{ 40, event_tile_routine_321 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_395[] = {
+	{ 56, event_tile_routine_322 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_397[] = {
+	{ 22, event_tile_routine_315 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_398[] = {
+	{ 5, event_tile_routine_317 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_399[] = {
+	{ 54, event_tile_routine_418 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_646[] = {
+	{ 33, event_tile_routine_444 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_654[] = {
+	{ 40, event_tile_routine_458 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_667[] = {
+	{ 66, event_tile_routine_433 },
+	{ 4, event_tile_routine_435 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_671[] = {
+	{ 42, event_tile_routine_437 },
+	{ 52, event_tile_routine_464 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_673[] = {
+	{ 64, event_tile_routine_430 },
+	{ 6, event_tile_routine_432 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_674[] = {
+	{ 89, event_tile_routine_427 },
+	{ 66, event_tile_routine_428 },
+	{ 4, event_tile_routine_431 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_675[] = {
+	{ 6, event_tile_routine_429 },
+	{ 27, event_tile_routine_449 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_678[] = {
+	{ 53, event_tile_routine_454 },
+	{ 41, event_tile_routine_455 },
+	{ 42, event_tile_routine_456 },
+	{ 54, event_tile_routine_457 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_679[] = {
+	{ 66, event_tile_routine_438 },
+	{ 4, event_tile_routine_440 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_681[] = {
+	{ 64, event_tile_routine_434 },
+	{ 6, event_tile_routine_436 },
+	{ 66, event_tile_routine_453 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_687[] = {
+	{ 27, event_tile_routine_447 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_693[] = {
+	{ 55, event_tile_routine_420 },
+	{ 13, event_tile_routine_448 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_695[] = {
+	{ 29, event_tile_routine_462 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_701[] = {
+	{ 41, event_tile_routine_445 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_702[] = {
+	{ 45, event_tile_routine_459 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_709[] = {
+	{ 17, event_tile_routine_461 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_788[] = {
+	{ 64, event_tile_routine_442 },
+	{ 6, event_tile_routine_443 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_789[] = {
+	{ 85, event_tile_routine_450 },
+	{ 80, event_tile_routine_451 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_524[] = {
+	{ 26, event_tile_routine_509 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_537[] = {
+	{ 55, event_tile_routine_515 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_539[] = {
+	{ 65, event_tile_routine_510 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_547[] = {
+	{ 78, event_tile_routine_511 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_557[] = {
+	{ 66, event_tile_routine_472 },
+	{ 4, event_tile_routine_474 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_566[] = {
+	{ 64, event_tile_routine_477 },
+	{ 6, event_tile_routine_479 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_567[] = {
+	{ 42, event_tile_routine_480 },
+	{ 52, event_tile_routine_508 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_569[] = {
+	{ 64, event_tile_routine_470 },
+	{ 6, event_tile_routine_471 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_570[] = {
+	{ 89, event_tile_routine_465 },
+	{ 66, event_tile_routine_467 },
+	{ 4, event_tile_routine_469 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_571[] = {
+	{ 6, event_tile_routine_468 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_572[] = {
+	{ 63, event_tile_routine_481 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_574[] = {
+	{ 41, event_tile_routine_488 },
+	{ 42, event_tile_routine_489 },
+	{ 53, event_tile_routine_490 },
+	{ 54, event_tile_routine_491 },
+	{ 15, event_tile_routine_492 },
+	{ 20, event_tile_routine_493 },
+	{ 75, event_tile_routine_494 },
+	{ 80, event_tile_routine_495 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_585[] = {
+	{ 66, event_tile_routine_476 },
+	{ 4, event_tile_routine_478 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_587[] = {
+	{ 64, event_tile_routine_473 },
+	{ 6, event_tile_routine_475 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_597[] = {
+	{ 64, event_tile_routine_482 },
+	{ 44, event_tile_routine_507 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_603[] = {
+	{ 18, event_tile_routine_497 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_618[] = {
+	{ 29, event_tile_routine_505 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_619[] = {
+	{ 78, event_tile_routine_496 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_628[] = {
+	{ 30, event_tile_routine_499 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_629[] = {
+	{ 78, event_tile_routine_498 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_632[] = {
+	{ 51, event_tile_routine_483 },
+	{ 16, event_tile_routine_484 },
+	{ 66, event_tile_routine_485 },
+	{ 32, event_tile_routine_486 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_639[] = {
+	{ 49, event_tile_routine_501 },
+	{ 54, event_tile_routine_504 },
+	{ 77, event_tile_routine_506 },
+};
+const Actiontiles_LUT event_tiles_LUT_for_map_644[] = {
+	{ 73, event_tile_routine_502 },
+	{ 91, event_tile_routine_503 },
+};
+const Actiontiles_LUTLUT actionTilesStart_0[] = {
+	{ 0x5e, 4, event_tiles_LUT_for_map_37 },
+	{ 0x4e, 2, event_tiles_LUT_for_map_39 },
+	{ 0x6e, 2, event_tiles_LUT_for_map_40 },
+	{ 0x5d, 3, event_tiles_LUT_for_map_41 },
+	{ 0x4d, 4, event_tiles_LUT_for_map_43 },
+	{ 0x7e, 1, event_tiles_LUT_for_map_45 },
+	{ 0xad, 1, event_tiles_LUT_for_map_50 },
+	{ 0xac, 1, event_tiles_LUT_for_map_51 },
+	{ 0xbb, 1, event_tiles_LUT_for_map_55 },
+	{ 0x3c, 1, event_tiles_LUT_for_map_60 },
+	{ 0x4a, 1, event_tiles_LUT_for_map_63 },
+	{ 0x59, 2, event_tiles_LUT_for_map_65 },
+	{ 0x49, 2, event_tiles_LUT_for_map_66 },
+	{ 0x58, 4, event_tiles_LUT_for_map_68 },
+	{ 0x48, 6, event_tiles_LUT_for_map_69 },
+	{ 0x68, 3, event_tiles_LUT_for_map_70 },
+	{ 0x47, 4, event_tiles_LUT_for_map_71 },
+	{ 0x57, 1, event_tiles_LUT_for_map_72 },
+	{ 0x67, 2, event_tiles_LUT_for_map_73 },
+	{ 0xa8, 2, event_tiles_LUT_for_map_78 },
+	{ 0xa9, 2, event_tiles_LUT_for_map_79 },
+	{ 0xb9, 1, event_tiles_LUT_for_map_84 },
+	{ 0x56, 1, event_tiles_LUT_for_map_86 },
+	{ 0x76, 1, event_tiles_LUT_for_map_88 },
+	{ 0x39, 1, event_tiles_LUT_for_map_94 },
+	{ 0x38, 4, event_tiles_LUT_for_map_95 },
+	{ 0x36, 1, event_tiles_LUT_for_map_96 },
+	{ 0x37, 1, event_tiles_LUT_for_map_97 },
+	{ 0x2c, 1, event_tiles_LUT_for_map_98 },
+	{ 0x0e, 1, event_tiles_LUT_for_map_102 },
+	{ 0x0f, 1, event_tiles_LUT_for_map_103 },
+	{ 0xae, 1, event_tiles_LUT_for_map_105 },
+	{ 0x5b, 1, event_tiles_LUT_for_map_106 },
+	{ 0x5c, 5, event_tiles_LUT_for_map_107 },
+	{ 0x6b, 2, event_tiles_LUT_for_map_108 },
+	{ 0x6c, 2, event_tiles_LUT_for_map_109 },
+	{ 0x7c, 1, event_tiles_LUT_for_map_111 },
+	{ 0xa5, 2, event_tiles_LUT_for_map_200 },
+	{ 0xb7, 1, event_tiles_LUT_for_map_202 },
+	{ 0xa4, 3, event_tiles_LUT_for_map_208 },
+	{ 0x55, 2, event_tiles_LUT_for_map_214 },
+	{ 0x54, 1, event_tiles_LUT_for_map_426 },
+	{ 0x73, 1, event_tiles_LUT_for_map_433 },
+	{ 0x40, 1, event_tiles_LUT_for_map_444 },
+	{ 0x71, 1, event_tiles_LUT_for_map_445 },
+	{ 0xc5, 1, event_tiles_LUT_for_map_448 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_1[] = {
+	{ 0x12, 1, event_tiles_LUT_for_map_136 },
+	{ 0x43, 1, event_tiles_LUT_for_map_143 },
+	{ 0x10, 2, event_tiles_LUT_for_map_149 },
+	{ 0x01, 2, event_tiles_LUT_for_map_166 },
+	{ 0x13, 1, event_tiles_LUT_for_map_268 },
+	{ 0x53, 1, event_tiles_LUT_for_map_269 },
+	{ 0x00, 2, event_tiles_LUT_for_map_422 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_2[] = {
+	{ 0x26, 2, event_tiles_LUT_for_map_153 },
+	{ 0x23, 1, event_tiles_LUT_for_map_161 },
+	{ 0x44, 1, event_tiles_LUT_for_map_163 },
+	{ 0x31, 1, event_tiles_LUT_for_map_167 },
+	{ 0x22, 1, event_tiles_LUT_for_map_168 },
+	{ 0x42, 1, event_tiles_LUT_for_map_174 },
+	{ 0x36, 1, event_tiles_LUT_for_map_270 },
+	{ 0x05, 1, event_tiles_LUT_for_map_271 },
+	{ 0x06, 1, event_tiles_LUT_for_map_272 },
+	{ 0x17, 2, event_tiles_LUT_for_map_273 },
+	{ 0x13, 2, event_tiles_LUT_for_map_423 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_3[] = {
+	{ 0x24, 1, event_tiles_LUT_for_map_318 },
+	{ 0x13, 1, event_tiles_LUT_for_map_320 },
+	{ 0x33, 1, event_tiles_LUT_for_map_321 },
+	{ 0x42, 2, event_tiles_LUT_for_map_323 },
+	{ 0x32, 9, event_tiles_LUT_for_map_324 },
+	{ 0x31, 1, event_tiles_LUT_for_map_325 },
+	{ 0x21, 1, event_tiles_LUT_for_map_326 },
+	{ 0x11, 1, event_tiles_LUT_for_map_327 },
+	{ 0x30, 1, event_tiles_LUT_for_map_328 },
+	{ 0x03, 1, event_tiles_LUT_for_map_330 },
+	{ 0x00, 1, event_tiles_LUT_for_map_332 },
+	{ 0x02, 1, event_tiles_LUT_for_map_334 },
+	{ 0x22, 1, event_tiles_LUT_for_map_335 },
+	{ 0x41, 1, event_tiles_LUT_for_map_336 },
+	{ 0x04, 2, event_tiles_LUT_for_map_424 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_4[] = {
+	{ 0x34, 2, event_tiles_LUT_for_map_194 },
+	{ 0x25, 2, event_tiles_LUT_for_map_196 },
+	{ 0x24, 4, event_tiles_LUT_for_map_197 },
+	{ 0x13, 1, event_tiles_LUT_for_map_246 },
+	{ 0x14, 1, event_tiles_LUT_for_map_247 },
+	{ 0x22, 1, event_tiles_LUT_for_map_249 },
+	{ 0x01, 1, event_tiles_LUT_for_map_255 },
+	{ 0x42, 1, event_tiles_LUT_for_map_258 },
+	{ 0x43, 1, event_tiles_LUT_for_map_259 },
+	{ 0x30, 4, event_tiles_LUT_for_map_261 },
+	{ 0x20, 1, event_tiles_LUT_for_map_262 },
+	{ 0x21, 2, event_tiles_LUT_for_map_263 },
+	{ 0x44, 2, event_tiles_LUT_for_map_264 },
+	{ 0x54, 1, event_tiles_LUT_for_map_265 },
+	{ 0x50, 1, event_tiles_LUT_for_map_266 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_5[] = {
+	{ 0x36, 2, event_tiles_LUT_for_map_193 },
+	{ 0x46, 2, event_tiles_LUT_for_map_217 },
+	{ 0x45, 1, event_tiles_LUT_for_map_218 },
+	{ 0x56, 2, event_tiles_LUT_for_map_219 },
+	{ 0x55, 2, event_tiles_LUT_for_map_220 },
+	{ 0x44, 2, event_tiles_LUT_for_map_221 },
+	{ 0x54, 5, event_tiles_LUT_for_map_222 },
+	{ 0x43, 2, event_tiles_LUT_for_map_223 },
+	{ 0x35, 2, event_tiles_LUT_for_map_224 },
+	{ 0x34, 7, event_tiles_LUT_for_map_225 },
+	{ 0x33, 2, event_tiles_LUT_for_map_226 },
+	{ 0x26, 2, event_tiles_LUT_for_map_227 },
+	{ 0x25, 2, event_tiles_LUT_for_map_228 },
+	{ 0x16, 7, event_tiles_LUT_for_map_230 },
+	{ 0x15, 7, event_tiles_LUT_for_map_231 },
+	{ 0x14, 3, event_tiles_LUT_for_map_232 },
+	{ 0x23, 3, event_tiles_LUT_for_map_238 },
+	{ 0x13, 2, event_tiles_LUT_for_map_239 },
+	{ 0x06, 2, event_tiles_LUT_for_map_240 },
+	{ 0x04, 2, event_tiles_LUT_for_map_242 },
+	{ 0x03, 2, event_tiles_LUT_for_map_243 },
+	{ 0x32, 2, event_tiles_LUT_for_map_244 },
+	{ 0x22, 6, event_tiles_LUT_for_map_245 },
+	{ 0x53, 2, event_tiles_LUT_for_map_296 },
+	{ 0x52, 6, event_tiles_LUT_for_map_337 },
+	{ 0x42, 2, event_tiles_LUT_for_map_338 },
+	{ 0x51, 2, event_tiles_LUT_for_map_339 },
+	{ 0x41, 6, event_tiles_LUT_for_map_340 },
+	{ 0x31, 3, event_tiles_LUT_for_map_341 },
+	{ 0x21, 2, event_tiles_LUT_for_map_342 },
+	{ 0x12, 2, event_tiles_LUT_for_map_343 },
+	{ 0x11, 2, event_tiles_LUT_for_map_402 },
+	{ 0x02, 2, event_tiles_LUT_for_map_403 },
+	{ 0x01, 2, event_tiles_LUT_for_map_404 },
+	{ 0x00, 2, event_tiles_LUT_for_map_405 },
+	{ 0x10, 6, event_tiles_LUT_for_map_421 },
+	{ 0x20, 4, event_tiles_LUT_for_map_511 },
+	{ 0x30, 3, event_tiles_LUT_for_map_512 },
+	{ 0x40, 2, event_tiles_LUT_for_map_787 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_6[] = {
+	{ 0x58, 1, event_tiles_LUT_for_map_233 },
+	{ 0x49, 1, event_tiles_LUT_for_map_235 },
+	{ 0x37, 1, event_tiles_LUT_for_map_237 },
+	{ 0x56, 1, event_tiles_LUT_for_map_251 },
+	{ 0x57, 1, event_tiles_LUT_for_map_252 },
+	{ 0x46, 1, event_tiles_LUT_for_map_253 },
+	{ 0x36, 2, event_tiles_LUT_for_map_344 },
+	{ 0x16, 1, event_tiles_LUT_for_map_349 },
+	{ 0x06, 1, event_tiles_LUT_for_map_350 },
+	{ 0x34, 1, event_tiles_LUT_for_map_351 },
+	{ 0x39, 1, event_tiles_LUT_for_map_352 },
+	{ 0x38, 1, event_tiles_LUT_for_map_353 },
+	{ 0x19, 1, event_tiles_LUT_for_map_354 },
+	{ 0x29, 1, event_tiles_LUT_for_map_355 },
+	{ 0x27, 2, event_tiles_LUT_for_map_357 },
+	{ 0x18, 1, event_tiles_LUT_for_map_359 },
+	{ 0x55, 1, event_tiles_LUT_for_map_360 },
+	{ 0x44, 1, event_tiles_LUT_for_map_362 },
+	{ 0x54, 1, event_tiles_LUT_for_map_363 },
+	{ 0x43, 1, event_tiles_LUT_for_map_364 },
+	{ 0x23, 1, event_tiles_LUT_for_map_365 },
+	{ 0x33, 1, event_tiles_LUT_for_map_366 },
+	{ 0x31, 1, event_tiles_LUT_for_map_406 },
+	{ 0x20, 1, event_tiles_LUT_for_map_410 },
+	{ 0x40, 1, event_tiles_LUT_for_map_412 },
+	{ 0x41, 1, event_tiles_LUT_for_map_413 },
+	{ 0x13, 1, event_tiles_LUT_for_map_415 },
+	{ 0x04, 1, event_tiles_LUT_for_map_417 },
+	{ 0x05, 1, event_tiles_LUT_for_map_418 },
+	{ 0x14, 1, event_tiles_LUT_for_map_420 },
+	{ 0x53, 1, event_tiles_LUT_for_map_449 },
+	{ 0x74, 1, event_tiles_LUT_for_map_452 },
+	{ 0x61, 1, event_tiles_LUT_for_map_453 },
+	{ 0x52, 1, event_tiles_LUT_for_map_455 },
+	{ 0x62, 1, event_tiles_LUT_for_map_513 },
+	{ 0x60, 1, event_tiles_LUT_for_map_517 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_7[] = {
+	{ 0x17, 3, event_tiles_LUT_for_map_274 },
+	{ 0x07, 2, event_tiles_LUT_for_map_275 },
+	{ 0x27, 1, event_tiles_LUT_for_map_285 },
+	{ 0x69, 1, event_tiles_LUT_for_map_292 },
+	{ 0x16, 1, event_tiles_LUT_for_map_368 },
+	{ 0x14, 1, event_tiles_LUT_for_map_376 },
+	{ 0x56, 1, event_tiles_LUT_for_map_401 },
+	{ 0x31, 1, event_tiles_LUT_for_map_790 },
+	{ 0x41, 1, event_tiles_LUT_for_map_793 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_8[] = {
+	{ 0x45, 2, event_tiles_LUT_for_map_377 },
+	{ 0x34, 1, event_tiles_LUT_for_map_380 },
+	{ 0x25, 1, event_tiles_LUT_for_map_381 },
+	{ 0x24, 1, event_tiles_LUT_for_map_382 },
+	{ 0x56, 1, event_tiles_LUT_for_map_384 },
+	{ 0x36, 2, event_tiles_LUT_for_map_385 },
+	{ 0x26, 1, event_tiles_LUT_for_map_386 },
+	{ 0x43, 1, event_tiles_LUT_for_map_388 },
+	{ 0x32, 1, event_tiles_LUT_for_map_389 },
+	{ 0x42, 1, event_tiles_LUT_for_map_390 },
+	{ 0x21, 1, event_tiles_LUT_for_map_392 },
+	{ 0x22, 1, event_tiles_LUT_for_map_393 },
+	{ 0x30, 1, event_tiles_LUT_for_map_394 },
+	{ 0x41, 1, event_tiles_LUT_for_map_395 },
+	{ 0x16, 1, event_tiles_LUT_for_map_397 },
+	{ 0x06, 1, event_tiles_LUT_for_map_398 },
+	{ 0x15, 1, event_tiles_LUT_for_map_399 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_9[] = {
+	{ 0x52, 1, event_tiles_LUT_for_map_646 },
+	{ 0x82, 1, event_tiles_LUT_for_map_654 },
+	{ 0x61, 2, event_tiles_LUT_for_map_667 },
+	{ 0x60, 2, event_tiles_LUT_for_map_671 },
+	{ 0x71, 2, event_tiles_LUT_for_map_673 },
+	{ 0x81, 3, event_tiles_LUT_for_map_674 },
+	{ 0x91, 2, event_tiles_LUT_for_map_675 },
+	{ 0x25, 4, event_tiles_LUT_for_map_678 },
+	{ 0x21, 2, event_tiles_LUT_for_map_679 },
+	{ 0x51, 3, event_tiles_LUT_for_map_681 },
+	{ 0x14, 1, event_tiles_LUT_for_map_687 },
+	{ 0x04, 2, event_tiles_LUT_for_map_693 },
+	{ 0x17, 1, event_tiles_LUT_for_map_695 },
+	{ 0x64, 1, event_tiles_LUT_for_map_701 },
+	{ 0x65, 1, event_tiles_LUT_for_map_702 },
+	{ 0x46, 1, event_tiles_LUT_for_map_709 },
+	{ 0x70, 2, event_tiles_LUT_for_map_788 },
+	{ 0x80, 2, event_tiles_LUT_for_map_789 },
+	{ 0xFF, 0, 0 },
+};
+const Actiontiles_LUTLUT actionTilesStart_10[] = {
+	{ 0x53, 1, event_tiles_LUT_for_map_524 },
+	{ 0x77, 1, event_tiles_LUT_for_map_537 },
+	{ 0x95, 1, event_tiles_LUT_for_map_539 },
+	{ 0x83, 1, event_tiles_LUT_for_map_547 },
+	{ 0x61, 2, event_tiles_LUT_for_map_557 },
+	{ 0x70, 2, event_tiles_LUT_for_map_566 },
+	{ 0x60, 2, event_tiles_LUT_for_map_567 },
+	{ 0x71, 2, event_tiles_LUT_for_map_569 },
+	{ 0x81, 3, event_tiles_LUT_for_map_570 },
+	{ 0x91, 1, event_tiles_LUT_for_map_571 },
+	{ 0x42, 1, event_tiles_LUT_for_map_572 },
+	{ 0x25, 8, event_tiles_LUT_for_map_574 },
+	{ 0x21, 2, event_tiles_LUT_for_map_585 },
+	{ 0x51, 2, event_tiles_LUT_for_map_587 },
+	{ 0x41, 2, event_tiles_LUT_for_map_597 },
+	{ 0x15, 1, event_tiles_LUT_for_map_603 },
+	{ 0x17, 1, event_tiles_LUT_for_map_618 },
+	{ 0x05, 1, event_tiles_LUT_for_map_619 },
+	{ 0x45, 1, event_tiles_LUT_for_map_628 },
+	{ 0x35, 1, event_tiles_LUT_for_map_629 },
+	{ 0x46, 4, event_tiles_LUT_for_map_632 },
+	{ 0x07, 3, event_tiles_LUT_for_map_639 },
+	{ 0x50, 2, event_tiles_LUT_for_map_644 },
+	{ 0xFF, 0, 0 },
+};
+
+
 const uint8_t _tilemaps_data_37[] = {0x05,0xe0,0x04,0xe0,0x07,0xce,0x09,0x73,0x0e,0x74,0x0d,0x75,0x11,0x9c,0x04,0x10,0x11,0x4b,0x7a,0xa6,0x18,0x70,0x76,0x70,0x77,0x44,0x78,0x79,0xe0,0x48,0x8e,0x45,0x7a,0x9c,0x6c,0x7b,0x33,0x02,0x7c,0x38,0x1d,0x7d,0x2a,0x4c,0x18,0x65,0x06,0x05,0x0e,0x4a,0x06,0x0f,0x46,0x65,0x7e,0x4a,0x18,0x05,0x5c,0xe5,0x07,0x4d,0x0c,0x3b,0x2c,0x1d,0x60,0x09,0x5c,0x91,0x30,0x7f,0x38,0x40,0x21,0x43,0x68,0x5c,0x48,0x7e,0x15,0x05,0x1a,0xd0,0x0c,0x8c,0x0a,0xc1,0x0b,0x86,0x81,0x62,0x3c,0x12,0x67,0x96,0x02,0x54,0x65,0x06,0x63,0xdb,0x35,0x04,0xe4,0x2d,0x02,0x10,0x53,0x9b,0x1c,0x68,0x04,0x8d,0x02,0x66,0x64,0x29,0x68,0x6b,0x10,0x18,0x6f,0x14,0x62,0xd1,0xae,0x91,0xb0,0x44,0x20,0x68,0xd1,0x58,0x1a,0xd1,0xae,0x57,0x0c,0x22,0x10,0x84,0x14,0x53,0x7f,0xae,0x24,0x80,0x0c,0xe5,0x48,0x72,0xc0,0x09,0x88,0xa6,0x02,0x65,0x0b,0x55,0x26,0x50,0xa3,0x81,0x83,0x82,0x82,0x83,0x9a,0x56,0x28,0x18,0x62,0x5a,0x31,0x06,0x3c,0x5d,0xf0,0xab,0xbd,0x9a,0x64,0x40,0x9c,0x68,0x08,0x93,0x3e,0x94,0x84,0x8e,0xd9,0x50,0x10,0x27,0x68,0x55,0x62,0x4b,0x3e,0x7e,0x93,0x6c,0xbc,0x49,0x36,0xd0,0x8e,0xe6,0x2c,0x48,0x42,0x50,0xb6,0x04,0x70,0x85,0x68,0x86,0x58,0x16,0xee,0x55,0x12,0x32,0x87,0x05,0x88,0x2c,0x0c,0x86,0xa6,0x16,0xe9,0x12,0x88,0x96,0x02,0x70,0x89,0x47,0x4b,0x24,0x65,0x40,0x79,0x07,0x5b,0xcc,0x29,0x53,0x18,0x6a,0x76,0x71,0x10,0x5c,0x18,0x05,0xa9,0x98,0x08,0x5d,0xe4,0xf2,0x4e,0xc0,0x57,0x6b,0xee,0x24,0x0d,0x42,0x5b,0x43,0x31,0xa4,0x48,0x2c,0xa2,0x7a,0x9a,0x4c,0x07,0x2c,0x8a,0x04,0x8b,0xcf,0x2c,0x42,0x02,0x22,0x87,0x81,0x9e,0x8c,0x52,0x5e,0x0c,0x8a,0xf2,0x58,0x59,0x88,0x57,0x16,0xca,0xa8,0xdb,0xf4,0x50,0xce,0x8a,0x86,0x24,0x65,0x07,0x2d,0xbc,0xfa,0xb9,0xe8,0x87,0x23,0x04,0x45,0xa8,0x0b,0xd8,0x56,0x06,0x8a,0x86,0x64,0xa3,0xa8,0x23,0x14,0x19,0x8d,0x05,0x8b,0x4b,0x64,0x52,0x30,0x8c,0x8e,0x05,0x8c,0x91,0x0c,0xe8,0x18,0xc4,0x09,0x8b,0x9c,0x42,0xa8,0x90,0x02,0x64,0x84,0x07,0x8b,0x9a,0x42,0x78,0x90,0xc2,0x99,0x30,0x8a,0x52,0x7a,0x85,0xba,0x9c,0x6d,0x00,0x14,0x07,0x0e,0xf6,0x04,0x53,0x03,0x08,0x2c,0x8f,0x22,0xd9,0x63,0x22,0x9c,0xd1,0x18,0x93,0x50,0x06,0x18,0xad,0xa1,0x2d,0x18,0x90,0x90,0xd9,0x20,0x07,0x5c,0x16,0x05,0xae,0x52,0x5c,0x6b,0x10,0xdd,0xa4,0x38,0x59,0x67,0x32,0x10,0xc8,0x05,0xd9,0x67,0x63,0x80,0xd4,0x68,0xb8,0x86,0xc9,0x29,0x91,0x19,0x3a,0x8a,0x5d,0xea,0x4e,0x08,0x24,0x92,0x3a,0x64,0x91,0x9d,0x5a,0x4a,0x08,0x52,0x94,0x89,0x92,0x39,0x5a,0x88,0x32,0xb2,0xd2,0x65,0xee,0x39,0x98,0x95,0x68,0x91,0x1c,0xd0,0x7c,0x26,0x85,0x24,0x5b,0x29,0x78,0x8a,0x4e,0x92,0x93,0x76,0x58,0x05,0x91,0xfe,0x6a,0x9c,0xc7,0x0b,0x0d,0x31,0x27,0xfc,0xd1,0xc0,0x4c,0x10,0xb2,0x8a,0x45,0xf6,0xba,0x54,0x1c,0x46,0xb3,0x18,0xa3,0xce,0x15,0x8e,0x02,0x56,0xb2,0x42,0x18,0x46,0xce,0x49,0xe6,0x90,0x24,0x9a,0x31,0x65,0xd8,0xa4,0xe6,0xc8,0x24,0x48,0x18,0x44,0x87,0x8d,0x1c,0x26,0xe6,0x2e,0x79,0x64,0xed,0x05,0x15,0x6c,0xdc,0x0e,0x7d,0xae,0x16,0xed,0x4f,0xea,0x40,0x02,0x46,0xa7,0x18,0xa1,0xde,0x4d,0x41,0x1d,0x18,0x80,0x00,};
 const uint8_t _tilemaps_data_46[] = {0x88,0xe1,0x58,0x02,0x89,0xe0,0x07,0xe0,0x04,0xe0,0x8a,0xe1,0xfa,0x36,0x70,0x8d,0x70,0x8b,0x70,0x13,0x56,0x85,0x16,0xd9,0x28,0x8e,0xc1,0x8c,0x4c,0x2e,0x89,0xa6,0x28,0xd1,0x55,0x14,0x72,0xa7,0x46,0x94,0x8e,0x2a,0xdc,0xb2,0x89,0x87,0xa5,0x2e,0x91,0x4a,0x18,0x04,0x02,0xe5,0x91,0x33,0x7e,0x92,0x65,0x15,0x88,0x87,0x4c,0x02,0x86,0x31,0x92,0xa6,0x5e,0x81,0x0a,0x8e,0x4b,0xa4,0x7e,0xa5,0x8c,0xa1,0x2a,0x3e,0x57,0x02,0xf2,0x8d,0x1a,0x32,0x34,0x1c,0xd6,0x55,0x8e,0x02,0x1a,0xf0,0x29,0x89,0xac,0x68,0x96,0xa1,0x38,0x65,0x8b,0x3c,0xae,0x92,0xa6,0x38,0xd0,0x5d,0x2c,0xcd,0x05,0x04,0x0b,0x20,0x68,0x31,0x16,0x6f,0xd1,0xca,0x85,0xa8,0xed,0x31,0x0f,0x14,0x29,0x88,0xd4,0xee,0x54,0x76,0xb4,0x2e,0x18,0x29,0x92,0xaa,0x68,0xba,0xa3,0x54,0x92,0x86,0x3d,0x0e,0x15,0xba,0x3c,0x78,0x87,0xa5,0xfa,0xa9,0x90,0x53,0xc5,0x75,0xfa,0x79,0x3e,0x4e,0xbc,0x7e,0x93,0x10,0xed,0x04,0x0d,0xb0,0x1b,0x18,0x2b,0x04,0x58,0x64,0x8b,0xcb,0x3a,0xda,0x2d,0x1e,0x94,0x8a,0x8c,0x1e,0x16,0x8a,0xec,0x96,0x86,0x52,0x8a,0x16,0xd0,0xec,0xd1,0x22,0xdb,0x30,0x47,0x2d,0x02,0xd2,0x55,0x1a,0x5c,0xb5,0x29,0x0c,0xa4,0xd9,0x16,0x56,0x8a,0xac,0x1d,0x9c,0xb2,0x04,0x86,0x67,0xee,0x6e,0x55,0xcc,0xb6,0x21,0x85,0xa6,0xa1,0xcc,0xcd,0x21,0x23,0xd8,0xdd,0x2c,0x08,0x5a,0x34,0xac,0x52,0x05,0x18,0xd1,0x14,0x89,0x94,0x3e,0x38,0x52,0x86,0xda,0xb6,0xf1,0x85,0x1a,0x6a,0x7e,0xd1,0x87,0x4b,0x02,0x43,0xa2,0x9d,0xa4,0x98,0x56,0x4d,0x8e,0xe0,0xb2,0x86,0xba,0x18,0x11,0x08,0x90,0xa6,0x14,0x46,0xfb,0xc5,0x8f,0x50,0xcb,0x8d,0x36,0x40,0x99,0x4e,0xc8,0x60,0xd2,0x67,0x4e,0x29,0x12,0xd2,0x2a,0xc0,0xa2,0x7b,0x48,0x31,0x54,0xbd,0x4a,0xae,0x69,0x41,0xbe,0xac,0x8f,0x18,0x21,0x14,0x4b,0x1a,0x4e,0x3e,0xa0,0xf1,0x72,0x4e,0xd3,0x29,0xa8,0x09,0x9e,0x65,0x64,0x5f,0x5a,0x42,0x0c,0x26,0x85,0x28,0xf9,0x85,0x4a,0x66,0xd1,0xaa,0xa9,0x22,0x26,0xa6,0x05,0x86,0x18,0x8a,0x94,0x65,0x3e,0xa9,0x18,0x4b,0x1c,0xc8,0x9b,0xf0,0xcf,0xd7,0x7c,0x38,0x85,0xbb,0xfc,0x92,0x91,0x2c,0x90,0x8b,0x93,0x38,0xb4,0x41,0x36,0x1a,0xd5,0xae,0x5c,0x53,0x85,0xd4,0xd1,0xf2,0x92,0x69,0xf0,0x0e,0x6a,0x4d,0x08,0xe4,0x8e,0x44,0x60,0x00,};
 const uint8_t _tilemaps_data_54[] = {0x88,0xe0,0x89,0xe0,0x04,0xce,0x05,0x91,0x0e,0x8d,0x0a,0x8b,0x0a,0x9c,0x8a,0x36,0x28,0x04,0x8c,0x18,0x70,0x92,0x70,0x8e,0x57,0x8c,0x22,0x72,0xa9,0x1a,0x86,0x0d,0xa3,0x05,0x22,0xb9,0x53,0x34,0x2a,0x87,0x02,0x87,0x20,0x14,0x88,0x02,0xb2,0x89,0x99,0x14,0x85,0xa1,0x48,0x2e,0xa1,0x18,0x14,0x8b,0x16,0xdf,0xab,0x2e,0x65,0x8c,0x6d,0x90,0x1e,0x46,0x29,0x8a,0x0e,0x68,0x9c,0x3e,0x52,0x26,0xf2,0x92,0xbb,0xb6,0xa5,0x7d,0x3e,0x19,0xb6,0x95,0x04,0x91,0x18,0xb4,0x38,0xd6,0x91,0xad,0x18,0x95,0x94,0x1a,0xc9,0x8a,0x17,0x06,0x94,0x93,0xc0,0xf5,0x29,0x02,0xb9,0x28,0x52,0xd6,0xb2,0x87,0x9b,0x02,0xf4,0x7f,0x2b,0x8d,0xb8,0xe8,0x02,0xc4,0x8e,0x75,0x2a,0x16,0x23,0x04,0xa1,0xd0,0xc8,0x8c,0xf1,0x92,0x26,0x48,0xb2,0x91,0xbe,0x66,0x48,0x86,0x22,0xb2,0x8a,0x95,0x32,0x95,0x85,0xbe,0xb6,0x28,0x48,0x8e,0xa8,0xed,0x43,0xd4,0x4b,0x82,0x47,0x95,0x18,0x94,0x8c,0xaa,0xf2,0x8d,0x9b,0x1c,0x48,0x0d,0x1a,0xf6,0x05,0xa5,0x30,0x68,0x52,0x44,0x91,0x8b,0x28,0xd2,0x50,0x26,0xdc,0xbd,0x19,0xc6,0x54,0x7c,0x3a,0x02,0xd1,0xde,0x48,0x70,0xed,0x23,0x9e,0x8e,0x8d,0x1c,0xa1,0x5a,0x05,0x94,0x8b,0x8f,0x00,0x49,0x60,0xa2,0x8c,0xc5,0x00,0xa6,0x36,0x5c,0x4d,0x85,0x14,0xf2,0x86,0xc7,0x02,0x6d,0x05,0x22,0x2c,0xac,0x65,0xa6,0x02,0x47,0x67,0xc8,0x06,0x65,0x08,0x7c,0x18,0x58,0xce,0x05,0x54,0x0a,0x07,0x10,0xe5,0x63,0x4a,0x7a,0x53,0x06,0x99,0x50,0x31,0x64,0x4d,0x4e,0x1a,0x18,0x2b,0x0a,0x4e,0xb3,0x30,0x10,0x87,0x28,0xe5,0x12,0x7d,0x4e,0x90,0x04,0x10,0xb4,0x0a,0x4e,0x67,0x02,0x5e,0x85,0x18,0xcc,0xe8,0x6b,0xa6,0x18,0x8d,0xd0,0x33,0x28,0x09,0x2a,0xf1,0x0b,0x0c,0xf5,0x4d,0x84,0x08,0x16,0x7a,0xd0,0x59,0x80,0x28,0x05,0xae,0x89,0x36,0x5c,0x52,0x86,0x65,0x99,0x2c,0x0e,0x5d,0xfa,0x03,0x36,0x60,0x43,0x48,0x0a,0x68,0x45,0x02,0x59,0x11,0xc1,0x8f,0x4b,0x0a,0x45,0xca,0x0d,0xb0,0xe2,0xba,0x0a,0x14,0x02,0xd0,0xdd,0x0a,0xb4,0x2e,0x02,0x56,0x26,0x42,0x18,0xa5,0x67,0x26,0xea,0x02,0xd7,0x90,0x65,0xf7,0xe8,0x7a,0x28,0xe0,0x02,0xe8,0x28,0x52,0xa8,0x02,0xe0,0x7a,0x1c,0x28,0xaa,0x02,0x16,0xd4,0xd0,0x31,0x28,0xb4,0x0a,0xf8,0x04,0x14,0x6c,0x00,};
@@ -590,17 +3033,17 @@ const Tilemaps_Data tilemaps_10[] = {
 
 
 const World_Data worlds[] = {
-	{ tilemaps_0, /*dynTilesStart_0*/ 0, /*actionTilesStart_0*/ 0 },
-	{ tilemaps_1, /*dynTilesStart_1*/ 0, /*actionTilesStart_1*/ 0 },
-	{ tilemaps_2, /*dynTilesStart_2*/ 0, /*actionTilesStart_2*/ 0 },
-	{ tilemaps_3, /*dynTilesStart_3*/ 0, /*actionTilesStart_3*/ 0 },
-	{ tilemaps_4, /*dynTilesStart_4*/ 0, /*actionTilesStart_4*/ 0 },
-	{ tilemaps_5, /*dynTilesStart_5*/ 0, /*actionTilesStart_5*/ 0 },
-	{ tilemaps_6, /*dynTilesStart_6*/ 0, /*actionTilesStart_6*/ 0 },
-	{ tilemaps_7, /*dynTilesStart_7*/ 0, /*actionTilesStart_7*/ 0 },
-	{ tilemaps_8, /*dynTilesStart_8*/ 0, /*actionTilesStart_8*/ 0 },
-	{ tilemaps_9, /*dynTilesStart_9*/ 0, /*actionTilesStart_9*/ 0 },
-	{ tilemaps_10, /*dynTilesStart_10*/ 0, /*actionTilesStart_10*/ 0 },
+	{ tilemaps_0, /*dynTilesStart_0*/ 0, actionTilesStart_0 },
+	{ tilemaps_1, /*dynTilesStart_1*/ 0, actionTilesStart_1 },
+	{ tilemaps_2, /*dynTilesStart_2*/ 0, actionTilesStart_2 },
+	{ tilemaps_3, /*dynTilesStart_3*/ 0, actionTilesStart_3 },
+	{ tilemaps_4, /*dynTilesStart_4*/ 0, actionTilesStart_4 },
+	{ tilemaps_5, /*dynTilesStart_5*/ 0, actionTilesStart_5 },
+	{ tilemaps_6, /*dynTilesStart_6*/ 0, actionTilesStart_6 },
+	{ tilemaps_7, /*dynTilesStart_7*/ 0, actionTilesStart_7 },
+	{ tilemaps_8, /*dynTilesStart_8*/ 0, actionTilesStart_8 },
+	{ tilemaps_9, /*dynTilesStart_9*/ 0, actionTilesStart_9 },
+	{ tilemaps_10, /*dynTilesStart_10*/ 0, actionTilesStart_10 },
 };
 
 

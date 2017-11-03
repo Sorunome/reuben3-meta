@@ -63,6 +63,9 @@ void Player::update() {
 	float dy = _dy*v;
 	float _x = x;
 	float _y = y;
+	
+	int8_t oldtile_x = (x + 2) / 8;
+	int8_t oldtile_y = (y + 4) / 8;
 	if (dx) {
 		if (isWalkable(2 + dx, 4) && isWalkable(2 + dx, 7) && isWalkable(5 + dx, 4) && isWalkable(5 + dx, 7)) {
 			x += dx;
@@ -90,6 +93,15 @@ void Player::update() {
 		board.scrollDown();
 		return;
 	}
+	
+	int8_t newtile_x = (x + 2) / 8;
+	int8_t newtile_y = (y + 4) / 8;
+	
+	if (oldtile_x != newtile_x || oldtile_y != newtile_y) {
+		// check for scripts!
+		board.runScript(newtile_x, newtile_y, SCRIPT_WALK);
+	}
+	
 	focus();
 }
 

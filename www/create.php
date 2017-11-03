@@ -20,8 +20,10 @@ $bigSpritesPerPage = 65;
 function dechexpad2($i){
 	return str_pad(dechex($i),2,'0',STR_PAD_LEFT);
 }
+if (!function_exists('dechexpad')) {
 function dechexpad($i, $size){
 	return str_pad(dechex($i),$size,'0',STR_PAD_LEFT);
+}
 }
 function hex2binstr($s) {
 	return str_pad(base_convert($s, 16, 2), 8, '0', STR_PAD_LEFT);
@@ -386,6 +388,7 @@ $hexData = [];
 
 $maps = '';
 $thisId = 0;
+$tilemapIds = [];
 
 foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(',',array_map('intval',$mapIds)).")") as $m){
 	$name = $m['name'];
@@ -397,7 +400,7 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 	// we adjust the pointers here as in the parsing we'd have to decrease them else first
 	$worldLUT .= "\t{ tilemaps_$worldASMId, ";
 	$worldLUT .= "/*dynTilesStart_$worldASMId*/ 0, ";
-	$worldLUT .= "/*actionTilesStart_$worldASMId*/ 0 },\n";
+	$worldLUT .= "actionTilesStart_$worldASMId },\n";
 	
 	$tilemaps = $sql->query("SELECT `data`,`id`,`x`,`y`,`area`,`enemies` FROM `tilemaps` WHERE `mapId`=%d",[$mapId]);
 	$tilemapsLut .= "const Tilemaps_Data tilemaps_${worldASMId}[] = {\n";
@@ -406,6 +409,7 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 	$eventTilesOnWorld = false;
 	
 	foreach($tilemaps as $t){
+		$tilemapIds[] = (int)$t['id'];
 		$td = json_decode($t['data'],true);
 		$k = 0;
 		$xPos = (int)$t['x'] - $mapDimensions[(int)$m['id']]['ox'] - $mapDimensions['minx'];
@@ -428,20 +432,20 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 		
 		if($tileEvents[0]['id'] !== NULL){
 			if(!$eventTilesOnWorld){
-				$eventTilesLutLut .= "actionTilesStart_$worldASMId:\n";
+				$eventTilesLutLut .= "const Actiontiles_LUTLUT actionTilesStart_${worldASMId}[] = {\n";
 				$eventTilesOnWorld = true;
 			}
-			$eventTilesLutLut .= "\t.db $".dechexpad2($mapId)."\n\t.dw event_tiles_LUT_for_map_".$t['id']."\n";
+			$eventTilesLutLut .= "\t{ 0x".dechexpad2($mapId).", ".sizeof($tileEvents).", event_tiles_LUT_for_map_$t[id] },\n";
 			$s = '';
 			foreach($tileEvents as $te){
-				$s .= "\t.db ".(string)(((int)$te['y'] * 12) + (int)$te['x'])."\n\t.dw event_tile_routine_".$te['id']."\n";
+				$s .= "\t{ ".(string)(((int)$te['y'] * 12) + (int)$te['x']).", event_tile_routine_$te[id] },\n";
 				if($te['add_jump']){
 					$te['code'] .= "\nret";
 				}
 				$eventTilesCode .= "event_tile_routine_".$te['id'].":\n\t".parseCode(str_replace("\n","\n\t",$te['code']))."\n";
 				$eventTilesCode .= "\n";
 			}
-			$eventTilesLut['event_tiles_LUT_for_map_'.$t['id']] = $s."\t.db \$FF\n";
+			$eventTilesLut['event_tiles_LUT_for_map_'.$t['id']] = $s;
 		}
 		if($dynTiles[0]['id'] !== NULL){
 			if(!$dyntilesOnWorld){
@@ -461,14 +465,14 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 		$tilemapsLut .= "_tilemaps_data_$thisId },\n";
 		
 		$chunknum++;
-		for($i = 0;$i < 8;$i++){
-			for($j = 0;$j < 12;$j++){
+		for ($i = 0;$i < 8;$i++) {
+			for ($j = 0;$j < 12;$j++) {
 				$bytes = $spritesLUT[$td[$k]];
 				$hexData[] = '0x'.$bytes[2].$bytes[3].$bytes[0].$bytes[1]; // swap endian-ness
 				$k++;
 			}
 		}
-		if($chunknum == 8){
+		if ($chunknum == 8) {
 			// time to compress this thing!
 			$chunknum = 0;
 			$hexDataOut = compress($hexData, 4);
@@ -487,39 +491,60 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 	}
 	$tilemapsLut .= "};\n";
 	
-	if($dyntilesOnWorld){
+	
+	if ($dyntilesOnWorld) {
 		$dynTilesCode .= "\t.db \$ff\n";
-	}else{
+	} else {
 		$defines['dynTilesStart_'.$worldASMId] = 0;
 	}
-	if($eventTilesOnWorld){
-		$eventTilesLutLut .= "\t.db \$ff\n";
-	}else{
+	if ($eventTilesOnWorld) {
+		$eventTilesLutLut .= "\t{ 0xFF, 0, 0 },\n};\n";
+	} else {
 		$defines['actionTilesStart_'.$worldASMId] = 0;
 	}
 	$worldASMId++;
 }
-if($chunknum != 0){ // we still have more to compress!
+if ($chunknum != 0) { // we still have more to compress!
 	$hexDataOut = compress($hexData, 4);
 	$uncompressedSize += sizeof($hexData);
 	$compressedSize += sizeof($hexDataOut);
 	
 	$bytesCompressed += sizeof($hexData) - sizeof($hexDataOut) - 3; // pointer size
 	$maps .= "const uint8_t _tilemaps_data_${thisId}[] = {";
-	for($i = 0;$i < sizeof($hexDataOut);$i++){
+	for ($i = 0; $i < sizeof($hexDataOut); $i++) {
 		$maps .= $hexDataOut[$i].',';
 	}
 	$maps .= "};\n";
 }
 $worldLUT .= "};\n";
+
+// now create the scripts (couldn't do that before because we need the defines)
+// define some constants
+$defines['script_walk'] = 0;
+$defines['script_action'] = 1;
+foreach ($sql->query("SELECT `id`,`x`,`y`,`code`,`add_jump` FROM `eventTiles` WHERE `refId` IN (".implode(',',array_map('intval',$tilemapIds)).")") as $te) {
+	if ($te['add_jump']) {
+		$te['code'] .= "\nreturn(true)";
+	}
+	$code = bin2hex($parser->parse($te['code'], 0, $defines));
+	$file .= "const uint8_t event_tile_routine_".$te['id']."[] = {\n\t";
+	if ($code == '') {
+		$code = 'FF';
+	}
+	foreach (str_split($code, 2) as $h) {
+		$file .= "0x$h, ";
+	}
+	$file .= "\n};\n";
+}
+
+foreach($eventTilesLut as $label => $value){
+	$file .= "const Actiontiles_LUT ${label}[] = {\n$value};\n";
+}
+$file .= $eventTilesLutLut."\n\n";
 $file .= $maps;
 $file .= $tilemapsLut;
 $file .= "\n\n\n";
-//$file .= "actionTilesStart:\n".$eventTilesLutLut."actionTilesEnd:\n\n";
-/*foreach($eventTilesLut as $label => $value){
-	$file .= "$label:\n$value\n";
-}
-*/
+
 $file .= "\n\n\n";
 $file .= $worldLUT;
 $file .= "\n\n\n";
@@ -689,10 +714,10 @@ foreach($strings as $s){
 		//var_dump(sizeof($hexData) - $min);
 		
 		
-		while((sizeof($hexData) - $min) >= 827){ // time to compress this, but first look that everything after our flag is in the same block
+		while((sizeof($hexData) - $min) >= 827) { // time to compress this, but first look that everything after our flag is in the same block
 			$compress_string($min);
 		}
-	}else{
+	} else {
 		$file .= "string_$s[name]:\n\t.db ";
 		$s = getTextASM($s['string']);
 		for($i = 0;$i < mb_strlen($s);$i++){
