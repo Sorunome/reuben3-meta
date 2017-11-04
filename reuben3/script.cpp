@@ -26,6 +26,7 @@
 #define SCRIPT_ISEVENT 0x12
 #define SCRIPT_SETEVENT 0x13
 #define SCRIPT_CLEAREVENT 0x14
+#define SCRIPT_EQ 0x15
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -84,6 +85,8 @@ bool Script::condition() {
 			return getNum() < getNum();
 		case SCRIPT_ISEVENT:
 			return player.isEvent(getNum());
+		case SCRIPT_EQ:
+			return getNum() == getNum();
 	}
 	return false;
 }

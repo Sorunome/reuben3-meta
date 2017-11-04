@@ -52,6 +52,32 @@ bool Player::isWalkable(float dx, float dy) {
 	return tile < SPRITE_AFTER_WALK;
 }
 
+void Player::interact() {
+	if (gb.buttons.pressed(BUTTON_A)) {
+		// we check for the tile 2 pixels away, that should account for movement offsets
+		// inside the lower 4x4 hitbox, though
+		// more like, at the edges of it
+		// so edgy
+		
+		int8_t _x = x;
+		int8_t _y = y;
+		if (direction == Direction::up) {
+			_x += 3;
+			//_y += 0;
+		} else if (direction == Direction::right) {
+			_x += 7;
+			_y += 5;
+		} else if (direction == Direction::down) {
+			_x += 3;
+			_y += 9;
+		} else { // left
+			//_x += 0;
+			_y += 5;
+		}
+		board.runScript(_x / 8, _y / 8, SCRIPT_ACTION);
+	}
+}
+
 void Player::update() {
 	/*
 	 *  The player has a 4x4 hitbox on the bottom
@@ -60,6 +86,7 @@ void Player::update() {
 	int8_t _dy = gb.buttons.repeat(BUTTON_DOWN, 0) - gb.buttons.repeat(BUTTON_UP, 0);
 	if (!_dx && !_dy) {
 		// nothing to do
+		interact();
 		return;
 	}
 	float v = 1.5f;
@@ -68,17 +95,25 @@ void Player::update() {
 	}
 	float dx = _dx*v;
 	float dy = _dy*v;
-	float _x = x;
-	float _y = y;
 	
 	int8_t oldtile_x = (x + 2) / 8;
 	int8_t oldtile_y = (y + 4) / 8;
 	if (dx) {
+		if (dx > 0) {
+			direction = Direction::right;
+		} else {
+			direction = Direction::left;
+		}
 		if (isWalkable(2 + dx, 4) && isWalkable(2 + dx, 7) && isWalkable(5 + dx, 4) && isWalkable(5 + dx, 7)) {
 			x += dx;
 		}
 	}
 	if (dy) {
+		if (dy > 0) {
+			direction = Direction::down;
+		} else {
+			direction = Direction::up;
+		}
 		if (isWalkable(2, 4 + dy) && isWalkable(5, 4 + dy) && isWalkable(2, 7 + dy) && isWalkable(5, 7 + dy)) {
 			y += dy;
 		}
@@ -110,6 +145,9 @@ void Player::update() {
 	}
 	
 	focus();
+	
+	// now let's check for actions
+	interact();
 }
 
 void Player::render() {

@@ -192,7 +192,7 @@ void Board::render() {
 	}
 }
 
-void Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
+bool Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 	uint8_t amount = 0;
 	uint8_t i = 0;
 	uint8_t offset = y*12 + x;
@@ -202,22 +202,23 @@ void Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 		if (id == mapId) {
 			amount = worlds[worldId].actionTiles[i].amount;
 			if (!amount) {
-				return;
+				return false;
 			}
 			const Actiontiles_LUT* lut = worlds[worldId].actionTiles[i].lut;
 			for (i = 0; i < amount; i++) {
 				if (lut[i].offset == offset) {
 					script.run(lut[i].script);
-					return;
+					return true;
 				}
 			}
-			return;
+			return false;
 		}
 		if (id == 0xFF) {
-			return;
+			return false;
 		}
 		i++;
 	}
+	return false;
 }
 
 

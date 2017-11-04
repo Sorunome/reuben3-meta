@@ -238,6 +238,13 @@ class Parser{
 					return '14'.$this->getVar($args[0]);
 				}
 			],
+			'eq' => [
+				'args_min' => 2,
+				'args_max' => 2,
+				'fn' => function($args){
+					return '15'.$this->getVar($args[0]).$this->getVar($args[1]);
+				}
+			],
 			
 			'add_enemy' => [
 				'args_min' => 3,

@@ -4,12 +4,21 @@
 #include "data/defines.h"
 #include <Gamebuino-Meta.h>
 
+enum class Direction : uint8_t {
+	up = 0,
+	right,
+	down,
+	left,
+};
+
 class Player {
 	private:
 		float x = 0;
 		float y = 0;
 		bool isWalkable(float dx, float dy);
 		uint8_t events[(TOTAL_EVENTS + 7) / 8];
+		Direction direction;
+		void interact();
 	public:
 		void moveTo(int8_t _x, int8_t _y);
 		void moveX(int8_t _x);

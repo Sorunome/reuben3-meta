@@ -359,6 +359,13 @@ foreach($sql->query("SELECT `offset`,`bit`,`id`,`name` FROM `events`") as $e){
 	$eventCounter++;
 }
 $defines['total_events'] = $eventCounter;
+$stringCounter = 0;
+$strings = $sql->query("SELECT `name`,`string`,`compress` FROM `strings` WHERE `compress`=1");
+foreach ($strings as $s) {
+	$defines['string_'.$s['name']] = $stringCounter;
+	$stringCounter++;
+}
+$defines['total_strings'] = $stringCounter;
 
 $eventTilesLutLut = '';
 $eventTilesLut = [];
@@ -583,9 +590,8 @@ $file = "Chars:\n".$bighex."\nSmallChars:\n".$smallhex;
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/font.asm',$file);
 
 $html .= $file.'</textarea><h1>String Data</h1><textarea style="width:100%;height:500px;">';
-$strings = $sql->query("SELECT `name`,`string`,`compress` FROM `strings` WHERE 1");
+
 $file = '';
-$file2 = '';
 $hexData = [];
 $uncompressedSize = 0;
 $compressedSize = 0;
@@ -648,78 +654,59 @@ $compress_string = function($min) use (&$file,&$hexData,&$uncompressedSize,&$com
 	$f = rtrim($f,',')."\n";
 	$blockLUT .= "\t.dw _Text_block_$blocknum\n";
 	$blocknum++;
-	if($blocknum > $textBlocksPerPage){
-		$file2 .= $f;
-	}else{
-		$file .= $f;
-	}
+	$file .= $f;
 };
 $defines['first_offpage_textblock'] = $textBlocksPerPage;
 $stringLUT = '';
 foreach($strings as $s){
-	if((int)$s['compress']){
-		$stringLUT .= 'string_'.$s['name'].":\n";
-		$arrayCount = array_count_values($hexData);
-		
-		$min = $arrayCount['FREEZEBLOCK']??0;
-		$min += $arrayCount['UNFREEZEBLOCK']??0;
-		//echo "\n======\n",$s['name']."\n";
-		//var_dump(sizeof($hexData));
-		//var_dump($min);
-		//echo "-----\n";
-		$stringLUT .= "\t.dw ".(sizeof($hexData) - $min)."\n";
-		$stringLUT .= "\t.db $blocknum\n";
-		
-		$bs = '';
-		$s = getTextASM($s['string']);
-		for($i = 0;$i < mb_strlen($s);$i++){
-			$c = mb_substr($s,$i,1);
-			//if($i == 0){
-			//	echo $c."\n";
-			//}
-			if($c == "\x05"){
-				$bs .= 'FREEZEBLOCK,'.mb_substr($s,$i+1).'UNFREEZEBLOCK,';
-				break;
-			}
-			$bs .= (string)$charsLUT[$c].',';
+	$stringLUT .= 'string_'.$s['name'].":\n";
+	$arrayCount = array_count_values($hexData);
+	
+	$min = $arrayCount['FREEZEBLOCK']??0;
+	$min += $arrayCount['UNFREEZEBLOCK']??0;
+	//echo "\n======\n",$s['name']."\n";
+	//var_dump(sizeof($hexData));
+	//var_dump($min);
+	//echo "-----\n";
+	$stringLUT .= "\t.dw ".(sizeof($hexData) - $min)."\n";
+	$stringLUT .= "\t.db $blocknum\n";
+	
+	$bs = '';
+	$s = getTextASM($s['string']);
+	for($i = 0;$i < mb_strlen($s);$i++){
+		$c = mb_substr($s,$i,1);
+		//if($i == 0){
+		//	echo $c."\n";
+		//}
+		if($c == "\x05"){
+			$bs .= 'FREEZEBLOCK,'.mb_substr($s,$i+1).'UNFREEZEBLOCK,';
+			break;
 		}
-		//echo "new length:";
-		//var_dump(sizeof(explode(',',rtrim($bs,','))));
-		$hexData = array_merge($hexData,explode(',',rtrim($bs,',')));
-		
-		
-		$arrayCount = array_count_values($hexData);
-		
-		$min = $arrayCount['FREEZEBLOCK']??0;
-		$min += $arrayCount['UNFREEZEBLOCK']??0;
-		
-		//echo "data length:";
-		//var_dump(sizeof($hexData) - $min);
-		
-		
-		while((sizeof($hexData) - $min) >= 827) { // time to compress this, but first look that everything after our flag is in the same block
-			$compress_string($min);
-		}
-	} else {
-		$file .= "string_$s[name]:\n\t.db ";
-		$s = getTextASM($s['string']);
-		for($i = 0;$i < mb_strlen($s);$i++){
-			$c = mb_substr($s,$i,1);
-			if($c == "\x05"){
-				$file .= mb_substr($s,$i+1);
-				break;
-			}
-			$file .= (string)$charsLUT[$c].',';
-		}
-		$file = rtrim($file,',')."\n";
+		$bs .= (string)$charsLUT[$c].',';
+	}
+	//echo "new length:";
+	//var_dump(sizeof(explode(',',rtrim($bs,','))));
+	$hexData = array_merge($hexData,explode(',',rtrim($bs,',')));
+	
+	
+	$arrayCount = array_count_values($hexData);
+	
+	$min = $arrayCount['FREEZEBLOCK']??0;
+	$min += $arrayCount['UNFREEZEBLOCK']??0;
+	
+	//echo "data length:";
+	//var_dump(sizeof($hexData) - $min);
+	
+	
+	while((sizeof($hexData) - $min) >= 827) { // time to compress this, but first look that everything after our flag is in the same block
+		$compress_string($min);
 	}
 }
 while(sizeof($hexData)){
 	$compress_string(0);
 }
 $file .= "\n$blockLUT\n$stringLUT";
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/strings.asm',$file);
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/strings2.asm',$file2);
+file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/strings.h',$file);
 
 $compressedPercent = (($compressedSize/$uncompressedSize)*100);
 $html .= $file.'</textarea>Compressed: '.$compressedSize.'/'.$uncompressedSize.' ('.$compressedPercent.'%)<br>Bytes compressed: '.$bytesCompressed;

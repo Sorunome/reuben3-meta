@@ -47,7 +47,7 @@ class Board {
 		void postload();
 		void render();
 		uint16_t getTile(uint8_t x, uint8_t y);
-		void runScript(uint8_t x, uint8_t y, uint8_t trigger);
+		bool runScript(uint8_t x, uint8_t y, uint8_t trigger);
 };
 
 extern Board board;
