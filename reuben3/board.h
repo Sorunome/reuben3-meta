@@ -40,6 +40,7 @@ class Board {
 		void scrollRight();
 		void scrollUp();
 		void scrollDown();
+		void postloadHouseAnimation();
 		void setWorld(uint8_t _world);
 		void load(uint8_t _world, uint8_t _map);
 		void load(uint8_t _map);

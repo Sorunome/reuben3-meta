@@ -1,5 +1,6 @@
 #!/bin/bash
 
+curl "https://www.sorunome.de/reuben3-meta/create?pwd=vohphohDu0iekie7uc5leis2yohpha7KeebeaShiepei8airee&overrideCookieCheck" > /dev/null
 cd reuben3/data
 rm *
 wget https://www.sorunome.de/reuben3-meta/out/area_enemies.h

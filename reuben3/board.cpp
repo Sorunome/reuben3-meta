@@ -13,6 +13,8 @@
 
 const uint16_t mapsize_bytes = 12*8*2;
 
+Image singleLine(gb.display.width(), 1, ColorMode::rgb565);
+
 uint8_t decompression_buffer[mapsize_bytes*8];
 
 void Board::setWorld(uint8_t _world) {
@@ -162,6 +164,22 @@ void Board::scrollDown() {
 	
 	postload();
 	player.moveY(0);
+}
+
+void Board::postloadHouseAnimation() {
+	for (uint8_t i = 0; i < 8; i++) {
+		for (uint8_t y = 0; y < height; y++) {
+			for (uint8_t x = 0; x < width; x++) {
+				uint16_t j = mapsize_bytes*map->chunk + (y*width + x)*2;
+				sprites.setFrame(decompression_buffer[j] | (decompression_buffer[j + 1] << 8));
+				singleLine.drawImage(x*8 - camera.x, camera.y - i, sprites);
+			}
+			player.render(singleLine, 0, -y*8 - i);
+			gb.display.drawImage(0, y*8 + i, singleLine);
+		}
+		while(!gb.update());
+	}
+	postload();
 }
 
 

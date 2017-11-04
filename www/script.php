@@ -217,52 +217,28 @@ class Parser{
 					return '11';
 				}
 			],
-			'text' => [
+			'is_event' => [
 				'args_min' => 1,
-				'args_max' => 99999999999,
+				'args_max' => 1,
 				'fn' => function($args){
-					$s = implode(',',$args);
-					$s = preg_replace_callback('/\\\\x([\da-fA-F]{2})/',function($matches){
-						return hex2bin($matches[1]);
-					},$s);
-					$s = strtr($s,[
-						'\\n' => "\xfe",
-						'\\r' => "\xfd"
-					]);
-					$a = [];
-					while(strlen($s)){
-						if(strlen($s) > 19){
-							for($i = 19;$i >= 0;$i--){
-								if(isset($s[$i]) && $s[$i] == ' '){
-									break;
-								}
-							}
-							if($i <= 0){
-								$i = 19;
-							}
-							$a[] = substr($s,0,$i);
-							$s = ltrim(substr($s,$i));
-						}else{
-							$a[] = $s;
-							break;
-						}
-					}
-					$s = '';
-					$alt = true;
-					foreach($a as $e){
-						$s .= $e;
-						if($alt = !$alt){
-							// pagebreak
-							$s .="\xfd";
-						}else{
-							// linebreak
-							$s .= "\xfe";
-						}
-					}
-					$s = substr($s,0,-1);
-					return '04'.bin2hex($s).'ff';
+					return '12'.$this->getVar($args[0]);
 				}
 			],
+			'set_event' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args){
+					return '13'.$this->getVar($args[0]);
+				}
+			],
+			'clear_event' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args){
+					return '14'.$this->getVar($args[0]);
+				}
+			],
+			
 			'add_enemy' => [
 				'args_min' => 3,
 				'args_max' => 3,

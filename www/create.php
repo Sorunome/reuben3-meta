@@ -68,19 +68,7 @@ function compress($hexData, $chunksize = 2){
 	}
 	return $hexDataComp;
 }
-function parseCode($s){
-	$s = preg_replace('/setEvent\(([\d\w-]+)\)/','setEvent_real(event_${1}_offset,event_${1}_bit)',$s);
-	$s = preg_replace('/isEvent\(([\d\w-]+)\)/','isEvent_real(event_${1}_offset,event_${1}_bit)',$s);
-	$s = preg_replace('/clearEvent\(([\d\w-]+)\)/','clearEvent_real(event_${1}_offset,event_${1}_bit)',$s);
-	$s = preg_replace('/toggleEvent\(([\d\w-]+)\)/','toggleEvent_real(event_${1}_offset,event_${1}_bit)',$s);
-	$s = preg_replace('/doSpeech\(([\d\w-]+)\)/','doSpeech_real(string_${1})',$s);
-	$s = preg_replace('/doBattle\(([\d\w-]+)\)/','doBattle_real(enemy_${1})',$s);
-	$s = preg_replace('/shop\(([\d\w-]+),([\d\w-]+)\)/','shop_real(string_${1},${2},0)',$s);
-	$s = preg_replace('/shop_bottle\(([\d\w-]+),([\d\w-]+)\)/','shop_real(string_${1},${2},1)',$s);
-	
-	$s = preg_replace('/call ([\d\w-]+)\s+ret\s*$/','jp ${1}',$s);
-	return $s;
-}
+
 function getTextASM($s){
 	$s = str_replace("\n\n\n","\t",$s);
 	$s = str_replace("\n\n","\x01",$s);
@@ -362,18 +350,18 @@ $file .= "};\n";
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/area_enemies.h',$file);
 $html .= $file.'</textarea><h1>Tilemaps</h1><textarea style="width:100%;height:500px;">';
 
+$eventCounter = 0;
 foreach($sql->query("SELECT `offset`,`bit`,`id`,`name` FROM `events`") as $e){
-	$defines['event_'.$e['id'].'_offset'] = $e['offset'];
-	$defines['event_'.$e['id'].'_bit'] = $e['bit'];
+	$defines['event_'.$e['id']] = $eventCounter;
 	if($e['name'] != ''){
-		$defines['event_'.$e['name'].'_offset'] = $e['offset'];
-		$defines['event_'.$e['name'].'_bit'] = $e['bit'];
+		$defines['event_'.$e['name']] = $eventCounter;
 	}
+	$eventCounter++;
 }
+$defines['total_events'] = $eventCounter;
 
 $eventTilesLutLut = '';
 $eventTilesLut = [];
-$eventTilesCode = '';
 $file = "/* tilemap data */\n";
 $dynTilesCode = "";
 $tilemapsLut = '';
@@ -439,11 +427,6 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 			$s = '';
 			foreach($tileEvents as $te){
 				$s .= "\t{ ".(string)(((int)$te['y'] * 12) + (int)$te['x']).", event_tile_routine_$te[id] },\n";
-				if($te['add_jump']){
-					$te['code'] .= "\nret";
-				}
-				$eventTilesCode .= "event_tile_routine_".$te['id'].":\n\t".parseCode(str_replace("\n","\n\t",$te['code']))."\n";
-				$eventTilesCode .= "\n";
 			}
 			$eventTilesLut['event_tiles_LUT_for_map_'.$t['id']] = $s;
 		}
@@ -750,12 +733,6 @@ foreach($defines as $label => $value){
 	$file .= "#define $label $value\n";
 }
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/defines.h',$file);
-
-$html .= $file.'</textarea><h1>Event Tiles</h1><textarea style="width:100%;height:500px;">';
-
-$file = $eventTilesCode;
-
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/eventtiles.asm',$file);
 
 
 $html .= $file.'</textarea><hr><a href="/reuben3">&lt;&lt; Back</a>';

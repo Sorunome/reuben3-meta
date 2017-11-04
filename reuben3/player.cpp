@@ -1,5 +1,4 @@
 #include "player.h"
-#include <Gamebuino-Meta.h>
 #include "camera.h"
 #include "board.h"
 #include "data/defines.h"
@@ -29,6 +28,14 @@ void Player::moveX(int8_t _x) {
 
 void Player::moveY(int8_t _y) {
 	y = _y;
+}
+
+float Player::getX() {
+	return x;
+}
+
+float Player::getY() {
+	return y;
 }
 
 void Player::focus() {
@@ -107,6 +114,31 @@ void Player::update() {
 
 void Player::render() {
 	gb.display.drawImage(x - camera.x, y - camera.y, player_sprite);
+}
+
+void Player::render(Image& img, int8_t dx, int8_t dy) {
+	img.drawImage(x - camera.x + dx, y - camera.y + dy, player_sprite);
+}
+
+
+bool Player::isEvent(uint8_t e) {
+	uint8_t offset = e / 8;
+	uint8_t index = e % 8;
+	return (events[offset] >> index) & 1;
+}
+
+void Player::setEvent(uint8_t e) {
+	uint8_t offset = e / 8;
+	uint8_t index = e % 8;
+	uint8_t mask = 1 << index;
+	events[offset] |= mask;
+}
+
+void Player::clearEvent(uint8_t e) {
+	uint8_t offset = e / 8;
+	uint8_t index = e % 8;
+	uint8_t mask = 1 << index;
+	events[offset] &= ~mask;
 }
 
 Player player;

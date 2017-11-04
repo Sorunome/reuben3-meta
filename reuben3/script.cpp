@@ -23,6 +23,9 @@
 #define SCRIPT_DEC 0x0F
 #define SCRIPT_CALL 0x10
 #define SCRIPT_RET 0x11
+#define SCRIPT_ISEVENT 0x12
+#define SCRIPT_SETEVENT 0x13
+#define SCRIPT_CLEAREVENT 0x14
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -79,6 +82,8 @@ bool Script::condition() {
 	switch(*script++) {
 		case SCRIPT_LT:
 			return getNum() < getNum();
+		case SCRIPT_ISEVENT:
+			return player.isEvent(getNum());
 	}
 	return false;
 }
@@ -101,10 +106,9 @@ bool Script::run(uint8_t* _script) {
 				// no continue as from now on it is the same as just setting the map
 			case SCRIPT_TRANSITION_MAP:
 				board.load(getNum());
-				// TODO: neat transitions
-				board.postload();
 				player.moveTo(getNum(), getNum());
 				player.focus();
+				board.postloadHouseAnimation();
 				continue;
 			case SCRIPT_ADD_ENEMY:
 				continue;
@@ -143,6 +147,12 @@ bool Script::run(uint8_t* _script) {
 				continue;
 			case SCRIPT_DEC:
 				(*getVar())--;
+				continue;
+			case SCRIPT_SETEVENT:
+				player.setEvent(getNum());
+				continue;
+			case SCRIPT_CLEAREVENT:
+				player.clearEvent(getNum());
 				continue;
 			
 			case SCRIPT_RETURN_FALSE:
