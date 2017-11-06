@@ -69,21 +69,21 @@ function compress($hexData, $chunksize = 2){
 	return $hexDataComp;
 }
 
-function getTextASM($s){
-	$s = str_replace("\n\n\n","\t",$s);
-	$s = str_replace("\n\n","\x01",$s);
-	$s = str_replace("\n","\x02",$s);
-	$s .= "\x04";
-	if(mb_strpos($s,"{#ask}\x02") !== false){
-		$s = str_replace("{#ask}\x02","\x03",$s);
-		$i = mb_strpos($s,"\x03")+1;
-		$ss = explode(' ',mb_substr($s,$i));
-		$s = str_replace('_',' ',$s);
+function getTextASM($s) {
+	$s = str_replace("\n\n\n", "\x80", $s); // page wrap
+	$s = str_replace("\n\n", "\x81", $s); // block wrap
+//	$s = str_replace("\n","\n",$s);
+	$s .= "\x00"; // end
+	if (mb_strpos($s, "{#ask}\n") !== false) {
+		$s = str_replace("{#ask}\n", "\x82", $s); // question
+		$i = mb_strpos($s, "\x82") + 1;
+		$ss = explode(' ', mb_substr($s, $i));
+		$s = str_replace('_', ' ', $s);
 		$i = 0;
-		$s .= "\x05".sizeof($ss).',';
-		foreach($ss as $si){
+		$s .= "\x83".sizeof($ss).','; // shopoptions
+		foreach ($ss as $si) {
 			$s .= (string)($i*6).',';
-			$i += strlen($si)+1; // +1 because of the space
+			$i += strlen($si) + 1; // +1 because of the space
 		}
 	}
 	return $s;
@@ -163,32 +163,7 @@ $sql->query("UPDATE `font` SET `asm_id`=7 WHERE `char`='6'");
 $sql->query("UPDATE `font` SET `asm_id`=8 WHERE `char`='7'");
 $sql->query("UPDATE `font` SET `asm_id`=9 WHERE `char`='8'");
 $sql->query("UPDATE `font` SET `asm_id`=10 WHERE `char`='9'");*/
-$idCounter = 11;
-$charsLUT = [
-	'0' => 1,
-	'1' => 2,
-	'2' => 3,
-	'3' => 4,
-	'4' => 5,
-	'5' => 6,
-	'6' => 7,
-	'7' => 8,
-	'8' => 9,
-	'9' => 10,
-	"\x05" => "",
-	"\x04" => 0,
-	"\x03" => 0xFC,
-	"\t" => 0xFD,
-	"\x01" => 0xFE,
-	"\x02" => 0xFF
-];
-foreach($charsInUse as $c){
-	if(mb_strpos("0123456789\n\t\x01\x02\x03\x04\x05",$c)===false){
-		$charsLUT[$c] = $idCounter;
-		//$sql->query("UPDATE `font` SET `asm_id`=%d WHERE `char`='%s'",[$idCounter,$c]);
-		$idCounter++;
-	}
-}
+
 
 $mapDimensions = [
 	'width' => 0,
@@ -348,7 +323,144 @@ foreach($sql->query("SELECT `id`,`name`,`enemies` FROM `areas` WHERE 1") as $a){
 }
 $file .= "};\n";
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/area_enemies.h',$file);
-$html .= $file.'</textarea><h1>Tilemaps</h1><textarea style="width:100%;height:500px;">';
+$html .= $file.'</textarea>';
+
+
+$html .= '<h1>String Data</h1><textarea style="width:100%;height:500px;">';
+
+$file = '';
+$hexData = [];
+$uncompressedSize = 0;
+$compressedSize = 0;
+$bytesCompressed = 0;
+$blocknum = 0;
+$blockLUT = "const uint8_t* const _Text_decompression_LUT[] = {\n";
+
+$compress_string = function($min) use (&$file,&$hexData,&$uncompressedSize,&$compressedSize,&$bytesCompressed,&$blocknum,&$blockLUT,&$file2,&$textBlocksPerPage){
+	$workData = [];
+	$j = 2047;
+	for($i = 0;$i < $j; $i++){
+		if(!isset($hexData[$i])){
+			break;
+		}
+		$workData[] = $hexData[$i];
+		if($hexData[$i] == 'FREEZEBLOCK' || $hexData[$i] == 'UNFREEZEBLOCK'){
+			$j++;
+		}
+		unset($hexData[$i]);
+	}
+	//$chunks = array_chunk($hexData,827 + $min);
+	//echo "precompress length:";
+	//var_dump(sizeof($workData));
+	
+	$chunk_prepend = [];
+	if(($i = array_search('FREEZEBLOCK',array_reverse($workData,true))) !== false){
+		
+		$j = sizeof($workData);
+		if(sizeof($hexData) > 0 && array_search('UNFREEZEBLOCK',array_slice($workData,$i)) === false){ // uho, we'll better flip this over
+			for($i++;$i < $j;$i++){
+				$chunk_prepend[] = $workData[$i];
+				unset($workData[$i]);
+			}
+		}
+	}
+	while(($i = array_search('FREEZEBLOCK',$workData)) !== false){
+		unset($workData[$i]);
+	}
+	while(($i = array_search('UNFREEZEBLOCK',$workData)) !== false){
+		unset($workData[$i]);
+	}
+	
+	
+	$hexData = array_merge($chunk_prepend,$hexData);
+	
+	
+	$uncompressedSize += sizeof($workData);
+	//echo "compress length:";
+	//var_dump(sizeof($workData));
+	$workData[] = '0x84'; // end of chunk
+	
+	$hexDataOut = compress($workData);
+	$compressedSize += sizeof($hexDataOut);
+	$bytesCompressed += sizeof($workData) - sizeof($hexDataOut) + 5; // just appriximate the # of strings
+	$f = "const uint8_t _Text_block_${blocknum}[] = {\n\t";
+	for($i = 0;$i < sizeof($hexDataOut);$i++){
+		$f .= $hexDataOut[$i].',';
+	}
+	$f .= "\n};\n";
+	$blockLUT .= "\t_Text_block_$blocknum,\n";
+	$blocknum++;
+	$file .= $f;
+};
+$defines['first_offpage_textblock'] = $textBlocksPerPage;
+$stringLUT = "const Strings_LUT stringsLut[] = {\n";
+$strings = $sql->query("SELECT `name`,`string`,`compress` FROM `strings` WHERE `compress`=1");
+$stringCounter = 0;
+foreach($strings as $s) {
+	$defines['string_'.$s['name']] = $stringCounter;
+	$stringCounter++;
+	$arrayCount = array_count_values($hexData);
+	
+	$min = $arrayCount['FREEZEBLOCK']??0;
+	$min += $arrayCount['UNFREEZEBLOCK']??0;
+	//echo "\n======\n",$s['name']."\n";
+	//var_dump(sizeof($hexData));
+	//var_dump($min);
+	//echo "-----\n";
+	$stringLUT .= "\t{ ".(sizeof($hexData) - $min).", $blocknum },\n";
+	
+	$bs = '';
+	$s = getTextASM($s['string']);
+	for($i = 0; $i < mb_strlen($s); $i++) {
+		$c = mb_substr($s, $i, 1);
+		//if($i == 0){
+		//	echo $c."\n";
+		//}
+		if ($c == "\x83") { // we don't split options accross multiple chunks
+			$bs .= 'FREEZEBLOCK,'.mb_substr($s, $i+1).'UNFREEZEBLOCK,';
+			break;
+		}
+		if ($c == "\\") {
+			$i++;
+			$bs .= '0x'.mb_substr($s, $i, 2).',';
+			$i += 2;
+		} else {
+			$bs .= '0x'.dechexpad2(ord($c)).',';
+		}
+	}
+	//echo "new length:";
+	//var_dump(sizeof(explode(',',rtrim($bs,','))));
+	$hexData = array_merge($hexData, explode(',', rtrim($bs, ',')));
+	
+	
+	$arrayCount = array_count_values($hexData);
+	
+	$min = $arrayCount['FREEZEBLOCK']??0;
+	$min += $arrayCount['UNFREEZEBLOCK']??0;
+	
+	//echo "data length:";
+	//var_dump(sizeof($hexData) - $min);
+	
+	
+	while ((sizeof($hexData) - $min) >= 2047) { // time to compress this, but first look that everything after our flag is in the same block
+		$compress_string($min);
+	}
+}
+while (sizeof($hexData)) {
+	$compress_string(0);
+}
+
+$defines['total_strings'] = $stringCounter;
+$blockLUT .= "};\n";
+$stringLUT .= "};\n";
+$file .= "\n$blockLUT\n$stringLUT";
+file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/strings.h',$file);
+
+$compressedPercent = (($compressedSize/$uncompressedSize)*100);
+$html .= $file.'</textarea>Compressed: '.$compressedSize.'/'.$uncompressedSize.' ('.$compressedPercent.'%)<br>Bytes compressed: '.$bytesCompressed;
+
+
+$html .='<h1>Tilemaps</h1><textarea style="width:100%;height:500px;">';
 
 $eventCounter = 0;
 foreach($sql->query("SELECT `offset`,`bit`,`id`,`name` FROM `events`") as $e){
@@ -360,12 +472,6 @@ foreach($sql->query("SELECT `offset`,`bit`,`id`,`name` FROM `events`") as $e){
 }
 $defines['total_events'] = $eventCounter;
 $stringCounter = 0;
-$strings = $sql->query("SELECT `name`,`string`,`compress` FROM `strings` WHERE `compress`=1");
-foreach ($strings as $s) {
-	$defines['string_'.$s['name']] = $stringCounter;
-	$stringCounter++;
-}
-$defines['total_strings'] = $stringCounter;
 
 $eventTilesLutLut = '';
 $eventTilesLut = [];
@@ -551,168 +657,8 @@ $defines['tilemaps_width'] = $mapDimensions['width'];
 $compressedPercent = (($compressedSize/$uncompressedSize)*100);
 $html .= $file.'</textarea>Compressed: '.$compressedSize.'/'.$uncompressedSize.' ('.$compressedPercent.'%)<br>Bytes compressed: '.$bytesCompressed;
 
-
-$html .= '<h1>Font Data</h1><textarea style="width:100%;height:500px;">';
-
-$sqlquery = "SELECT `char`,`bighex`,`smallhex` FROM `font` WHERE `char` IN (";
-foreach($charsInUse as $c){
-	$sqlquery .= "'%s',";
-}
-$chars = $sql->query(rtrim($sqlquery,',').')',$charsInUse);
-$charsbig = [];
-$charssmall = [];
-foreach($chars as $c){
-	$bighex = "\t.db ";
-	for($i = 0;$i < 14;$i += 2){
-		$bighex .= "$".substr($c['bighex'],$i,2).",";
-	}
-	$charsbig[$c['char']] = rtrim($bighex,',')."\n";
-	
-	
-	$smallhex = "\t.db ";
-	for($i = 0;$i < 10;$i += 2){
-		$smallhex .= "$".substr($c['smallhex'],$i,2).",";
-	}
-	$charssmall[$c['char']] = rtrim($smallhex,',')."\n";
-}
-asort($charsLUT);
-$bighex = '';
-$smallhex = '';
-foreach($charsLUT as $id => $asmid){
-	if(isset($charsbig[$id])){
-		$bighex .= $charsbig[$id];
-		$smallhex .= $charssmall[$id];
-	}
-}
-
-$file = "Chars:\n".$bighex."\nSmallChars:\n".$smallhex;
-
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/font.asm',$file);
-
-$html .= $file.'</textarea><h1>String Data</h1><textarea style="width:100%;height:500px;">';
-
-$file = '';
-$hexData = [];
-$uncompressedSize = 0;
-$compressedSize = 0;
-$bytesCompressed = 0;
-$blocknum = 0;
-$blockLUT = "_Text_decompression_LUT:\n";
-
-$compress_string = function($min) use (&$file,&$hexData,&$uncompressedSize,&$compressedSize,&$bytesCompressed,&$blocknum,&$blockLUT,&$file2,&$textBlocksPerPage){
-	$workData = [];
-	$j = 827;
-	for($i = 0;$i < $j; $i++){
-		if(!isset($hexData[$i])){
-			break;
-		}
-		$workData[] = $hexData[$i];
-		if($hexData[$i] == 'FREEZEBLOCK' || $hexData[$i] == 'UNFREEZEBLOCK'){
-			$j++;
-		}
-		unset($hexData[$i]);
-	}
-	//$chunks = array_chunk($hexData,827 + $min);
-	//echo "precompress length:";
-	//var_dump(sizeof($workData));
-	
-	$chunk_prepend = [];
-	if(($i = array_search('FREEZEBLOCK',array_reverse($workData,true))) !== false){
-		
-		$j = sizeof($workData);
-		if(sizeof($hexData) > 0 && array_search('UNFREEZEBLOCK',array_slice($workData,$i)) === false){ // uho, we'll better flip this over
-			for($i++;$i < $j;$i++){
-				$chunk_prepend[] = $workData[$i];
-				unset($workData[$i]);
-			}
-		}
-	}
-	while(($i = array_search('FREEZEBLOCK',$workData)) !== false){
-		unset($workData[$i]);
-	}
-	while(($i = array_search('UNFREEZEBLOCK',$workData)) !== false){
-		unset($workData[$i]);
-	}
-	
-	
-	$hexData = array_merge($chunk_prepend,$hexData);
-	
-	
-	$uncompressedSize += sizeof($workData);
-	//echo "compress length:";
-	//var_dump(sizeof($workData));
-	$workData[] = '$fb';
-	
-	$hexDataOut = compress($workData);
-	$compressedSize += sizeof($hexDataOut);
-	$bytesCompressed += sizeof($workData) - sizeof($hexDataOut) + 5; // just appriximate the # of strings
-	$f = "_Text_block_$blocknum:\n";
-	$f .= "\t.db ";
-	for($i = 0;$i < sizeof($hexDataOut);$i++){
-		$f .= $hexDataOut[$i].',';
-	}
-	$f = rtrim($f,',')."\n";
-	$blockLUT .= "\t.dw _Text_block_$blocknum\n";
-	$blocknum++;
-	$file .= $f;
-};
-$defines['first_offpage_textblock'] = $textBlocksPerPage;
-$stringLUT = '';
-foreach($strings as $s){
-	$stringLUT .= 'string_'.$s['name'].":\n";
-	$arrayCount = array_count_values($hexData);
-	
-	$min = $arrayCount['FREEZEBLOCK']??0;
-	$min += $arrayCount['UNFREEZEBLOCK']??0;
-	//echo "\n======\n",$s['name']."\n";
-	//var_dump(sizeof($hexData));
-	//var_dump($min);
-	//echo "-----\n";
-	$stringLUT .= "\t.dw ".(sizeof($hexData) - $min)."\n";
-	$stringLUT .= "\t.db $blocknum\n";
-	
-	$bs = '';
-	$s = getTextASM($s['string']);
-	for($i = 0;$i < mb_strlen($s);$i++){
-		$c = mb_substr($s,$i,1);
-		//if($i == 0){
-		//	echo $c."\n";
-		//}
-		if($c == "\x05"){
-			$bs .= 'FREEZEBLOCK,'.mb_substr($s,$i+1).'UNFREEZEBLOCK,';
-			break;
-		}
-		$bs .= (string)$charsLUT[$c].',';
-	}
-	//echo "new length:";
-	//var_dump(sizeof(explode(',',rtrim($bs,','))));
-	$hexData = array_merge($hexData,explode(',',rtrim($bs,',')));
-	
-	
-	$arrayCount = array_count_values($hexData);
-	
-	$min = $arrayCount['FREEZEBLOCK']??0;
-	$min += $arrayCount['UNFREEZEBLOCK']??0;
-	
-	//echo "data length:";
-	//var_dump(sizeof($hexData) - $min);
-	
-	
-	while((sizeof($hexData) - $min) >= 827) { // time to compress this, but first look that everything after our flag is in the same block
-		$compress_string($min);
-	}
-}
-while(sizeof($hexData)){
-	$compress_string(0);
-}
-$file .= "\n$blockLUT\n$stringLUT";
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/strings.h',$file);
-
-$compressedPercent = (($compressedSize/$uncompressedSize)*100);
-$html .= $file.'</textarea>Compressed: '.$compressedSize.'/'.$uncompressedSize.' ('.$compressedPercent.'%)<br>Bytes compressed: '.$bytesCompressed;
-
-
 $html .= '<h1>Defines</h1><textarea style="width:100%;height:500px;">';
+
 
 $file = "";
 foreach($defines as $label => $value){
@@ -726,4 +672,3 @@ $html .= $file.'</textarea><hr><a href="/reuben3">&lt;&lt; Back</a>';
 
 $sql->switchDb('soru_homepage');
 echo $page->getPage('Create Asm',$html,$lang,$pathPartsParsed);
-?>
