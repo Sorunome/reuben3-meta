@@ -4,6 +4,7 @@
 #include "player.h"
 #include "camera.h"
 #include "board.h"
+#include "text.h"
 
 #define SCRIPT_NOP 0x00
 #define SCRIPT_FADE_TO_WHITE 0x01
@@ -27,6 +28,8 @@
 #define SCRIPT_SETEVENT 0x13
 #define SCRIPT_CLEAREVENT 0x14
 #define SCRIPT_EQ 0x15
+#define SCRIPT_TEXT 0x16
+#define SCRIPT_TEXT_ANSWER 0x17
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -97,7 +100,6 @@ bool Script::run(const uint8_t* _script) {
 
 bool Script::run(uint8_t* _script) {
 	script_entry = script = _script;
-	uint8_t* ptr;
 	while(1) {
 		switch(*script++) {
 			case SCRIPT_FADE_TO_WHITE:
@@ -121,9 +123,11 @@ bool Script::run(uint8_t* _script) {
 			case SCRIPT_UPDATE_SCREEN:
 				continue;
 			case SCRIPT_SET_VAR:
-				ptr = getVar();
+			{
+				uint8_t* ptr = getVar();
 				*ptr = getNum();
 				continue;
+			}
 			case SCRIPT_JUMP:
 				jump();
 				continue;
@@ -142,9 +146,11 @@ bool Script::run(uint8_t* _script) {
 				script += 4;
 				continue;
 			case SCRIPT_ADD:
-				ptr = getVar();
+			{
+				uint8_t* ptr = getVar();
 				*ptr += getNum();
 				continue;
+			}
 			case SCRIPT_INC:
 				(*getVar())++;
 				continue;
@@ -157,6 +163,21 @@ bool Script::run(uint8_t* _script) {
 			case SCRIPT_CLEAREVENT:
 				player.clearEvent(getNum());
 				continue;
+			case SCRIPT_TEXT:
+			{
+				uint16_t i = *script++;
+				i += (*script++) << 8;
+				text.box(i, player.getY() > 28);
+				continue;
+			}
+			case SCRIPT_TEXT_ANSWER:
+			{
+				uint16_t i = *script++;
+				i += (*script++) << 8;
+				uint8_t* ptr = getVar();
+				*ptr = (uint8_t)text.box(i, player.getY() > 28);
+				continue;
+			}
 			
 			case SCRIPT_RETURN_FALSE:
 				return false;

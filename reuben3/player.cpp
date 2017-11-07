@@ -53,7 +53,7 @@ bool Player::isWalkable(float dx, float dy) {
 }
 
 void Player::interact() {
-	if (gb.buttons.pressed(BUTTON_A)) {
+	if (gb.buttons.released(BUTTON_A)) {
 		// we check for the tile 2 pixels away, that should account for movement offsets
 		// inside the lower 4x4 hitbox, though
 		// more like, at the edges of it

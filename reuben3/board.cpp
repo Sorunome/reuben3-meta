@@ -15,7 +15,7 @@ const uint16_t mapsize_bytes = 12*8*2;
 
 Image singleLine(gb.display.width(), 1, ColorMode::rgb565);
 
-extern uint8_t* decompression_buffer;
+extern uint8_t decompression_buffer[];
 
 void Board::setWorld(uint8_t _world) {
 	worldId = _world;

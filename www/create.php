@@ -70,8 +70,8 @@ function compress($hexData, $chunksize = 2){
 }
 
 function getTextASM($s) {
-	$s = str_replace("\n\n\n", "\x80", $s); // page wrap
-	$s = str_replace("\n\n", "\x81", $s); // block wrap
+	$s = str_replace("\n\n\n", "\x80", $s); // block wrap
+	$s = str_replace("\n\n", "\x81", $s); // page wrap
 //	$s = str_replace("\n","\n",$s);
 	$s .= "\x00"; // end
 	if (mb_strpos($s, "{#ask}\n") !== false) {
@@ -420,10 +420,10 @@ foreach($strings as $s) {
 			$bs .= 'FREEZEBLOCK,'.mb_substr($s, $i+1).'UNFREEZEBLOCK,';
 			break;
 		}
-		if ($c == "\\") {
-			$i++;
-			$bs .= '0x'.mb_substr($s, $i, 2).',';
+		if ($c == "\\" && mb_substr($s, $i+1, 1) == 'x') {
 			$i += 2;
+			$bs .= '0x'.mb_substr($s, $i, 2).',';
+			$i++; // the second increase will happen in the for-loop
 		} else {
 			$bs .= '0x'.dechexpad2(ord($c)).',';
 		}

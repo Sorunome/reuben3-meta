@@ -98,21 +98,21 @@ class Parser{
 			'fade_to_white' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					return '01';
 				}
 			],
 			'fade_from_white' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					return '02';
 				}
 			],
 			'transition_map' => [
 				'args_min' => 3,
 				'args_max' => 4,
-				'fn' => function($args){
+				'fn' => function($args) {
 					$s = '';
 					if (sizeof($args) == 4) {
 						$s = '03';
@@ -128,21 +128,21 @@ class Parser{
 			'focus_cam' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					return '06';
 				}
 			],
 			'update_screen' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					return '07';
 				}
 			],
 			'set_var' => [
 				'args_min' => 2,
 				'args_max' => 2,
-				'fn' => function($args){
+				'fn' => function($args) {
 					$s = '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
 					return '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
 				}
@@ -150,106 +150,118 @@ class Parser{
 			'label' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					$this->addLabel($args[0]);
 				}
 			],
 			'goto' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '09'.$this->getAddress($args);
 				}
 			],
 			'jump_ifnot' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '0a';
 				}
 			],
 			'lt' => [
 				'args_min' => 2,
 				'args_max' => 2,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '0b'.$this->getVar($args[0]).$this->getVar($args[1]);
 				}
 			],
 			'gt' => [ // gt is like lt....with reversed arguments!
 				'args_min' => 2,
 				'args_max' => 2,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '0b'.$this->getVar($args[1]).$this->getVar($args[0]);
 				}
 			],
 			'add' => [
 				'args_min' => 2,
 				'args_max' => 2,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '0c'.$this->getVarNum($args[0]).$this->getVar($args[1]);
 				}
 			],
 			'inc' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '0e'.$this->getVarNum($args[0]);
 				}
 			],
 			'dec' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '0f'.$this->getVarNum($args[0]);
 				}
 			],
 			'call' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '10'.$getAddress([$args[0]]);
 				}
 			],
 			'ret' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '11';
 				}
 			],
 			'is_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '12'.$this->getVar($args[0]);
 				}
 			],
 			'set_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '13'.$this->getVar($args[0]);
 				}
 			],
 			'clear_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '14'.$this->getVar($args[0]);
 				}
 			],
 			'eq' => [
 				'args_min' => 2,
 				'args_max' => 2,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '15'.$this->getVar($args[0]).$this->getVar($args[1]);
+				}
+			],
+			'text' => [
+				'args_min' => 1,
+				'args_max' => 2,
+				'fn' => function($args) {
+					$i = dechexpad($this->defines['string_'.$args[0]] ?? $args[0], 4);
+					$i = $i[2].$i[3].$i[0].$i[1];
+					if (sizeof($args) == 1) {
+						return '16'.$i;
+					}
+					return '17'.$i.$this->getVarNum($args[1]);
 				}
 			],
 			
 			'add_enemy' => [
 				'args_min' => 3,
 				'args_max' => 3,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return '05'.$this->getVar($args[0]).$this->getVar($args[1]).$this->getVar($args[2]);
 				}
 			],
@@ -257,24 +269,24 @@ class Parser{
 				'args_min' => 1,
 				'args_max' => 1,
 				'unparsed_args' => true,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return $args[0];
 				}
 			],
 			'put_address' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return $this->getAddress($args[0]);
 				}
 			],
 			'set_address_prefix' => [
 				'args_min' => 0,
 				'args_max' => 1,
-				'fn' => function($args){
-					if(sizeof($args) == 0){
+				'fn' => function($args) {
+					if (sizeof($args) == 0) {
 						$this->addressPrefix = '';
-					}else{
+					} else {
 						$this->addressPrefix = $args[0];
 					}
 				}
@@ -283,14 +295,14 @@ class Parser{
 			'return_false' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return 'fe';
 				}
 			],
 			'return_true' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function($args){
+				'fn' => function($args) {
 					return 'ff';
 				}
 			],
@@ -298,8 +310,8 @@ class Parser{
 			'define_vars' => [
 				'args_min' => 1,
 				'args_max' => 10,
-				'fn' => function($args){
-					foreach($args as $i => $a){
+				'fn' => function($args) {
+					foreach($args as $i => $a) {
 						$this->variables[$a] = $i;
 					}
 				}
@@ -307,47 +319,15 @@ class Parser{
 			'clear_vars' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					$this->variables = [];
-				}
-			],
-			'set_player_pos' => [
-				'args_min' => 2,
-				'args_max' => 5,
-				'fn' => function($args){
-					$out = '';
-					$size = sizeof($args);
-					$update = false;
-					if($size > 2 && $args[$size-1] == 'update'){
-						$update = true;
-						$size--;
-					}
-					$focus = false;
-					if($size > 2 && $args[$size-1] == 'focus'){
-						$focus = true;
-						$size--;
-					}
-					$i = 0;
-					if($size > 2){
-						$out .= $this->functions['set_map']['fn']([$args[$i++]]);
-					}
-					$out .= $this->functions['set_var']['fn'](['player_x',$args[$i++]]);
-					
-					$out .= $this->functions['set_var']['fn'](['player_y',$args[$i++]]);
-					if($focus){
-						$out .= '06';
-					}
-					if($update){
-						$out .= '07';
-					}
-					return $out;
 				}
 			],
 			'return' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
-					if($args[0] == 'true'){
+				'fn' => function($args) {
+					if ($args[0] == 'true') {
 						return 'ff';
 					}
 					return 'fe';
@@ -356,7 +336,7 @@ class Parser{
 			'if' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					$out = '0a'.$this->parseLine($args[0],false);
 					$label = $this->getLabel();
 					$this->if_stack[] = $label;
@@ -366,7 +346,7 @@ class Parser{
 			'else' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					$label = array_pop($this->if_stack);
 					$this->addLabel($label,5);
 					
@@ -379,7 +359,7 @@ class Parser{
 			'endif' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					$label = array_pop($this->if_stack);
 					$this->addLabel($label);
 				}
@@ -387,7 +367,7 @@ class Parser{
 			'do' => [
 				'args_min' => 0,
 				'args_max' => 0,
-				'fn' => function(){
+				'fn' => function() {
 					$label = $this->getLabel();
 					$this->addLabel($label);
 					$this->while_stack[] = $label;
@@ -396,7 +376,7 @@ class Parser{
 			'while' => [
 				'args_min' => 1,
 				'args_max' => 1,
-				'fn' => function($args){
+				'fn' => function($args) {
 					$out = '0d'.$this->parseLine($args[0],false);
 					$label = array_pop($this->while_stack);
 					$out .= $this->getAddress($label);

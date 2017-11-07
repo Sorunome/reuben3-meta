@@ -7,7 +7,7 @@
 #include "script.h"
 
 
-uint8_t decompression_buffer[2048]; // 2048 > 12*8*2*8
+uint8_t decompression_buffer[2048]; // 2048 > 12*8*2*8 = 1536
 
 void setup() {
 	gb.begin();
