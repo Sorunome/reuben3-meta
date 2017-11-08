@@ -22,8 +22,13 @@ const uint8_t buttonsBuffer[] = {
 	0x55, 0x55,
 	0xF5, 0x5F,
 	0xFF, 0xFF,
+	
+	0x55, 0x5F,
+	0x5F, 0x5F,
+	0x55, 0x5F,
+	0xFF, 0xFF,
 };
-Image buttons(buttonsBuffer, 2, 0);
+Image buttons(buttonsBuffer, 3, 0);
 
 void waitCycles(uint8_t num) {
 	for (uint8_t i = 0; i < num; i++) {
@@ -34,7 +39,7 @@ void waitCycles(uint8_t num) {
 bool waitCyclesButton(uint8_t num) {
 	for (uint8_t i = 0; i < num; i++) {
 		while(!gb.update());
-		if (gb.buttons.pressed(BUTTON_A) || gb.buttons.pressed(BUTTON_B)) {
+		if (gb.buttons.pressed(BUTTON_A) || gb.buttons.pressed(BUTTON_B) || gb.buttons.pressed(BUTTON_LEFT) || gb.buttons.pressed(BUTTON_RIGHT)) {
 			return true;
 		}
 	}
@@ -44,7 +49,7 @@ bool waitCyclesButton(uint8_t num) {
 void waitRelease() {
 	while(1) {
 		while(!gb.update());
-		if (gb.buttons.released(BUTTON_A) || gb.buttons.released(BUTTON_B)) {
+		if (gb.buttons.released(BUTTON_A) || gb.buttons.released(BUTTON_B) || gb.buttons.released(BUTTON_LEFT) || gb.buttons.released(BUTTON_RIGHT)) {
 			return;
 		}
 	}
@@ -65,6 +70,7 @@ int8_t Text::box(uint16_t i, bool up) {
 	uint8_t cursorYStart = up ? 8 : 38;
 	gb.display.setCursor(cursorXStart, cursorYStart);
 	uint8_t* textCursor = decompression_buffer + stringsLut[i].offset;
+	bool hasOptions = false;
 textloop_entry:
 	uint8_t c = *textCursor++;
 	SerialUSB.println(c, HEX);
@@ -105,7 +111,9 @@ textloop_entry:
 			goto textloop_entry;
 		}
 		case 0x82: // question
-			break;
+			hasOptions = true;
+			gb.display.write(' ');
+			goto textloop_entry;
 		case 0x83: // options
 			break;
 		case 0:
@@ -125,12 +133,44 @@ textloop_entry:
 			}
 			goto textloop_entry;
 	}
-	if (c == 0) {
+	if (!hasOptions) {
 		return -1;
 	}
 	
 	// do shop
-	return -1;
+	// we can assume here that our text isn't spread accross multiple chunks
+	// because our creation tool makes sure of that
+	uint8_t options = *textCursor++;
+	uint8_t* offsets = textCursor;
+	uint8_t cursor = 0;
+	uint8_t y = gb.display.getCursorY() + 1;
+	buttons.setFrame(2);
+	while(1) {
+		bool alt = true;
+		do {
+			if (alt) {
+				gb.display.drawImage(cursorXStart + offsets[cursor], y, buttons);
+			} else {
+				gb.display.setColor(BEIGE);
+				gb.display.fillRect(cursorXStart + offsets[cursor], y, 4, 3);
+			}
+			alt = !alt;
+		} while(!waitCyclesButton(5));
+		waitRelease();
+		if (gb.buttons.released(BUTTON_A)) {
+			return cursor;
+		}
+		// make sure theo ld cursor is erased
+		gb.display.setColor(BEIGE);
+		gb.display.fillRect(cursorXStart + offsets[cursor], y, 4, 3);
+		
+		if (gb.buttons.released(BUTTON_LEFT) && cursor > 0) {
+			cursor--;
+		}
+		if (gb.buttons.released(BUTTON_RIGHT) && cursor < options-1) {
+			cursor++;
+		}
+	}
 }
 
 

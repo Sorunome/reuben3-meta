@@ -76,13 +76,13 @@ function getTextASM($s) {
 	$s .= "\x00"; // end
 	if (mb_strpos($s, "{#ask}\n") !== false) {
 		$s = str_replace("{#ask}\n", "\x82", $s); // question
-		$i = mb_strpos($s, "\x82") + 1;
-		$ss = explode(' ', mb_substr($s, $i));
+		$i = mb_strpos($s, "\x82") + 2; // thefuck? why +2 and not +1? well, it works this way....
+		$ss = explode(' ', mb_substr($s, $i)); // $ss will hold all the shop options
 		$s = str_replace('_', ' ', $s);
 		$i = 0;
 		$s .= "\x83".sizeof($ss).','; // shopoptions
 		foreach ($ss as $si) {
-			$s .= (string)($i*6).',';
+			$s .= (string)($i*4).',';
 			$i += strlen($si) + 1; // +1 because of the space
 		}
 	}
