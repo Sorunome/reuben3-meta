@@ -221,21 +221,21 @@ class Parser{
 				'args_min' => 1,
 				'args_max' => 1,
 				'fn' => function($args) {
-					return '12'.$this->getVar($args[0]);
+					return '12'.(isset($this->defines['event_'.$args[0]])?dechexpad($this->defines['event_'.$args[0]], 2):$this->getVar($args[0]));
 				}
 			],
 			'set_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
 				'fn' => function($args) {
-					return '13'.$this->getVar($args[0]);
+					return '13'.(isset($this->defines['event_'.$args[0]])?dechexpad($this->defines['event_'.$args[0]], 2):$this->getVar($args[0]));
 				}
 			],
 			'clear_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
 				'fn' => function($args) {
-					return '14'.$this->getVar($args[0]);
+					return '14'.(isset($this->defines['event_'.$args[0]])?dechexpad($this->defines['event_'.$args[0]], 2):$this->getVar($args[0]));
 				}
 			],
 			'eq' => [

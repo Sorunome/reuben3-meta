@@ -500,7 +500,7 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 	
 	// we adjust the pointers here as in the parsing we'd have to decrease them else first
 	$worldLUT .= "\t{ tilemaps_$worldASMId, ";
-	$worldLUT .= "/*dynTilesStart_$worldASMId*/ 0, ";
+	$worldLUT .= "dynTilesStart_$worldASMId, ";
 	$worldLUT .= "actionTilesStart_$worldASMId },\n";
 	
 	$tilemaps = $sql->query("SELECT `data`,`id`,`x`,`y`,`area`,`enemies` FROM `tilemaps` WHERE `mapId`=%d",[$mapId]);
@@ -521,7 +521,7 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 		
 		$defines['tilemap_'.$t['id']] = "0x".dechexpad2($mapId);
 		$tileEvents = $sql->query("SELECT `id`,`x`,`y`,`code`,`add_jump` FROM `eventTiles` WHERE `refId`=%d",[$t['id']]);
-		$dynTiles = $sql->query("SELECT t1.`id`,t1.`x`,t1.`y`,t1.`newTile`,t2.`offset`,t2.`bit` FROM `dynTiles` AS t1 INNER JOIN `events` AS t2 ON t1.`event`=t2.`id` WHERE t1.`refId`=%d",[$t['id']]);
+		$dynTiles = $sql->query("SELECT t1.`id`,t1.`x`,t1.`y`,t1.`newTile`,t2.`id` AS eventId FROM `dynTiles` AS t1 INNER JOIN `events` AS t2 ON t1.`event`=t2.`id` WHERE t1.`refId`=%d",[$t['id']]);
 		if(isset($areasLUT[(int)$t['area']])){
 			$headerByte = $areasLUT[(int)$t['area']];
 		}else{
@@ -545,11 +545,13 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 		}
 		if($dynTiles[0]['id'] !== NULL){
 			if(!$dyntilesOnWorld){
-				$dynTilesCode .= "dynTilesStart_$worldASMId:\n";
+				$dynTilesCode .= "const Dyn_Data dynTilesStart_${worldASMId}[] = {\n";
 				$dyntilesOnWorld = true;
 			}
 			foreach($dynTiles as $d){
-				$dynTilesCode .= "\t.db $".dechexpad2($mapId).",".$d['offset'].",".(2**($d['bit'])).",".($d['y']*12 + $d['x']).",$".$spritesLUT[$d['newTile']]."\n";
+				// offset is *2 because we have uint8_t decompression buffer but our map is uint16_t and we do the modifying on the decompression buffer
+				$dt = $spritesLUT[$d['newTile']];
+				$dynTilesCode .= "\t{ 0x".dechexpad2($mapId).", ".$defines['event_'.$d['eventId']].", ".(($d['y']*12 + $d['x'])*2).", 0x$dt[2]$dt[3], 0x$dt[0]$dt[1]},\n";
 			}
 		}
 		if ($chunknum == 0) {
@@ -589,9 +591,7 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 	
 	
 	if ($dyntilesOnWorld) {
-		$dynTilesCode .= "\t.db \$ff\n";
-	} else {
-		$defines['dynTilesStart_'.$worldASMId] = 0;
+		$dynTilesCode .= "\t{ 0xFF, 0, 0, 0, 0 },\n};\n";
 	}
 	if ($eventTilesOnWorld) {
 		$eventTilesLutLut .= "\t{ 0xFF, 0, 0 },\n};\n";
@@ -641,10 +641,9 @@ $file .= $maps;
 $file .= $tilemapsLut;
 $file .= "\n\n\n";
 
+$file .= $dynTilesCode;
 $file .= "\n\n\n";
 $file .= $worldLUT;
-$file .= "\n\n\n";
-//$file .= $dynTilesCode;
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/maps.h',$file);
 
 

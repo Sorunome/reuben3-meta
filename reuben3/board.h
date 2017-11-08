@@ -20,9 +20,17 @@ struct Actiontiles_LUTLUT {
 	const Actiontiles_LUT* lut;
 };
 
+struct Dyn_Data {
+	const uint8_t mapId;
+	const uint8_t eventId;
+	const uint8_t offset;
+	const uint8_t tileLower;
+	const uint8_t tileUpper;
+};
+
 struct World_Data {
 	const Tilemaps_Data* maps;
-	const uint8_t a;
+	const Dyn_Data* dyn;
 	const Actiontiles_LUTLUT* actionTiles;
 };
 

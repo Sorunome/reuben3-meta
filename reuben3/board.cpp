@@ -41,6 +41,21 @@ void Board::load() {
 		i++;
 	}
 	aP_depack(map->block, decompression_buffer);
+	const Dyn_Data* d = worlds[worldId].dyn;
+	uint8_t* mapbuf = decompression_buffer + (mapsize_bytes*map->chunk);
+	for(;;d++) {
+		if (d->mapId == 0xFF) {
+			return;
+		}
+		if (d->mapId != mapId) {
+			continue;
+		}
+		if (!player.isEvent(d->eventId)) {
+			continue;
+		}
+		mapbuf[d->offset] = d->tileLower;
+		mapbuf[d->offset + 1] = d->tileUpper;
+	}
 }
 
 void Board::postload() {
