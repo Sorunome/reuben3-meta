@@ -26,17 +26,32 @@ function createColors(&$im){
 	$darkgray = imagecolorallocate($im, 0x60, 0x60, 0x60);
 	$black = imagecolorallocate($im, 0x00, 0x00, 0x00);
 }
+
+$SPRITESROOT = '/var/www/www.sorunome.de/reuben3-meta/sprites/';
+
 $tileBuffer = [];
+$imgBuffer = [];
 function dispTile(&$im,$x,$y,$id){
-	global $scale,$sql,$white,$lightgray,$darkgray,$black,$tileBuffer;
-	if(!is_array($id)){
-		if(isset($tileBuffer[(int)$id])){
+	global $scale, $sql, $white, $lightgray, $darkgray, $black, $tileBuffer, $imgBuffer, $SPRITESROOT;
+	if (!is_array($id)) {
+		if (isset($tileBuffer[(int)$id])) {
 			$r = $tileBuffer[(int)$id];
+		} else {
+			$r = $sql->query("SELECT `buffer1`,`buffer2`,`id` FROM `sprites` WHERE `id`=%d",[(int)$id],0);
+			$tileBuffer[(int)$id] = $r;
 		}
-		$r = $sql->query("SELECT `buffer1`,`buffer2` FROM `sprites` WHERE `id`=%d",[(int)$id],0);
-		$tileBuffer[(int)$id] = $r;
-	}else{
+	} else {
 		$r = $id;
+	}
+	$id = (int)$r['id'];
+	if (file_exists($SPRITESROOT.(string)$id.'.png') && !isset($imgBuffer[$id])) {
+		$imgBuffer[$id] = @imagecreatefromstring(file_get_contents($SPRITESROOT.(string)$id.'.png'));
+	}
+	if (isset($imgBuffer[$id]) && $imgBuffer[$id]) {
+		$i = imagescale($imgBuffer[$id], 8*$scale, 8*$scale);
+		imagecopy($im, $i, $x, $y, 0, 0, 8*$scale, 8*$scale);
+		imagedestroy($i);
+		return;
 	}
 	//var_dump($r);
 	$buffer1bin = hexstr2binstr($r['buffer1']);

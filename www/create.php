@@ -189,7 +189,7 @@ foreach($mapIds as $m){
 
 $html = '<h1>Sprites</h1><textarea style="width:100%;height:500px;">';
 
-
+$SPRITESROOT = '/var/www/www.sorunome.de/reuben3-meta/sprites/';
 $file = "const uint16_t sprites_data[] = {\n\t8, 8,\n";
 $spriteData = [];
 foreach($sql->query("SELECT `buffer1`,`buffer2`,`name`,`id` FROM `sprites` WHERE `id` IN (".implode(',',array_map('intval',$spritesWithId)).")") as $s){
@@ -197,12 +197,27 @@ foreach($sql->query("SELECT `buffer1`,`buffer2`,`name`,`id` FROM `sprites` WHERE
 		$defines['sprite_'.$s['name']] = '0x'.$spritesLUT[$s['id']];
 	}
 	$out = "";
-	for($i = 0;$i < 16;$i += 2){
-		$b1 = hex2binstr(substr($s['buffer1'],$i,2));
-		$b2 = hex2binstr(substr($s['buffer2'],$i,2));
-		for ($j = 0; $j < 8; $j++) {
-			$n = ($b1[$j] == '1')*2 + ($b2[$j] == '1')*1;
-			$out .= ['0xFFFF', '0xACD0', '0x72C7', '0x0000'][$n].',';
+	if (file_exists($SPRITESROOT.$s['id'].'.png')) {
+		$i = @imagecreatefromstring(file_get_contents($SPRITESROOT.$s['id'].'.png'));
+		for ($y = 0; $y < 8; $y++) {
+			for ($x = 0; $x < 8; $x++) {
+				$rgb = imagecolorat($i, $x, $y);
+				$r = ($rgb >> 16) & 0xFF;
+				$g = ($rgb >> 8) & 0xFF;
+				$b = $rgb & 0xFF;
+				$c = (($r & 0xF8) << 8) | (($g & 0xFC) << 3) | ($b >> 3);
+				$out .= '0x'.dechexpad($c, 4).',';
+			}
+		}
+		imagedestroy($i);
+	} else {
+		for($i = 0;$i < 16;$i += 2){
+			$b1 = hex2binstr(substr($s['buffer1'],$i,2));
+			$b2 = hex2binstr(substr($s['buffer2'],$i,2));
+			for ($j = 0; $j < 8; $j++) {
+				$n = ($b1[$j] == '1')*2 + ($b2[$j] == '1')*1;
+				$out .= ['0xFFFF', '0xACD0', '0x72C7', '0x0000'][$n].',';
+			}
 		}
 	}
 	$spriteData[$s['id']] = $out;

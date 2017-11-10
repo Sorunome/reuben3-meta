@@ -6,6 +6,9 @@ if(!$security->isLoggedIn() || !($user_info['power']&32)){
 	echo $page->getPage('Nope','<script type="text/javascript">getPageJSON("/");</script>Redirecting...',$lang,$pathPartsParsed);
 	die();
 }
+
+$SPRITESROOT = '/var/www/www.sorunome.de/reuben3-meta/sprites/';
+
 $sql->switchDb('soru_reuben3_meta');
 include_once(realpath(dirname(__FILE__)).'/functions.php');
 if(isset($_GET['edit'])){
@@ -157,12 +160,30 @@ if(isset($_GET['edit'])){
 							});
 						}
 					});
+					$("#upload").on("submit", function(e) {
+						e.preventDefault();
+						$.ajax({
+							url: "sprites?upload='.(int)$_GET['edit'].'",
+							type: "POST",
+							data: new FormData(this),
+							contentType: false,
+							cache: false,
+							processData: false,
+							success: function(data) {
+								alert(data);
+							}
+						});
+					});
 				});
 			</script>
 			<h1>Sprite ID: '.(int)$_GET['edit'].'</h1>
 			<div id="container" oncontextmenu="return false;">
 				
 			</div>
+			<form id="upload" action="" method="post" encode="multipart/form-data">
+				<input type="file" name="file" required>
+				<input type="submit" value="Upload">
+			</form>
 			<button id="save">Save</button><button id="delete" style="float:right;">Delete</button><br>
 			<a href="/reuben3/sprites">&lt;&lt; Back</a>';
 	$sql->switchDb('soru_homepage');
@@ -172,6 +193,38 @@ if(isset($_GET['edit'])){
 	echo 'Saved';
 }elseif(isset($_GET['delete'])){
 	$sql->query("DELETE FROM `sprites` WHERE `id`=%d",[(int)$_GET['delete']]);
+} elseif (isset($_GET['upload'])) {
+	$id = (int)$_GET['upload'];
+	if ($id != $_GET['upload']) {
+		die('non-int ID');
+	}
+	$i = $sql->query("SELECT `id` FROM `sprites` WHERE `id`=%d",[$id],0);
+	if ($i['id'] === NULL) {
+		die('invalid ID');
+	}
+	is_uploaded_file($_FILES['file']['tmp_name']) or die('no file to upload');
+	$fname = $SPRITESROOT.(string)$id.'.png';
+	if (file_exists($fname)) {
+		unlink($fname);
+	}
+	move_uploaded_file($_FILES['file']['tmp_name'], $fname) or die('could not move tmp file');
+	if (!($j = @imagecreatefromstring(file_get_contents($fname)))) {
+		unlink($fname);
+		die('invalid image');
+	}
+	if (imagesx($j) != 8 || imagesy($j) != 8) {
+		unlink($fname);
+		die('image needs to be 8x8');
+	}
+	unlink($fname);
+	ob_start();
+	imagepng($j);
+	$b = ob_get_contents();
+	ob_end_clean();
+	file_put_contents($fname, $b);
+	imagedestroy($j);
+	
+	die('Successfully uploaded image');
 }elseif(isset($_GET['new'])){
 	$sql->query("INSERT INTO `sprites` (`buffer1`,`buffer2`) VALUES ('0000000000000000','0000000000000000')");
 	$sql->switchDb('soru_homepage');
