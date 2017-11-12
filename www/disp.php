@@ -48,7 +48,7 @@ function dispTile(&$im,$x,$y,$id){
 		$imgBuffer[$id] = @imagecreatefromstring(file_get_contents($SPRITESROOT.(string)$id.'.png'));
 	}
 	if (isset($imgBuffer[$id]) && $imgBuffer[$id]) {
-		$i = imagescale($imgBuffer[$id], 8*$scale, 8*$scale);
+		$i = imagescale($imgBuffer[$id], 8*$scale, 8*$scale, IMG_NEAREST_NEIGHBOUR);
 		imagecopy($im, $i, $x, $y, 0, 0, 8*$scale, 8*$scale);
 		imagedestroy($i);
 		return;

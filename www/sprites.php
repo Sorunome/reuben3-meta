@@ -12,6 +12,7 @@ $SPRITESROOT = '/var/www/www.sorunome.de/reuben3-meta/sprites/';
 $sql->switchDb('soru_reuben3_meta');
 include_once(realpath(dirname(__FILE__)).'/functions.php');
 if(isset($_GET['edit'])){
+	$id = (int)$_GET['edit'];
 	$html = '<style type="text/css">
 				#container {
 					width:336px;
@@ -49,7 +50,7 @@ if(isset($_GET['edit'])){
 				$(document).ready(function(){
 					var spriteData = [';
 	
-						$r = $sql->query("SELECT `buffer1`,`buffer2` FROM `sprites` WHERE `id`=%d",[(int)$_GET['edit']],0);
+						$r = $sql->query("SELECT `buffer1`,`buffer2` FROM `sprites` WHERE `id`=%d",[$id],0);
 						$buffer1bin = hexstr2binstr($r['buffer1']);
 						$buffer2bin = hexstr2binstr($r['buffer2']);
 						$s = '';
@@ -141,7 +142,7 @@ if(isset($_GET['edit'])){
 							buffer2Binary = "";
 						}
 						
-						homepage.post("/reuben3/sprites?save=';
+						homepage.post("sprites?save=';
 							$html .= $_GET['edit'];
 							$html .= '",
 						{
@@ -178,14 +179,16 @@ if(isset($_GET['edit'])){
 			</script>
 			<h1>Sprite ID: '.(int)$_GET['edit'].'</h1>
 			<div id="container" oncontextmenu="return false;">
-				
-			</div>
-			<form id="upload" action="" method="post" encode="multipart/form-data">
+			</div>';
+	if (file_exists($SPRITESROOT.(string)$id.'.png')) {
+		$html .= '<img src="disp?sprite='.(string)$id.'&amp;scale=12" alt="sprite">';
+	}
+	$html .= '<form id="upload" action="" method="post" encode="multipart/form-data">
 				<input type="file" name="file" required>
 				<input type="submit" value="Upload">
 			</form>
 			<button id="save">Save</button><button id="delete" style="float:right;">Delete</button><br>
-			<a href="/reuben3/sprites">&lt;&lt; Back</a>';
+			<a href="sprites">&lt;&lt; Back</a>';
 	$sql->switchDb('soru_homepage');
 	echo $page->getPage('Edit Sprite',$html,$lang,$pathPartsParsed);
 }elseif(isset($_GET['save'])){
@@ -228,7 +231,7 @@ if(isset($_GET['edit'])){
 }elseif(isset($_GET['new'])){
 	$sql->query("INSERT INTO `sprites` (`buffer1`,`buffer2`) VALUES ('0000000000000000','0000000000000000')");
 	$sql->switchDb('soru_homepage');
-	echo $page->getPage('Nope','<script type="text/javascript">getPageJSON("/reuben3/sprites");</script>Redirecting...',$lang,$pathPartsParsed);
+	echo $page->getPage('Nope','<script type="text/javascript">getPageJSON("sprites");</script>Redirecting...',$lang,$pathPartsParsed);
 }elseif(isset($_GET['info'])){
 	header('Content-Type: text/json');
 	$i = $sql->query("SELECT `id`,`name` FROM `sprites` WHERE `id`=%d",[(int)$_GET['info']],0);
@@ -248,7 +251,7 @@ if(isset($_GET['edit'])){
 			display:inline-block;
 			width:32px;
 			height:32px;
-			background-image:url("/reuben3/disp?spritesheet&amp;scale=4&amp;'.time().'");
+			background-image:url("disp?spritesheet&amp;scale=4&amp;'.time().'");
 			border:1px solid red;
 			margin:0;
 			padding:0;
@@ -258,11 +261,11 @@ if(isset($_GET['edit'])){
 	
 	$sprites = $sql->query("SELECT `id` FROM `sprites` WHERE 1");
 	foreach($sprites as $s){
-		$html .= '<a href="/reuben3/sprites?edit='.$s['id'].'"><div class="img" style="background-position:-'.(8*4*($s['id'] % 15)).'px -'.(8*4*floor($s['id'] / 15)).'px"></div></a>';
+		$html .= '<a href="sprites?edit='.$s['id'].'"><div class="img" style="background-position:-'.(8*4*($s['id'] % 15)).'px -'.(8*4*floor($s['id'] / 15)).'px"></div></a>';
 	}
 	$html .='</div><hr>
-	<a href="/reuben3/sprites?new">New</a><br>
-	<a href="/reuben3">&lt;&lt; Back</a>';
+	<a href="sprites?new">New</a><br>
+	<a href="/reuben3-meta">&lt;&lt; Back</a>';
 	$sql->switchDb('soru_homepage');
 	echo $page->getPage('Sprites',$html,$lang,$pathPartsParsed);
 }

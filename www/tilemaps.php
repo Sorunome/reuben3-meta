@@ -233,6 +233,13 @@ if(isset($_GET['getData'])){
 							return '-'+(8*4*(id % 15)).toString()+'px -'+(8*4*Math.floor(id / 15)).toString()+'px';
 						},
 						getTileElem = function(id){
+							if(id == -1){
+								return $('<div>').css({
+									display:'inline-block',
+									width:8*4,
+									height:8*4
+								});
+							}
 							return $('<div>').css({
 								display:'inline-block',
 								width:8*4,
@@ -543,6 +550,9 @@ if(isset($_GET['getData'])){
 													.data('id',sp)
 													.click(function(e){
 														e.preventDefault();
+														if($(this).data('id') == -1){
+															return;
+														}
 														setCurSprite($(this).data('id'));
 														curSprite = $(this).data('id');
 													})
@@ -736,13 +746,13 @@ if(isset($_GET['getData'])){
 		$html .= '<a href="tilemaps?edit='.$m['id'].'">'.$m['name'].'</a> Whole image: <a href="disp?world='.$m['id'].'" target="_blank">click</a><br>';
 	}
 	$html .= '</div><hr><a id="newLink">New</a><br>
-	<a href="/reuben3">&lt;&lt; Back</a>
+	<a href="/reuben3-meta">&lt;&lt; Back</a>
 	<script type="text/javascript">
 		$("#newLink").click(function(e){
 			e.preventDefault();
 			var name = prompt("Name:");
 			if(name != "" && name != null && name != undefined && name){
-				homepage.get("/reuben3/tilemaps?newMap="+encodeURIComponent(name),function(data){
+				homepage.get("/reuben3-meta/tilemaps?newMap="+encodeURIComponent(name),function(data){
 					location.reload();
 				});
 			}

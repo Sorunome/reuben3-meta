@@ -198,7 +198,10 @@ foreach($sql->query("SELECT `buffer1`,`buffer2`,`name`,`id` FROM `sprites` WHERE
 	}
 	$out = "";
 	if (file_exists($SPRITESROOT.$s['id'].'.png')) {
-		$i = @imagecreatefromstring(file_get_contents($SPRITESROOT.$s['id'].'.png'));
+		$ii = @imagecreatefromstring(file_get_contents($SPRITESROOT.$s['id'].'.png'));
+		$i = imagecreatetruecolor(8, 8);
+		imagecopy($i, $ii, 0, 0, 0, 0, 8, 8);
+		imagedestroy($ii);
 		for ($y = 0; $y < 8; $y++) {
 			for ($x = 0; $x < 8; $x++) {
 				$rgb = imagecolorat($i, $x, $y);
@@ -682,7 +685,7 @@ foreach($defines as $label => $value){
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/defines.h',$file);
 
 
-$html .= $file.'</textarea><hr><a href="/reuben3">&lt;&lt; Back</a>';
+$html .= $file.'</textarea><hr><a href="/reuben3-meta">&lt;&lt; Back</a>';
 
 $sql->switchDb('soru_homepage');
 echo $page->getPage('Create Asm',$html,$lang,$pathPartsParsed);
