@@ -12,6 +12,7 @@ class Camera {
 		int8_t x = 0;
 		int8_t y = 0;
 		void moveTo(int8_t _x, int8_t _y);
+		void setY(int8_t _y);
 		void centerOn(int8_t _x, int8_t _y);
 };
 

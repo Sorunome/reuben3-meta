@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "board.h"
 #include "text.h"
+#include "misc.h"
 
 #define SCRIPT_NOP 0x00
 #define SCRIPT_FADE_TO_WHITE 0x01
@@ -13,7 +14,7 @@
 #define SCRIPT_TRANSITION_MAP 0x04
 #define SCRIPT_ADD_ENEMY 0x05
 #define SCRIPT_FOCUS_CAM 0x06
-#define SCRIPT_UPDATE_SCREEN 0x07
+//#define SCRIPT_UPDATE_SCREEN 0x07
 #define SCRIPT_SET_VAR 0x08
 #define SCRIPT_JUMP 0x09
 #define SCRIPT_JUMP_IFNOT 0x0A
@@ -30,6 +31,9 @@
 #define SCRIPT_EQ 0x15
 #define SCRIPT_TEXT 0x16
 #define SCRIPT_TEXT_ANSWER 0x17
+#define SCRIPT_SHAKE_SCREEN 0x18
+#define SCRIPT_UPDATE_SCREEN 0x19
+#define SCRIPT_SET_TILE 0x1A
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -120,8 +124,8 @@ bool Script::run(uint8_t* _script) {
 			case SCRIPT_FOCUS_CAM:
 				player.focus();
 				continue;
-			case SCRIPT_UPDATE_SCREEN:
-				continue;
+//			case SCRIPT_UPDATE_SCREEN:
+//				continue;
 			case SCRIPT_SET_VAR:
 			{
 				uint8_t* ptr = getVar();
@@ -178,6 +182,39 @@ bool Script::run(uint8_t* _script) {
 				*ptr = (uint8_t)text.box(i, player.getY() > 28);
 				continue;
 			}
+			case SCRIPT_SHAKE_SCREEN:
+				for (uint8_t i = 0; i < 2; i++) {
+					for (uint8_t j = 0; j < 4; j++) {
+						while(!gb.update());
+						camera.setY(j*2);
+						board.render();
+						player.render();
+					}
+					for (int8_t j = 4; j > 0; j--) {
+						while(!gb.update());
+						camera.setY(j*2);
+						board.render();
+						player.render();
+					}
+				}
+				// no need to update, we just roll over to update_screen and all is good to go
+			case SCRIPT_UPDATE_SCREEN:
+				while(!gb.update());
+				camera.setY(0);
+				board.render();
+				player.render();
+				gb.update(); // send the screen out
+				continue;
+			case SCRIPT_SET_TILE:
+			{
+				uint8_t x = getNum();
+				uint8_t y = getNum();
+				uint8_t s1 = *script++;
+				uint8_t s2 = *script++;
+				board.setTile(x, y, s1 + (s2 << 8));
+				continue;
+			}
+			
 			
 			case SCRIPT_RETURN_FALSE:
 				return false;

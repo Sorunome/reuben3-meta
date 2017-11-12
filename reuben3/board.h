@@ -55,6 +55,8 @@ class Board {
 		void postload();
 		void render();
 		uint16_t getTile(uint8_t x, uint8_t y);
+		void setTile(uint8_t x, uint8_t y, uint16_t tile);
+		void interact(uint8_t x, uint8_t y);
 		bool runScript(uint8_t x, uint8_t y, uint8_t trigger);
 };
 

@@ -18,6 +18,10 @@ void Camera::moveTo(int8_t _x, int8_t _y) {
 	y = _y;
 }
 
+void Camera::setY(int8_t _y) {
+	y = _y;
+}
+
 void Camera::centerOn(int8_t _x, int8_t _y) {
 	moveTo(_x - (gb.display.width()/2), _y - (gb.display.height()/2));
 }

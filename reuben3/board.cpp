@@ -66,6 +66,10 @@ uint16_t Board::getTile(uint8_t x, uint8_t y) {
 	return board[y*width + x];
 }
 
+void Board::setTile(uint8_t x, uint8_t y, uint16_t tile) {
+	board[y*width + x] = tile;
+}
+
 void Board::scrollLeft() {
 	mapId--;
 	load();
@@ -234,6 +238,31 @@ bool Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 		i++;
 	}
 	return false;
+}
+
+void Board::interact(uint8_t x, uint8_t y) {
+	switch(getTile(x, y)) {
+		case SPRITE_105: // shrub on grass
+			setTile(x, y, SPRITE_1);
+			return;
+		case SPRITE_113: // rock on sand
+			if (player.isEvent(EVENT_PICKAXE)) {
+				setTile(x, y, SPRITE_308);
+			}
+			return;
+		case SPRITE_376: // rock on darkgray
+			if (player.isEvent(EVENT_PICKAXE)) {
+				if (worldId == WORLD_OVERWORLD && mapId == TILEMAP_43) {
+					// we place the path sprite
+					setTile(x, y, SPRITE_348);
+				} else {
+					setTile(x, y, SPRITE_309);
+				}
+			}
+			return;
+		default:
+			runScript(x, y, SCRIPT_ACTION);
+	}
 }
 
 

@@ -484,7 +484,7 @@ $eventCounter = 0;
 foreach($sql->query("SELECT `offset`,`bit`,`id`,`name` FROM `events`") as $e){
 	$defines['event_'.$e['id']] = $eventCounter;
 	if($e['name'] != ''){
-		$defines['event_'.$e['name']] = $eventCounter;
+		$defines['event_'.strtolower($e['name'])] = $eventCounter;
 	}
 	$eventCounter++;
 }

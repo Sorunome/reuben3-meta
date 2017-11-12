@@ -74,7 +74,9 @@ void Player::interact() {
 			//_x += 0;
 			_y += 5;
 		}
-		board.runScript(_x / 8, _y / 8, SCRIPT_ACTION);
+		_x /= 8;
+		_y /= 8;
+		board.interact(_x, _y);
 	}
 }
 

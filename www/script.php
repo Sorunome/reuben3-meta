@@ -132,6 +132,7 @@ class Parser{
 					return '06';
 				}
 			],
+			/*
 			'update_screen' => [
 				'args_min' => 0,
 				'args_max' => 0,
@@ -139,6 +140,7 @@ class Parser{
 					return '07';
 				}
 			],
+			*/
 			'set_var' => [
 				'args_min' => 2,
 				'args_max' => 2,
@@ -255,6 +257,29 @@ class Parser{
 						return '16'.$i;
 					}
 					return '17'.$i.$this->getVarNum($args[1]);
+				}
+			],
+			'shake_screen' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '18';
+				}
+			],
+			'update_screen' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '19';
+				}
+			],
+			'set_tile' => [
+				'args_min' => 3,
+				'args_max' => 3,
+				'fn' => function($args) {
+					$i = $this->defines['sprite_'.$args[2]]??dechexpad($args[2], 4);
+					$i = str_replace('0x', '', $i);
+					return '1A'.$this->getVar($args[0]).$this->getVar($args[1]).$i[2].$i[3].$i[0].$i[1];
 				}
 			],
 			
