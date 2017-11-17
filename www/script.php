@@ -132,15 +132,13 @@ class Parser{
 					return '06';
 				}
 			],
-			/*
-			'update_screen' => [
+			'fade_home' => [
 				'args_min' => 0,
 				'args_max' => 0,
 				'fn' => function() {
 					return '07';
 				}
 			],
-			*/
 			'set_var' => [
 				'args_min' => 2,
 				'args_max' => 2,
@@ -280,6 +278,22 @@ class Parser{
 					$i = $this->defines['sprite_'.$args[2]]??dechexpad($args[2], 4);
 					$i = str_replace('0x', '', $i);
 					return '1A'.$this->getVar($args[0]).$this->getVar($args[1]).$i[2].$i[3].$i[0].$i[1];
+				}
+			],
+			'fade_map' => [
+				'args_min' => 1,
+				'args_max' => 2,
+				'fn' => function($args) {
+					$s = '';
+					if (sizeof($args) == 2) {
+						$s = '1B';
+					} else {
+						$s = '1C';
+					}
+					foreach($args as $a) {
+						$s .= $this->getVar($a);
+					}
+					return $s;
 				}
 			],
 			

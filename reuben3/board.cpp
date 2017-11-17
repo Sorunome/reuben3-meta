@@ -17,6 +17,14 @@ Image singleLine(gb.display.width(), 1, ColorMode::rgb565);
 
 extern uint8_t decompression_buffer[];
 
+uint8_t Board::getWorldId() {
+	return worldId;
+}
+
+uint8_t Board::getMapId() {
+	return mapId;
+}
+
 void Board::setWorld(uint8_t _world) {
 	worldId = _world;
 }

@@ -1,6 +1,7 @@
 #include "script.h"
 
 #include <Gamebuino-Meta.h>
+#include <utility/Misc.h> // pixel to rgb converters
 #include "player.h"
 #include "camera.h"
 #include "board.h"
@@ -14,7 +15,7 @@
 #define SCRIPT_TRANSITION_MAP 0x04
 #define SCRIPT_ADD_ENEMY 0x05
 #define SCRIPT_FOCUS_CAM 0x06
-//#define SCRIPT_UPDATE_SCREEN 0x07
+#define SCRIPT_FADE_HOME 0x07
 #define SCRIPT_SET_VAR 0x08
 #define SCRIPT_JUMP 0x09
 #define SCRIPT_JUMP_IFNOT 0x0A
@@ -34,6 +35,8 @@
 #define SCRIPT_SHAKE_SCREEN 0x18
 #define SCRIPT_UPDATE_SCREEN 0x19
 #define SCRIPT_SET_TILE 0x1A
+#define SCRIPT_FADE_TO_MAP_AND_WORLD 0x1B
+#define SCRIPT_FADE_TO_MAP 0x1C
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -102,13 +105,52 @@ bool Script::run(const uint8_t* _script) {
 	return run((uint8_t*) _script);
 }
 
+void fade_to_white() {
+	const uint8_t steps = 17;
+	uint16_t limit = gb.display.width() * gb.display.height();
+	for (uint8_t i = 0; i <= steps; i++) {
+		renderAll();
+		for (uint16_t j = 0; j < limit; j++) {
+			uint16_t c = gb.display._buffer[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r += (0xFF - rgb.r)*i / steps;
+			rgb.g += (0xFF - rgb.g)*i / steps;
+			rgb.b += (0xFF - rgb.b)*i / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			gb.display._buffer[j] = c;
+		}
+		while(!gb.update());
+	}
+}
+
+void fade_from_white() {
+	const uint8_t steps = 17;
+	uint16_t limit = gb.display.width() * gb.display.height();
+	for (uint8_t i = 0; i <= steps; i++) {
+		renderAll();
+		for (uint16_t j = 0; j < limit; j++) {
+			uint16_t c = gb.display._buffer[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r += (0xFF - rgb.r)*(steps - i) / steps;
+			rgb.g += (0xFF - rgb.g)*(steps - i) / steps;
+			rgb.b += (0xFF - rgb.b)*(steps - i) / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			gb.display._buffer[j] = c;
+		}
+		while(!gb.update());
+	}
+}
+
 bool Script::run(uint8_t* _script) {
 	script_entry = script = _script;
+	isHome = true;
 	while(1) {
 		switch(*script++) {
 			case SCRIPT_FADE_TO_WHITE:
+				fade_to_white();
 				continue;
 			case SCRIPT_FADE_FROM_WHITE:
+				fade_from_white();
 				continue;
 			case SCRIPT_TRANSITION_MAP_AND_WORLD:
 				board.setWorld(getNum());
@@ -124,8 +166,14 @@ bool Script::run(uint8_t* _script) {
 			case SCRIPT_FOCUS_CAM:
 				player.focus();
 				continue;
-//			case SCRIPT_UPDATE_SCREEN:
-//				continue;
+			case SCRIPT_FADE_HOME:
+				fade_to_white();
+				board.setWorld(homeWorld);
+				board.load(homeMap);
+				board.postload();
+				player.show();
+				fade_from_white();
+				continue;
 			case SCRIPT_SET_VAR:
 			{
 				uint8_t* ptr = getVar();
@@ -187,22 +235,19 @@ bool Script::run(uint8_t* _script) {
 					for (uint8_t j = 0; j < 4; j++) {
 						while(!gb.update());
 						camera.setY(j*2);
-						board.render();
-						player.render();
+						renderAll();
 					}
 					for (int8_t j = 4; j > 0; j--) {
 						while(!gb.update());
 						camera.setY(j*2);
-						board.render();
-						player.render();
+						renderAll();
 					}
 				}
 				// no need to update, we just roll over to update_screen and all is good to go
 			case SCRIPT_UPDATE_SCREEN:
 				while(!gb.update());
 				camera.setY(0);
-				board.render();
-				player.render();
+				renderAll();
 				gb.update(); // send the screen out
 				continue;
 			case SCRIPT_SET_TILE:
@@ -214,6 +259,31 @@ bool Script::run(uint8_t* _script) {
 				board.setTile(x, y, s1 + (s2 << 8));
 				continue;
 			}
+			case SCRIPT_FADE_TO_MAP_AND_WORLD:
+				if (isHome) {
+					isHome = false;
+					homeMap = board.getMapId();
+					homeWorld = board.getWorldId();
+				}
+				fade_to_white();
+				player.hide();
+				board.setWorld(getNum());
+				board.load(getNum());
+				board.postload();
+				fade_from_white();
+				continue;
+			case SCRIPT_FADE_TO_MAP:
+				if (isHome) {
+					isHome = false;
+					homeMap = board.getMapId();
+					homeWorld = board.getWorldId();
+				}
+				fade_to_white();
+				player.hide();
+				board.load(getNum());
+				board.postload();
+				fade_from_white();
+				continue;
 			
 			
 			case SCRIPT_RETURN_FALSE:

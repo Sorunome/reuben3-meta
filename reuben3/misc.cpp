@@ -1,5 +1,7 @@
 #include "misc.h"
 
+#include "board.h"
+#include "player.h"
 #include <Gamebuino-Meta.h>
 
 void waitCycles(uint8_t num) {
@@ -25,4 +27,9 @@ void waitRelease() {
 			return;
 		}
 	}
+}
+
+void renderAll() {
+	board.render();
+	player.render();
 }

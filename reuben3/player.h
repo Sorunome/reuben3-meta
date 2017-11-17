@@ -19,7 +19,10 @@ class Player {
 		uint8_t events[(TOTAL_EVENTS + 7) / 8];
 		Direction direction;
 		void interact();
+		bool visible = true;
 	public:
+		void hide();
+		void show();
 		void moveTo(int8_t _x, int8_t _y);
 		void moveX(int8_t _x);
 		void moveY(int8_t _y);

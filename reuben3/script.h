@@ -13,6 +13,9 @@ class Script {
 		void jump();
 		uint8_t* script;
 		uint8_t* script_entry;
+		bool isHome;
+		uint8_t homeMap;
+		uint8_t homeWorld;
 	public:
 		bool run(const uint8_t* _script);
 		bool run(uint8_t* _script);

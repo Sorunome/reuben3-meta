@@ -5,5 +5,6 @@
 void waitCycles(uint8_t num);
 bool waitCyclesButton(uint8_t num);
 void waitRelease();
+void renderAll();
 
 #endif // _MISC_H_

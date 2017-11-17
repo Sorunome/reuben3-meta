@@ -17,6 +17,14 @@ const uint8_t player_sprite_data[] = {
 
 Image player_sprite(player_sprite_data);
 
+void Player::hide() {
+	visible = false;
+}
+
+void Player::show() {
+	visible = true;
+}
+
 void Player::moveTo(int8_t _x, int8_t _y) {
 	x = _x;
 	y = _y;
@@ -153,10 +161,16 @@ void Player::update() {
 }
 
 void Player::render() {
+	if (!visible) {
+		return;
+	}
 	gb.display.drawImage(x - camera.x, y - camera.y, player_sprite);
 }
 
 void Player::render(Image& img, int8_t dx, int8_t dy) {
+	if (!visible) {
+		return;
+	}
 	img.drawImage(x - camera.x + dx, y - camera.y + dy, player_sprite);
 }
 

@@ -44,6 +44,8 @@ class Board {
 		const Tilemaps_Data* map;
 		void load();
 	public:
+		uint8_t getWorldId();
+		uint8_t getMapId();
 		void scrollLeft();
 		void scrollRight();
 		void scrollUp();
