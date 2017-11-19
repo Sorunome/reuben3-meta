@@ -78,6 +78,11 @@ void Board::setTile(uint8_t x, uint8_t y, uint16_t tile) {
 	board[y*width + x] = tile;
 }
 
+void Board::drawTile(int8_t x, int8_t y, uint16_t tile) {
+	sprites.setFrame(tile);
+	gb.display.drawImage(x - camera.x, y - camera.y, sprites);
+}
+
 void Board::scrollLeft() {
 	mapId--;
 	load();
@@ -234,7 +239,7 @@ bool Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 			const Actiontiles_LUT* lut = worlds[worldId].actionTiles[i].lut;
 			for (i = 0; i < amount; i++) {
 				if (lut[i].offset == offset) {
-					script.run(lut[i].script);
+					script.run(lut[i].script, trigger);
 					return true;
 				}
 			}

@@ -16,9 +16,10 @@ class Script {
 		bool isHome;
 		uint8_t homeMap;
 		uint8_t homeWorld;
+		uint8_t trigger;
 	public:
-		bool run(const uint8_t* _script);
-		bool run(uint8_t* _script);
+		bool run(const uint8_t* _script, uint8_t _trigger = 0);
+		bool run(uint8_t* _script, uint8_t _trigger = 0);
 };
 
 extern Script script;

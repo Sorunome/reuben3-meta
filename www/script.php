@@ -15,7 +15,7 @@ class Parser{
 	private $if_stack = [];
 	private $while_stack = [];
 	private $defines = [];
-	private $extra_vars = ['camera_x', 'camera_y'];
+	private $extra_vars = ['camera_x', 'camera_y', 'script_trigger'];
 	private $firstPass = true;
 	private $labels = [];
 	private $genericLabelCounter = 0;
@@ -207,14 +207,14 @@ class Parser{
 				'args_min' => 1,
 				'args_max' => 1,
 				'fn' => function($args) {
-					return '10'.$getAddress([$args[0]]);
+					return '10'.$this->getVar($args[0]);
 				}
 			],
-			'ret' => [
-				'args_min' => 0,
-				'args_max' => 0,
+			'move_player' => [
+				'args_min' => 2,
+				'args_max' => 2,
 				'fn' => function($args) {
-					return '11';
+					return '11'.$this->getVar($args[0]).$this->getVar($args[1]);
 				}
 			],
 			'is_event' => [
@@ -282,10 +282,12 @@ class Parser{
 			],
 			'fade_map' => [
 				'args_min' => 1,
-				'args_max' => 2,
+				'args_max' => 4,
 				'fn' => function($args) {
 					$s = '';
-					if (sizeof($args) == 2) {
+					if (sizeof($args) == 4) {
+						$s = '22';
+					} else if (sizeof($args) == 2) {
 						$s = '1B';
 					} else {
 						$s = '1C';
@@ -294,6 +296,43 @@ class Parser{
 						$s .= $this->getVar($a);
 					}
 					return $s;
+				}
+			],
+			'get_player_x' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					return '1D'.$this->getVarNum($args[0]);
+				}
+			],
+			'get_player_y' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					return '1E'.$this->getVarNum($args[0]);
+				}
+			],
+			'render' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '1F';
+				}
+			],
+			'draw_tile' => [
+				'args_min' => 3,
+				'args_max' => 3,
+				'fn' => function($args) {
+					$i = $this->defines['sprite_'.$args[2]]??dechexpad($args[2], 4);
+					$i = str_replace('0x', '', $i);
+					return '20'.$this->getVar($args[0]).$this->getVar($args[1]).$i[2].$i[3].$i[0].$i[1];
+				}
+			],
+			'reload_map' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '21';
 				}
 			],
 			
@@ -377,6 +416,16 @@ class Parser{
 				'args_max' => 1,
 				'fn' => function($args) {
 					$out = '0a'.$this->parseLine($args[0],false);
+					$label = $this->getLabel();
+					$this->if_stack[] = $label;
+					return $out.$this->getAddress($label);
+				}
+			],
+			'ifnot' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					$out = '0D'.$this->parseLine($args[0],false);
 					$label = $this->getLabel();
 					$this->if_stack[] = $label;
 					return $out.$this->getAddress($label);

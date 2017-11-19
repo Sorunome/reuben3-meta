@@ -8,6 +8,8 @@
 #include "text.h"
 #include "misc.h"
 
+#include "data/scripts.h"
+
 #define SCRIPT_NOP 0x00
 #define SCRIPT_FADE_TO_WHITE 0x01
 #define SCRIPT_FADE_FROM_WHITE 0x02
@@ -25,7 +27,7 @@
 #define SCRIPT_INC 0x0E
 #define SCRIPT_DEC 0x0F
 #define SCRIPT_CALL 0x10
-#define SCRIPT_RET 0x11
+#define SCRIPT_MOVE_PLAYER 0x11
 #define SCRIPT_ISEVENT 0x12
 #define SCRIPT_SETEVENT 0x13
 #define SCRIPT_CLEAREVENT 0x14
@@ -37,6 +39,12 @@
 #define SCRIPT_SET_TILE 0x1A
 #define SCRIPT_FADE_TO_MAP_AND_WORLD 0x1B
 #define SCRIPT_FADE_TO_MAP 0x1C
+#define SCRIPT_GET_PLAYER_X 0x1D
+#define SCRIPT_GET_PLAYER_Y 0x1E
+#define SCRIPT_RENDER 0x1F
+#define SCRIPT_DRAW_TILE 0x20
+#define SCRIPT_RELOAD_MAP 0x21
+#define SCRIPT_FADE_TO_MAP_AND_WORLD_POS 0x22
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -44,6 +52,7 @@
 
 #define SCRIPT_VAR_CAMERA_X 0xFF
 #define SCRIPT_VAR_CAMERA_y 0xFE
+#define SCRIPT_VAR_SCRIPT_TRIGGER 0xFD
 
 union View32 {
 	uint32_t addr;
@@ -62,6 +71,8 @@ uint8_t* Script::getVar() {
 			return (uint8_t*)&(camera.x);
 		case SCRIPT_VAR_CAMERA_y:
 			return (uint8_t*)&(camera.y);
+		case SCRIPT_VAR_SCRIPT_TRIGGER:
+			return (uint8_t*)&(trigger);
 		default:
 			return (uint8_t*)&(vars[i]);
 	}
@@ -101,8 +112,8 @@ bool Script::condition() {
 	return false;
 }
 
-bool Script::run(const uint8_t* _script) {
-	return run((uint8_t*) _script);
+bool Script::run(const uint8_t* _script, uint8_t _trigger) {
+	return run((uint8_t*) _script, _trigger);
 }
 
 void fade_to_white() {
@@ -141,8 +152,9 @@ void fade_from_white() {
 	}
 }
 
-bool Script::run(uint8_t* _script) {
+bool Script::run(uint8_t* _script, uint8_t _trigger) {
 	script_entry = script = _script;
+	trigger = _trigger;
 	isHome = true;
 	while(1) {
 		switch(*script++) {
@@ -172,6 +184,7 @@ bool Script::run(uint8_t* _script) {
 				board.load(homeMap);
 				board.postload();
 				player.show();
+				player.focus();
 				fade_from_white();
 				continue;
 			case SCRIPT_SET_VAR:
@@ -209,6 +222,22 @@ bool Script::run(uint8_t* _script) {
 			case SCRIPT_DEC:
 				(*getVar())--;
 				continue;
+			case SCRIPT_CALL:
+			{
+				uint8_t a = getNum();
+				uint8_t* _script = script;
+				uint8_t* _script_entry = script_entry;
+				run(scripts[a], trigger);
+				script = _script;
+				script_entry = _script_entry;
+				continue;
+			}
+			case SCRIPT_MOVE_PLAYER:
+				player.moveX(getNum());
+				player.moveY(getNum());
+				player.show();
+				player.focus();
+				continue;
 			case SCRIPT_SETEVENT:
 				player.setEvent(getNum());
 				continue;
@@ -243,11 +272,13 @@ bool Script::run(uint8_t* _script) {
 						renderAll();
 					}
 				}
-				// no need to update, we just roll over to update_screen and all is good to go
-			case SCRIPT_UPDATE_SCREEN:
 				while(!gb.update());
 				camera.setY(0);
 				renderAll();
+				gb.update(); // send the screen out
+				continue;
+			case SCRIPT_UPDATE_SCREEN:
+				while(!gb.update());
 				gb.update(); // send the screen out
 				continue;
 			case SCRIPT_SET_TILE:
@@ -281,6 +312,43 @@ bool Script::run(uint8_t* _script) {
 				fade_to_white();
 				player.hide();
 				board.load(getNum());
+				board.postload();
+				fade_from_white();
+				continue;
+			case SCRIPT_GET_PLAYER_X:
+				(*getVar()) = player.getX();
+				continue;
+			case SCRIPT_GET_PLAYER_Y:
+				(*getVar()) = player.getY();
+				continue;
+			case SCRIPT_RENDER:
+				renderAll();
+				continue;
+			case SCRIPT_DRAW_TILE:
+			{
+				uint8_t x = getNum();
+				uint8_t y = getNum();
+				uint8_t s1 = *script++;
+				uint8_t s2 = *script++;
+				board.drawTile(x, y, s1 + (s2 << 8));
+				continue;
+			}
+			case SCRIPT_RELOAD_MAP:
+				board.load();
+				board.postload();
+				continue;
+			case SCRIPT_FADE_TO_MAP_AND_WORLD_POS:
+				if (isHome) {
+					isHome = false;
+					homeMap = board.getMapId();
+					homeWorld = board.getWorldId();
+				}
+				fade_to_white();
+				player.hide();
+				board.setWorld(getNum());
+				board.load(getNum());
+				player.moveTo(getNum(), getNum());
+				player.focus();
 				board.postload();
 				fade_from_white();
 				continue;

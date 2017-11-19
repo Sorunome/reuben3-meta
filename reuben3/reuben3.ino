@@ -31,5 +31,5 @@ void loop() {
 	player.render();
 	gb.display.setCursor(0, 0);
 	gb.display.setColor(BLACK, WHITE);
-	gb.display.print(gb.getFreeRam());
+	gb.display.print(gb.getCpuLoad());
 }

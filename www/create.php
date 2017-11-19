@@ -70,14 +70,16 @@ function compress($hexData, $chunksize = 2){
 }
 
 function getTextASM($s) {
+	$s = str_replace("\r\n", "\n", $s);
+	
 	$s = str_replace("\n\n\n", "\x80", $s); // block wrap
 	$s = str_replace("\n\n", "\x81", $s); // page wrap
 //	$s = str_replace("\n","\n",$s);
 	$s .= "\x00"; // end
-	if (mb_strpos($s, "{#ask}\n") !== false) {
+	if (strpos($s, "{#ask}\n") !== false) {
 		$s = str_replace("{#ask}\n", "\x82", $s); // question
-		$i = mb_strpos($s, "\x82") + 2; // thefuck? why +2 and not +1? well, it works this way....
-		$ss = explode(' ', mb_substr($s, $i)); // $ss will hold all the shop options
+		$i = strpos($s, "\x82") + 1;
+		$ss = explode(' ', substr($s, $i)); // $ss will hold all the shop options
 		$s = str_replace('_', ' ', $s);
 		$i = 0;
 		$s .= "\x83".sizeof($ss).','; // shopoptions
@@ -139,8 +141,8 @@ $charsInUse = [];
 $texts[] = ['string' => '0123456789']; // make sure the numbers get loaded
 foreach($texts as $s){
 	$s = getTextASM($s['string']);
-	for($i = 0;$i < mb_strlen($s);$i++){
-		$c = mb_substr($s,$i,1);
+	for($i = 0;$i < strlen($s);$i++){
+		$c = substr($s,$i,1);
 		if($c == "\x05"){
 			break;
 		}
@@ -429,18 +431,18 @@ foreach($strings as $s) {
 	
 	$bs = '';
 	$s = getTextASM($s['string']);
-	for($i = 0; $i < mb_strlen($s); $i++) {
-		$c = mb_substr($s, $i, 1);
+	for($i = 0; $i < strlen($s); $i++) {
+		$c = substr($s, $i, 1);
 		//if($i == 0){
 		//	echo $c."\n";
 		//}
 		if ($c == "\x83") { // we don't split options accross multiple chunks
-			$bs .= 'FREEZEBLOCK,'.mb_substr($s, $i+1).'UNFREEZEBLOCK,';
+			$bs .= 'FREEZEBLOCK,'.substr($s, $i+1).'UNFREEZEBLOCK,';
 			break;
 		}
-		if ($c == "\\" && mb_substr($s, $i+1, 1) == 'x') {
+		if ($c == "\\" && substr($s, $i+1, 1) == 'x') {
 			$i += 2;
-			$bs .= '0x'.mb_substr($s, $i, 2).',';
+			$bs .= '0x'.substr($s, $i, 2).',';
 			$i++; // the second increase will happen in the for-loop
 		} else {
 			$bs .= '0x'.dechexpad2(ord($c)).',';
@@ -636,6 +638,32 @@ $worldLUT .= "};\n";
 // define some constants
 $defines['script_walk'] = 0;
 $defines['script_action'] = 1;
+$scriptfile = '';
+$scriptfileLut = "const uint8_t* scripts[] = {\n";
+$scriptId = 0;
+
+foreach ($sql->query("SELECT `id`, `name`, `code` FROM `scripts`") as $s) {
+	$s['code'] .= "\nreturn(true)";
+	$defines['script_'.$s['name']] = $scriptId;
+	$defines['script_'.(string)$s['id']] = $scriptId;
+	$code = bin2hex($parser->parse($s['code'], 0, $defines));
+	$scriptfile .= "const uint8_t script_${scriptId}[] = {\n\t";
+	if ($code == '') {
+		$code = 'FF';
+	}
+	foreach (str_split($code, 2) as $h) {
+		$scriptfile .= "0x$h, ";
+	}
+	$scriptfile .= "\n};\n";
+	$scriptfileLut .= "\tscript_$scriptId,\n";
+	
+	$scriptId++;
+}
+$scriptfileLut .= "};\n";
+$scriptfile .= $scriptfileLut;
+file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/scripts.h', $scriptfile);
+
+
 foreach ($sql->query("SELECT `id`,`x`,`y`,`code`,`add_jump` FROM `eventTiles` WHERE `refId` IN (".implode(',',array_map('intval',$tilemapIds)).")") as $te) {
 	if ($te['add_jump']) {
 		$te['code'] .= "\nreturn(true)";

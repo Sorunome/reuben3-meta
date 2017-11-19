@@ -8,4 +8,5 @@ wget https://www.sorunome.de/reuben3-meta/out/sprites.h
 wget https://www.sorunome.de/reuben3-meta/out/strings.h
 wget https://www.sorunome.de/reuben3-meta/out/maps.h
 wget https://www.sorunome.de/reuben3-meta/out/defines.h
+wget https://www.sorunome.de/reuben3-meta/out/scripts.h
 cd ../..

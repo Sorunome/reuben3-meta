@@ -84,7 +84,9 @@ void Player::interact() {
 		}
 		_x /= 8;
 		_y /= 8;
-		board.interact(_x, _y);
+		if (board.getTile(_x, _y) >= SPRITE_AFTER_SWIM) {
+			board.interact(_x, _y);
+		}
 	}
 }
 
@@ -146,13 +148,11 @@ void Player::update() {
 		return;
 	}
 	
-	int8_t newtile_x = (x + 2) / 8;
-	int8_t newtile_y = (y + 4) / 8;
+	int8_t newtile_x = (x + 2 + 2) / 8;
+	int8_t newtile_y = (y + 4 + 2) / 8;
 	
-	if (oldtile_x != newtile_x || oldtile_y != newtile_y) {
-		// check for scripts!
-		board.runScript(newtile_x, newtile_y, SCRIPT_WALK);
-	}
+	// check for scripts!
+	board.runScript(newtile_x, newtile_y, SCRIPT_WALK);
 	
 	focus();
 	

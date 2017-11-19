@@ -42,7 +42,6 @@ class Board {
 		uint8_t worldId;
 		uint8_t mapId;
 		const Tilemaps_Data* map;
-		void load();
 	public:
 		uint8_t getWorldId();
 		uint8_t getMapId();
@@ -54,10 +53,12 @@ class Board {
 		void setWorld(uint8_t _world);
 		void load(uint8_t _world, uint8_t _map);
 		void load(uint8_t _map);
+		void load();
 		void postload();
 		void render();
 		uint16_t getTile(uint8_t x, uint8_t y);
 		void setTile(uint8_t x, uint8_t y, uint16_t tile);
+		void drawTile(int8_t x, int8_t y, uint16_t tile);
 		void interact(uint8_t x, uint8_t y);
 		bool runScript(uint8_t x, uint8_t y, uint8_t trigger);
 };
