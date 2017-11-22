@@ -18,8 +18,10 @@ class Player {
 		bool isWalkable(float dx, float dy);
 		uint8_t events[(TOTAL_EVENTS + 7) / 8];
 		Direction direction;
+		void item();
 		void interact();
-		bool visible = true;
+		bool visible;
+		uint8_t curItem;
 		uint8_t lvl;
 		uint16_t hp;
 		uint16_t hp_max;

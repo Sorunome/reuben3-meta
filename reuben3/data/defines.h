@@ -1669,8 +1669,17 @@
 #define ARMOR_WOUNDS 1
 #define ARMOR_NONE 2
 #define ARMOR_SHIELD 4
+#define ITEM_NONE 0
+#define ITEM_BOTTLE1 1
+#define ITEM_BOTTLE2 2
+#define ITEM_BOTTLE3 3
+#define ITEM_BOTTLE4 4
+#define ITEM_HOOKSHOT 5
+#define ITEM_BOMB 6
+#define ITEM_PROTECT 7
 #define SCRIPT_WALK 0
 #define SCRIPT_ACTION 1
+#define SCRIPT_BOMB 2
 #define SCRIPT_AERILON_CASTLE_1 0
 #define SCRIPT_1 0
 #define SCRIPT_NUM_VARS 4

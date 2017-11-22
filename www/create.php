@@ -656,8 +656,18 @@ $defines['weapon_toxicsword'] = 7;
 $defines['armor_wounds'] = 1;
 $defines['armor_none'] = 2;
 $defines['armor_shield'] = 4;
+$defines['item_none'] = 0;
+$defines['item_bottle1'] = 1;
+$defines['item_bottle2'] = 2;
+$defines['item_bottle3'] = 3;
+$defines['item_bottle4'] = 4;
+$defines['item_hookshot'] = 5;
+$defines['item_bomb'] = 6;
+$defines['item_protect'] = 7;
+
 $defines['script_walk'] = 0;
 $defines['script_action'] = 1;
+$defines['script_bomb'] = 2;
 $scriptfile = '';
 $scriptfileLut = "const uint8_t* scripts[] = {\n";
 $scriptId = 0;

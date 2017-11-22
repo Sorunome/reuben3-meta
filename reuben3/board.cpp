@@ -17,6 +17,24 @@ Image singleLine(gb.display.width(), 1, ColorMode::rgb565);
 
 extern uint8_t decompression_buffer[];
 
+uint16_t Board::getDefaultTile() {
+	switch(worldId) {
+		case WORLD_DUNGEON_MOVE_BLOCKS:
+		case WORLD_DUNGEON_BOMBS:
+		case WORLD_DUNGEON_SWIMSUIT:
+		case WORLD_CAVES:
+			return SPRITE_203;
+		case WORLD_AERILON_CASTLE:
+		case WORLD_SAND_CASTLE_PRESENT:
+		case WORLD_SAND_CASTLE_PAST:
+			return SPRITE_308;
+		case WORLD_HOUSES:
+			return SPRITE_193;
+		default:
+			return SPRITE_1;
+	}
+}
+
 uint8_t Board::getWorldId() {
 	return worldId;
 }
@@ -72,6 +90,10 @@ void Board::postload() {
 
 uint16_t Board::getTile(uint8_t x, uint8_t y) {
 	return board[y*width + x];
+}
+
+void Board::eraseTile(uint8_t x, uint8_t y) {
+	setTile(x, y, getDefaultTile());
 }
 
 void Board::setTile(uint8_t x, uint8_t y, uint16_t tile) {
@@ -224,7 +246,7 @@ void Board::render() {
 	}
 }
 
-bool Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
+int8_t Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 	uint8_t amount = 0;
 	uint8_t i = 0;
 	uint8_t offset = y*12 + x;
@@ -234,35 +256,34 @@ bool Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 		if (id == mapId) {
 			amount = worlds[worldId].actionTiles[i].amount;
 			if (!amount) {
-				return false;
+				return -1;
 			}
 			const Actiontiles_LUT* lut = worlds[worldId].actionTiles[i].lut;
 			for (i = 0; i < amount; i++) {
 				if (lut[i].offset == offset) {
-					script.run(lut[i].script, trigger);
-					return true;
+					return script.run(lut[i].script, trigger);
 				}
 			}
-			return false;
+			return -1;
 		}
 		if (id == 0xFF) {
-			return false;
+			return -1;
 		}
 		i++;
 	}
-	return false;
+	return -1;
 }
 
-void Board::interact(uint8_t x, uint8_t y) {
+int8_t Board::interact(uint8_t x, uint8_t y) {
 	switch(getTile(x, y)) {
 		case SPRITE_105: // shrub on grass
 			setTile(x, y, SPRITE_1);
-			return;
+			return 1;
 		case SPRITE_113: // rock on sand
 			if (player.isEvent(EVENT_PICKAXE)) {
 				setTile(x, y, SPRITE_308);
 			}
-			return;
+			return 1;
 		case SPRITE_376: // rock on darkgray
 			if (player.isEvent(EVENT_PICKAXE)) {
 				if (worldId == WORLD_OVERWORLD && mapId == TILEMAP_43) {
@@ -272,9 +293,9 @@ void Board::interact(uint8_t x, uint8_t y) {
 					setTile(x, y, SPRITE_309);
 				}
 			}
-			return;
+			return 1;
 		default:
-			runScript(x, y, SCRIPT_ACTION);
+			return runScript(x, y, SCRIPT_ACTION);
 	}
 }
 

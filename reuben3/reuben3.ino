@@ -23,6 +23,10 @@ void loop() {
 	if (!gb.update()) {
 		return;
 	}
+	if (gb.buttons.pressed(BUTTON_C)) {
+		statsMenu();
+		return; // make sure we do accidental shadowbutton triggers
+	}
 	player.update();
 	
 	

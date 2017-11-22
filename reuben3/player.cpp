@@ -2,6 +2,7 @@
 #include "camera.h"
 #include "board.h"
 #include "data/defines.h"
+#include "misc.h"
 
 const uint8_t player_sprite_data[] = {
 	8, 8,
@@ -23,6 +24,8 @@ void Player::init() {
 	y = 3*8;
 	direction = Direction::down;
 	visible = true;
+	curItem = ITEM_NONE;
+	curItem = ITEM_BOMB;
 	lvl = 1;
 	hp = 120;
 	hp_max = 120;
@@ -85,33 +88,53 @@ bool Player::isWalkable(float dx, float dy) {
 	return tile < SPRITE_AFTER_WALK;
 }
 
+void Player::item() {
+	if (!gb.buttons.released(BUTTON_B)) {
+		return;
+	}
+	switch(curItem) {
+		case ITEM_BOTTLE1:
+		case ITEM_BOTTLE2:
+		case ITEM_BOTTLE3:
+		case ITEM_BOTTLE4:
+			// let's bottle this up
+			return;
+		case ITEM_HOOKSHOT:
+			return;
+		case ITEM_BOMB:
+			bomb(x + 3, y + 5);
+			return;
+	}
+}
+
 void Player::interact() {
-	if (gb.buttons.released(BUTTON_A)) {
-		// we check for the tile 2 pixels away, that should account for movement offsets
-		// inside the lower 4x4 hitbox, though
-		// more like, at the edges of it
-		// so edgy
-		
-		int8_t _x = x;
-		int8_t _y = y;
-		if (direction == Direction::up) {
-			_x += 3;
-			//_y += 0;
-		} else if (direction == Direction::right) {
-			_x += 7;
-			_y += 5;
-		} else if (direction == Direction::down) {
-			_x += 3;
-			_y += 9;
-		} else { // left
-			//_x += 0;
-			_y += 5;
-		}
-		_x /= 8;
-		_y /= 8;
-		if (board.getTile(_x, _y) >= SPRITE_AFTER_SWIM) {
-			board.interact(_x, _y);
-		}
+	if (!gb.buttons.released(BUTTON_A)) {
+		return;
+	}
+	// we check for the tile 2 pixels away, that should account for movement offsets
+	// inside the lower 4x4 hitbox, though
+	// more like, at the edges of it
+	// so edgy
+	
+	int8_t _x = x;
+	int8_t _y = y;
+	if (direction == Direction::up) {
+		_x += 3;
+		//_y += 0;
+	} else if (direction == Direction::right) {
+		_x += 7;
+		_y += 5;
+	} else if (direction == Direction::down) {
+		_x += 3;
+		_y += 9;
+	} else { // left
+		//_x += 0;
+		_y += 5;
+	}
+	_x /= 8;
+	_y /= 8;
+	if (board.getTile(_x, _y) >= SPRITE_AFTER_SWIM) {
+		int8_t res = board.interact(_x, _y);
 	}
 }
 
@@ -124,6 +147,7 @@ void Player::update() {
 	if (!_dx && !_dy) {
 		// nothing to do
 		interact();
+		item();
 		return;
 	}
 	float v = 1.5f;
@@ -183,6 +207,7 @@ void Player::update() {
 	
 	// now let's check for actions
 	interact();
+	item();
 }
 
 void Player::render() {

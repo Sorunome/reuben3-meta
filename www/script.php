@@ -386,7 +386,7 @@ class Parser{
 				'args_min' => 1,
 				'args_max' => 1,
 				'fn' => function($args) {
-					return '23'.$this->getVar($args[0]);
+					return '23'.$this->getVar16($args[0]);
 				}
 			],
 			

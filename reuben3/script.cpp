@@ -347,7 +347,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				fade_from_white();
 				continue;
 			case SCRIPT_ADD_GOLD:
-				player.addGold(getNum());
+				player.addGold(getNum16());
 				continue;
 			
 			case SCRIPT_RETURN_FALSE:
