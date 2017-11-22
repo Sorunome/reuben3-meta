@@ -32,4 +32,7 @@ void waitRelease() {
 void renderAll() {
 	board.render();
 	player.render();
+	gb.display.setCursor(0, 0);
+	gb.display.setColor(BLACK, WHITE);
+	gb.display.print(gb.getCpuLoad());
 }

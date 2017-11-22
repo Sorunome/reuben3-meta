@@ -4,7 +4,7 @@
 #include "player.h"
 #include "data/defines.h"
 
-#include "script.h"
+#include "misc.h"
 
 
 uint8_t decompression_buffer[2048]; // 2048 > 12*8*2*8 = 1536
@@ -15,8 +15,7 @@ void setup() {
 	//while(!SerialUSB);
 	board.load(WORLD_OVERWORLD, TILEMAP_37);
 	board.postload();
-	player.moveTo(7*8, 3*8);
-	player.focus();
+	player.init();
 }
 
 
@@ -27,9 +26,5 @@ void loop() {
 	player.update();
 	
 	
-	board.render();
-	player.render();
-	gb.display.setCursor(0, 0);
-	gb.display.setColor(BLACK, WHITE);
-	gb.display.print(gb.getCpuLoad());
+	renderAll();
 }

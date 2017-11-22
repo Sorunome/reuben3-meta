@@ -15,7 +15,7 @@ class Parser{
 	private $if_stack = [];
 	private $while_stack = [];
 	private $defines = [];
-	private $extra_vars = ['camera_x', 'camera_y', 'script_trigger'];
+	private $extra_vars = ['camera_x', 'camera_y', 'script_trigger', 'armor', 'wait', 'sword', 'tradequest', 'fright', 'bombs', 'bombs_max'];
 	private $firstPass = true;
 	private $labels = [];
 	private $genericLabelCounter = 0;
@@ -36,10 +36,13 @@ class Parser{
 		return dechexpad($this->labels[$this->addressPrefix.$label], 8);
 	}
 	private function getVarNum($var){
-		if(isset($this->variables[$var])){
+		if (!$var) { // why the fuck is this needed
+			return false;
+		}
+		if (isset($this->variables[$var])) {
 			return dechexpad($this->variables[$var], 2);
 		}
-		if(($i = array_search($var,$this->extra_vars)) !== false){
+		if (($i = array_search($var, $this->extra_vars)) !== false) {
 			return dechexpad(0xFF - $i, 2);
 		}
 		return false;
@@ -56,6 +59,16 @@ class Parser{
 			return '8080';
 		}
 		return dechexpad($var, 2);
+	}
+	private function getVar16($var) {
+		if (strpos($var, '|') !== false) {
+			$vars = explode('|', $var);
+			return $this->getVar($vars[1]).$this->getVar($vars[0]);
+		}
+		$var = (int)$var;
+		$upper = $var >> 8;
+		$lower = $var & 0xFF;
+		return $this->getVar($lower).$this->getVar($upper);
 	}
 	private function parseLine($line,$convertToBytes = true){
 		global $defines;
@@ -92,6 +105,15 @@ class Parser{
 			}
 		}
 		return $out;
+	}
+	private function saveVarNumber() {
+		global $defines;
+		if (!isset($defines['script_num_vars'])) {
+			$defines['script_num_vars'] = 1;
+		}
+		if(sizeof($this->variables) > $defines['script_num_vars']){
+			$defines['script_num_vars'] = sizeof($this->variables);
+		}
 	}
 	public function __construct(){
 		$this->functions = [
@@ -145,6 +167,22 @@ class Parser{
 				'fn' => function($args) {
 					$s = '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
 					return '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
+				}
+			],
+			'set_var16' => [
+				'args_min' => 2,
+				'args_max' => 2,
+				'fn' => function($args) {
+					$num = $this->getVarNum($args[0]);
+					$num2 = dechex($num)+1;
+					$this->saveVarNumber();
+					global $defines;
+					if ($num2 > $defines['script_num_vars']) {
+						$defines['script_num_vars'] = $num2;
+					}
+					$num2 = dechexpad2($num2);
+					$i = $this->getVar16($args[1]);
+					return '08'.$num.$i[0].$i[1].'08'.$num2.$i[2].$i[3];
 				}
 			],
 			'label' => [
@@ -249,8 +287,8 @@ class Parser{
 				'args_min' => 1,
 				'args_max' => 2,
 				'fn' => function($args) {
-					$i = dechexpad($this->defines['string_'.$args[0]] ?? $args[0], 4);
-					$i = $i[2].$i[3].$i[0].$i[1];
+					$i = $this->defines['string_'.$args[0]] ?? $args[0];
+					$i = $this->getVar16($i);
 					if (sizeof($args) == 1) {
 						return '16'.$i;
 					}
@@ -275,9 +313,14 @@ class Parser{
 				'args_min' => 3,
 				'args_max' => 3,
 				'fn' => function($args) {
-					$i = $this->defines['sprite_'.$args[2]]??dechexpad($args[2], 4);
-					$i = str_replace('0x', '', $i);
-					return '1A'.$this->getVar($args[0]).$this->getVar($args[1]).$i[2].$i[3].$i[0].$i[1];
+					$i = $args[0];
+					if (isset($this->defines['sprite_'.$args[0]])) {
+						$i = hexdec($this->defines['sprite_'.$args[0]]);
+						
+					}
+					$i = $this->getVar16($i);
+				
+					return '1A'.$this->getVar($args[0]).$this->getVar($args[1]).$i;
 				}
 			],
 			'fade_map' => [
@@ -323,9 +366,13 @@ class Parser{
 				'args_min' => 3,
 				'args_max' => 3,
 				'fn' => function($args) {
-					$i = $this->defines['sprite_'.$args[2]]??dechexpad($args[2], 4);
-					$i = str_replace('0x', '', $i);
-					return '20'.$this->getVar($args[0]).$this->getVar($args[1]).$i[2].$i[3].$i[0].$i[1];
+					$i = $args[0];
+					if (isset($this->defines['sprite_'.$args[0]])) {
+						$i = hexdec($this->defines['sprite_'.$args[0]]);
+						
+					}
+					$i = $this->getVar16($i);
+					return '20'.$this->getVar($args[0]).$this->getVar($args[1]).$i;
 				}
 			],
 			'reload_map' => [
@@ -333,6 +380,13 @@ class Parser{
 				'args_max' => 0,
 				'fn' => function($args) {
 					return '21';
+				}
+			],
+			'add_gold' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					return '23'.$this->getVar($args[0]);
 				}
 			],
 			
@@ -398,6 +452,7 @@ class Parser{
 				'args_min' => 0,
 				'args_max' => 0,
 				'fn' => function() {
+					$this->saveVarNumber();
 					$this->variables = [];
 				}
 			],
@@ -498,13 +553,7 @@ class Parser{
 			$out .= $this->parseLine($line);
 			$this->bytes = strlen($out);
 		}
-		global $defines;
-		if (!isset($defines['script_num_vars'])) {
-			$defines['script_num_vars'] = 1;
-		}
-		if(sizeof($this->variables) > $defines['script_num_vars']){
-			$defines['script_num_vars'] = sizeof($this->variables);
-		}
+		$this->saveVarNumber();
 		return $out;
 	}
 }

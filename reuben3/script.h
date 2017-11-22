@@ -6,10 +6,11 @@
 
 class Script {
 	private:
-		int8_t vars[SCRIPT_NUM_VARS];
+		uint8_t vars[SCRIPT_NUM_VARS];
 		bool condition();
 		uint8_t* getVar();
 		uint8_t getNum();
+		uint16_t getNum16();
 		void jump();
 		uint8_t* script;
 		uint8_t* script_entry;

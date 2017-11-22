@@ -45,14 +45,10 @@
 #define SCRIPT_DRAW_TILE 0x20
 #define SCRIPT_RELOAD_MAP 0x21
 #define SCRIPT_FADE_TO_MAP_AND_WORLD_POS 0x22
+#define SCRIPT_ADD_GOLD 0x23
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
-
-
-#define SCRIPT_VAR_CAMERA_X 0xFF
-#define SCRIPT_VAR_CAMERA_y 0xFE
-#define SCRIPT_VAR_SCRIPT_TRIGGER 0xFD
 
 union View32 {
 	uint32_t addr;
@@ -66,16 +62,12 @@ union View32 {
 
 uint8_t* Script::getVar() {
 	uint8_t i = *script++;
-	switch(i) {
-		case SCRIPT_VAR_CAMERA_X:
-			return (uint8_t*)&(camera.x);
-		case SCRIPT_VAR_CAMERA_y:
-			return (uint8_t*)&(camera.y);
-		case SCRIPT_VAR_SCRIPT_TRIGGER:
-			return (uint8_t*)&(trigger);
-		default:
-			return (uint8_t*)&(vars[i]);
+	const uint8_t* ptrs[] = {(uint8_t*)&(camera.x), (uint8_t*)&(camera.y), &trigger, &(player.armor), &(player.wait), &(player.sword), &(player.tradequest), &(player.fright), &(player.bombs), &(player.bombs_max)};
+	const uint8_t len = sizeof(ptrs) / sizeof(const uint8_t*);
+	if (0xFF - i <= len) {
+		return (uint8_t*)(ptrs[0xFF - i]);
 	}
+	return &(vars[i]);
 }
 
 uint8_t Script::getNum() {
@@ -89,6 +81,12 @@ uint8_t Script::getNum() {
 		return i;
 	}
 	return *getVar();
+}
+
+uint16_t Script::getNum16() {
+	uint8_t l = getNum();
+	uint8_t h = getNum();
+	return (h << 8) | l;
 }
 
 void Script::jump() {
@@ -246,15 +244,13 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				continue;
 			case SCRIPT_TEXT:
 			{
-				uint16_t i = *script++;
-				i += (*script++) << 8;
+				uint16_t i = getNum16();
 				text.box(i, player.getY() > 28);
 				continue;
 			}
 			case SCRIPT_TEXT_ANSWER:
 			{
-				uint16_t i = *script++;
-				i += (*script++) << 8;
+				uint16_t i = getNum16();
 				uint8_t* ptr = getVar();
 				*ptr = (uint8_t)text.box(i, player.getY() > 28);
 				continue;
@@ -285,9 +281,8 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 			{
 				uint8_t x = getNum();
 				uint8_t y = getNum();
-				uint8_t s1 = *script++;
-				uint8_t s2 = *script++;
-				board.setTile(x, y, s1 + (s2 << 8));
+				uint16_t s = getNum16();
+				board.setTile(x, y, s);
 				continue;
 			}
 			case SCRIPT_FADE_TO_MAP_AND_WORLD:
@@ -328,9 +323,8 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 			{
 				uint8_t x = getNum();
 				uint8_t y = getNum();
-				uint8_t s1 = *script++;
-				uint8_t s2 = *script++;
-				board.drawTile(x, y, s1 + (s2 << 8));
+				uint8_t s = getNum16();
+				board.drawTile(x, y, s);
 				continue;
 			}
 			case SCRIPT_RELOAD_MAP:
@@ -352,7 +346,9 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				board.postload();
 				fade_from_white();
 				continue;
-			
+			case SCRIPT_ADD_GOLD:
+				player.addGold(getNum());
+				continue;
 			
 			case SCRIPT_RETURN_FALSE:
 				return false;

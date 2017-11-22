@@ -17,6 +17,31 @@ const uint8_t player_sprite_data[] = {
 
 Image player_sprite(player_sprite_data);
 
+void Player::init() {
+	memset(events, 0, sizeof(events));
+	x = 8*8;
+	y = 3*8;
+	direction = Direction::down;
+	visible = true;
+	lvl = 1;
+	hp = 120;
+	hp_max = 120;
+	mp = 23;
+	mp_max = 23;
+	exp = 0;
+	exp_next = 5;
+	gold = 0;
+	gold_max = 100;
+	armor = ARMOR_WOUNDS;
+	wait = 0xFF;
+	sword = WEAPON_NONE;
+	tradequest = TRADEQUEST_NONE;
+	fright = 0;
+	bombs = 10;
+	bombs_max = 10;
+	focus();
+}
+
 void Player::hide() {
 	visible = false;
 }
@@ -193,6 +218,16 @@ void Player::clearEvent(uint8_t e) {
 	uint8_t index = e % 8;
 	uint8_t mask = 1 << index;
 	events[offset] &= ~mask;
+}
+
+void Player::addGold(uint16_t num) {
+	// we temporary put gold to a 32-bit var to prevent overflows
+	uint32_t _gold = gold;
+	_gold += num;
+	if (_gold > gold_max) {
+		_gold = gold_max;
+	}
+	gold = _gold;
 }
 
 Player player;

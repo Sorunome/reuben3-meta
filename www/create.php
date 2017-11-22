@@ -636,6 +636,26 @@ $worldLUT .= "};\n";
 
 // now create the scripts (couldn't do that before because we need the defines)
 // define some constants
+$defines['tradequest_none'] = 0;
+$defines['tradequest_letter1'] = 1;
+$defines['tradequest_letter2'] = 2;
+$defines['tradequest_food'] = 3;
+$defines['tradequest_fishing_rod'] = 4;
+$defines['tradequest_fish'] = 5;
+$defines['tradequest_necklace'] = 6;
+$defines['tradequest_shell'] = 7;
+$defines['tradequest_rug'] = 8;
+$defines['tradequest_fox'] = 9;
+$defines['tradequest_done'] = 10;
+$defines['weapon_none'] = 0;
+$defines['weapon_stick'] = 2;
+$defines['weapon_axe'] = 4;
+$defines['weapon_sword'] = 5;
+$defines['weapon_breadsword'] = 6;
+$defines['weapon_toxicsword'] = 7;
+$defines['armor_wounds'] = 1;
+$defines['armor_none'] = 2;
+$defines['armor_shield'] = 4;
 $defines['script_walk'] = 0;
 $defines['script_action'] = 1;
 $scriptfile = '';
