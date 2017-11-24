@@ -3,6 +3,7 @@
 #include "board.h"
 #include "player.h"
 #include "camera.h"
+#include "data/defines.h"
 #include <Gamebuino-Meta.h>
 
 void waitCycles(uint8_t num) {
@@ -138,5 +139,371 @@ void bomb(int8_t x, int8_t y) {
 		while(!gb.update());
 		renderAll();
 		gb.display.drawImage(x - 3 - 8 - camera.x, y - 5 - 8 - camera.y, img);
+	}
+}
+
+void hookshot_draw_updown(int8_t x, int8_t y1, int8_t y2) {
+	if (y1 > y2) {
+		return hookshot_draw_updown(x, y2, y1);
+	}
+	gb.display.setColor(BLACK);
+	for(; y1 <= y2; y1++) {
+		if (y1 % 2) {
+			gb.display.drawPixel(x - camera.x, y1 - camera.y);
+		} else {
+			gb.display.drawPixel(x - 1 - camera.x, y1 - camera.y);
+			gb.display.drawPixel(x + 1 - camera.x, y1 - camera.y);
+		}
+	}
+}
+
+void hookshot_draw_leftright(int8_t x1, int8_t x2, int8_t y) {
+	if (x1 > x2) {
+		return hookshot_draw_leftright(x2, x1, y);
+	}
+	gb.display.setColor(BLACK);
+	for(; x1 <= x2; x1++) {
+		if (x1 % 2) {
+			gb.display.drawPixel(x1 - camera.x, y - camera.y);
+		} else {
+			gb.display.drawPixel(x1 - camera.x, y + 1 - camera.y);
+			gb.display.drawPixel(x1 - camera.x, y - 1- camera.y);
+		}
+	}
+}
+
+void hookshot_up(int8_t x, int8_t y) {
+	if (y < 0) {
+		return;
+	}
+	int8_t _y = y;
+	int8_t _x = x;
+	x += 4; // for animation
+	bool grab = false;
+	bool flying = false;
+	int8_t y_prev = -1;
+	while(1) {
+		y--;
+		if (y % 2) {
+			camera.centerOn(_x + 4, y + 4); // _x as we don't want random jumping
+			renderAll();
+			hookshot_draw_updown(x, y, _y);
+			while(!gb.update());
+		}
+		if (y <= 0) {
+			break;
+		}
+		if (y_prev == (y / 8)) {
+			continue;
+		}
+		uint8_t t = board.getTile(x / 8, y / 8);
+		y_prev = y / 8;
+		// check if we can just fly
+		if (t < SPRITE_AFTER_HOOKSHOT_FLY) {
+			continue;
+		}
+		// check if we pass over an up-wall and set the flying flag
+		if (t >= SPRITE_FIRST_HOOKSHOT_WALL_RIGHT_UP && t < SPRITE_AFTER_HOOKSHOT_WALL_LEFT_UP) {
+			flying = true;
+			continue;
+		}
+		if (t < SPRITE_AFTER_HOOKSHOT_WALL_DOWN) {
+			if (flying) {
+				flying = false;
+				continue;
+			}
+			break;
+		}
+		
+		
+		
+		// check if we grab onto something
+		if (t >= SPRITE_FIRST_HOOKSHOT && t < SPRITE_AFTER_HOOKSHOT) {
+			grab = true;
+		}
+		break;
+	}
+	// revert the last step as we want to appear in front of the object
+	// this also fixes a bug where you can hookshot into things
+	y++;
+	if (grab) {
+		for (; _y >= y; _y--) {
+			if (_y % 2) {
+				player.moveY(_y);
+				player.focus();
+				renderAll();
+				hookshot_draw_updown(x, y, _y);
+				while(!gb.update());
+			}
+		}
+		player.moveTo(_x, y);
+		player.focus();
+		return;
+	}
+	for(;_y > y; y++) {
+		if (y % 2) {
+			camera.centerOn(_x + 4, y + 4);
+			renderAll();
+			hookshot_draw_updown(x, y, _y);
+			while(!gb.update());
+		}
+	}
+}
+
+void hookshot_right(int8_t x, int8_t y) {
+	if (x >= 11*8) {
+		return;
+	}
+	int8_t _y = y;
+	int8_t _x = x;
+	x += 7; // for checking
+	y += 4; // for animation
+	
+	bool grab = false;
+	bool flying = false;
+	int x_prev = -1;
+	while(1) {
+		x++;
+		if (x % 2) {
+			camera.centerOn(x + 4, _y + 4); // _y as we don't want random jumping
+			renderAll();
+			hookshot_draw_leftright(x, _x + 7, y);
+			while(!gb.update());
+		}
+		if (x >= 12*8) {
+			break;
+		}
+		if (x_prev == (x / 8)) {
+			continue;
+		}
+		uint8_t t = board.getTile(x / 8, y / 8);
+		x_prev = x / 8;
+		// check if we can just fly
+		if (t < SPRITE_AFTER_HOOKSHOT_FLY) {
+			continue;
+		}
+		// check if we pass over an up-wall and set the flying flag
+		if (t >= SPRITE_FIRST_HOOKSHOT_WALL_RIGHT && t < SPRITE_AFTER_HOOKSHOT_WALL_RIGHT) {
+			flying = true;
+			continue;
+		}
+		if (t >= SPRITE_FIRST_HOOKSHOT_WALL_LEFT_UP && t < SPRITE_AFTER_HOOKSHOT_WALL_LEFT) {
+			if (flying) {
+				flying = false;
+				continue;
+			}
+			break;
+		}
+		
+		
+		
+		// check if we grab onto something
+		if (t >= SPRITE_FIRST_HOOKSHOT && t < SPRITE_AFTER_HOOKSHOT) {
+			grab = true;
+		}
+		break;
+	}
+	// revert the last step as we want to appear in front of the object
+	// this also fixes a bug where you can hookshot into things
+	x--;
+	if (grab) {
+		for (; _x <= (x - 7); _x++) {
+			if (_x % 2) {
+				player.moveX(_x);
+				player.focus();
+				renderAll();
+				hookshot_draw_leftright(x, _x + 7, y);
+				while(!gb.update());
+			}
+		}
+		player.moveTo(x - 7, _y);
+		player.focus();
+		return;
+	}
+	for(;_x + 7 < x; x--) {
+		if (x % 2) {
+			camera.centerOn(x + 4, _y + 4);
+			renderAll();
+			hookshot_draw_leftright(x, _x + 7, y);
+			while(!gb.update());
+		}
+	}
+	player.focus();
+}
+
+void hookshot_down(int8_t x, int8_t y) {
+	if (y >= 7*8) {
+		return;
+	}
+	int8_t _y = y;
+	int8_t _x = x;
+	x += 4; // for animation
+	y += 7; // for checking
+	bool grab = false;
+	bool flying = false;
+	int8_t y_prev = -1;
+	while(1) {
+		y++;
+		if (y % 2) {
+			camera.centerOn(_x + 4, y + 4); // _x as we don't want random jumping
+			renderAll();
+			hookshot_draw_updown(x, y, _y + 7);
+			while(!gb.update());
+		}
+		if (y >= 8*8) {
+			break;
+		}
+		if (y_prev == (y / 8)) {
+			continue;
+		}
+		uint8_t t = board.getTile(x / 8, y / 8);
+		y_prev = y / 8;
+		// check if we can just fly
+		if (t < SPRITE_AFTER_HOOKSHOT_FLY) {
+			continue;
+		}
+		// check if we pass over an up-wall and set the flying flag
+		if (t >= SPRITE_FIRST_HOOKSHOT_WALL_DOWN && t < SPRITE_AFTER_HOOKSHOT_WALL_DOWN) {
+			flying = true;
+			continue;
+		}
+		if (t >= SPRITE_FIRST_HOOKSHOT_WALL_RIGHT_UP && t < SPRITE_AFTER_HOOKSHOT_WALL_LEFT_UP) {
+			if (flying) {
+				flying = false;
+				continue;
+			}
+			break;
+		}
+		
+		
+		
+		// check if we grab onto something
+		if (t >= SPRITE_FIRST_HOOKSHOT && t < SPRITE_AFTER_HOOKSHOT) {
+			grab = true;
+		}
+		break;
+	}
+	// revert the last step as we want to appear in front of the object
+	// this also fixes a bug where you can hookshot into things
+	y--;
+	if (grab) {
+		for (; _y <= (y - 7); _y++) {
+			if (_y % 2) {
+				player.moveY(_y);
+				player.focus();
+				renderAll();
+				hookshot_draw_updown(x, y, _y + 7);
+				while(!gb.update());
+			}
+		}
+		player.moveTo(_x, y - 7);
+		player.focus();
+		return;
+	}
+	for(;_y + 7 < y; y--) {
+		if (y % 2) {
+			camera.centerOn(_x + 4, y + 4);
+			renderAll();
+			hookshot_draw_updown(x, y, _y + 7);
+			while(!gb.update());
+		}
+	}
+}
+
+void hookshot_left(int8_t x, int8_t y) {
+	if (x < 0) {
+		return;
+	}
+	int8_t _y = y;
+	int8_t _x = x;
+	y += 4; // for animation
+	
+	bool grab = false;
+	bool flying = false;
+	int x_prev = -1;
+	while(1) {
+		x--;
+		if (x % 2) {
+			camera.centerOn(x + 4, _y + 4); // _y as we don't want random jumping
+			renderAll();
+			hookshot_draw_leftright(x, _x, y);
+			while(!gb.update());
+		}
+		if (x <= 0) {
+			break;
+		}
+		if (x_prev == (x / 8)) {
+			continue;
+		}
+		uint8_t t = board.getTile(x / 8, y / 8);
+		x_prev = x / 8;
+		// check if we can just fly
+		if (t < SPRITE_AFTER_HOOKSHOT_FLY) {
+			continue;
+		}
+		// check if we pass over an up-wall and set the flying flag
+		if (t >= SPRITE_FIRST_HOOKSHOT_WALL_LEFT_UP && t < SPRITE_AFTER_HOOKSHOT_WALL_LEFT) {
+			flying = true;
+			continue;
+		}
+		
+		if (t >= SPRITE_FIRST_HOOKSHOT_WALL_RIGHT && t < SPRITE_AFTER_HOOKSHOT_WALL_RIGHT) {
+			if (flying) {
+				flying = false;
+				continue;
+			}
+			break;
+		}
+		
+		
+		
+		// check if we grab onto something
+		if (t >= SPRITE_FIRST_HOOKSHOT && t < SPRITE_AFTER_HOOKSHOT) {
+			grab = true;
+		}
+		break;
+	}
+	// revert the last step as we want to appear in front of the object
+	// this also fixes a bug where you can hookshot into things
+	x++;
+	if (grab) {
+		for (; _x >= x; _x--) {
+			if (_x % 2) {
+				player.moveX(_x);
+				player.focus();
+				renderAll();
+				hookshot_draw_leftright(x, _x, y);
+				while(!gb.update());
+			}
+		}
+		player.moveTo(x, _y);
+		player.focus();
+		return;
+	}
+	for(;_x > x; x++) {
+		if (x % 2) {
+			camera.centerOn(x + 4, _y + 4);
+			renderAll();
+			hookshot_draw_leftright(x, _x, y);
+			while(!gb.update());
+		}
+	}
+	player.focus();
+}
+
+void hookshot(int8_t x, int8_t y, Direction dir) {
+	switch(dir) {
+		case Direction::up:
+			hookshot_up(x, y);
+			break;
+		case Direction::right:
+			hookshot_right(x, y);
+			break;
+		case Direction::down:
+			hookshot_down(x, y);
+			break;
+		case Direction::left:
+			hookshot_left(x, y);
+			break;
 	}
 }

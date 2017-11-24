@@ -120,8 +120,14 @@ addSpriteSheet('Walk');
 addSpriteSheet('Swim');
 addSpriteSheet('Mix_Water');
 addSpriteSheet('Water');
-addSpriteSheet('hookshotfly');
-addSpriteSheet('hookshotgrab');
+addSpriteSheet('hookshot_fly');
+addSpriteSheet('hookshot_wall_right');
+addSpriteSheet('hookshot_wall_right_up');
+addSpriteSheet('hookshot_wall_up');
+addSpriteSheet('hookshot_wall_left_up');
+addSpriteSheet('hookshot_wall_left');
+addSpriteSheet('hookshot_wall_down');
+addSpriteSheet('hookshot');
 addSpriteSheet('bomb');
 
 foreach($spritesInUse as $s){

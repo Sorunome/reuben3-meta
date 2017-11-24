@@ -25,7 +25,7 @@ void Player::init() {
 	direction = Direction::down;
 	visible = true;
 	curItem = ITEM_NONE;
-	curItem = ITEM_BOMB;
+	curItem = ITEM_HOOKSHOT;
 	lvl = 1;
 	hp = 120;
 	hp_max = 120;
@@ -100,6 +100,7 @@ void Player::item() {
 			// let's bottle this up
 			return;
 		case ITEM_HOOKSHOT:
+			hookshot(x, y, direction);
 			return;
 		case ITEM_BOMB:
 			bomb(x + 3, y + 5);

@@ -195,7 +195,7 @@ if(isset($_GET['getData'])){
 		<script type="text/javascript">
 			$(document).ready(function(){
 					var sprites = <?php
-							$spritesheets = $sql->query("SELECT `name`,`sprites` FROM `spritesheets` WHERE 1 ORDER BY `sorder` ASC");
+							$spritesheets = $sql->query("SELECT `name`,`sprites` FROM `spritesheets` WHERE `visible`=1 ORDER BY `sorder` ASC");
 							$sheets = [];
 							$spritesInUse = [];
 							foreach($spritesheets as $sheet){
