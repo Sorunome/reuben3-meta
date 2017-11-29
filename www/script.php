@@ -313,13 +313,12 @@ class Parser{
 				'args_min' => 3,
 				'args_max' => 3,
 				'fn' => function($args) {
-					$i = $args[0];
-					if (isset($this->defines['sprite_'.$args[0]])) {
-						$i = hexdec($this->defines['sprite_'.$args[0]]);
-						
+					$i = $args[2];
+					if (isset($this->defines['sprite_'.$args[2]])) {
+						$i = hexdec($this->defines['sprite_'.$args[2]]);
 					}
 					$i = $this->getVar16($i);
-				
+
 					return '1A'.$this->getVar($args[0]).$this->getVar($args[1]).$i;
 				}
 			],
@@ -366,10 +365,9 @@ class Parser{
 				'args_min' => 3,
 				'args_max' => 3,
 				'fn' => function($args) {
-					$i = $args[0];
-					if (isset($this->defines['sprite_'.$args[0]])) {
-						$i = hexdec($this->defines['sprite_'.$args[0]]);
-						
+					$i = $args[2];
+					if (isset($this->defines['sprite_'.$args[2]])) {
+						$i = hexdec($this->defines['sprite_'.$args[2]]);
 					}
 					$i = $this->getVar16($i);
 					return '20'.$this->getVar($args[0]).$this->getVar($args[1]).$i;
@@ -389,7 +387,7 @@ class Parser{
 					return '23'.$this->getVar16($args[0]);
 				}
 			],
-			
+
 			'add_enemy' => [
 				'args_min' => 3,
 				'args_max' => 3,
@@ -423,7 +421,7 @@ class Parser{
 					}
 				}
 			],
-			
+
 			'return_false' => [
 				'args_min' => 0,
 				'args_max' => 0,
@@ -438,7 +436,7 @@ class Parser{
 					return 'ff';
 				}
 			],
-			
+
 			'define_vars' => [
 				'args_min' => 1,
 				'args_max' => 10,
@@ -492,7 +490,7 @@ class Parser{
 				'fn' => function() {
 					$label = array_pop($this->if_stack);
 					$this->addLabel($label,5);
-					
+
 					$out = '09';
 					$label = $this->getLabel();
 					$this->if_stack[] = $label;

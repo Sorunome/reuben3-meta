@@ -18,12 +18,12 @@ const uint8_t buttonsBuffer[] = {
 	0x55, 0x5F,
 	0xF5, 0xFF,
 	0xFF, 0xFF,
-	
+
 	0xF5, 0x5F,
 	0x55, 0x55,
 	0xF5, 0x5F,
 	0xFF, 0xFF,
-	
+
 	0x55, 0x5F,
 	0x5F, 0x5F,
 	0x55, 0x5F,
@@ -36,7 +36,7 @@ void Text::drawBox(bool up) {
 	gb.display.drawRect(4, up ? 4 : 34, 72, 26);
 	gb.display.setColor(BEIGE);
 	gb.display.fillRect(5, up ? 5 : 35, 70, 24);
-	
+
 }
 
 int8_t Text::box(uint16_t i, bool up) {
@@ -49,7 +49,7 @@ int8_t Text::box(uint16_t i, bool up) {
 	bool hasOptions = false;
 textloop_entry:
 	uint8_t c = *textCursor++;
-	SerialUSB.println(c, HEX);
+//	SerialUSB.println(c, HEX);
 	switch(c) {
 		case '\n':
 			gb.display.write(c);
@@ -112,7 +112,7 @@ textloop_entry:
 	if (!hasOptions) {
 		return -1;
 	}
-	
+
 	// do shop
 	// we can assume here that our text isn't spread accross multiple chunks
 	// because our creation tool makes sure of that
@@ -139,7 +139,7 @@ textloop_entry:
 		// make sure theo ld cursor is erased
 		gb.display.setColor(BEIGE);
 		gb.display.fillRect(cursorXStart + offsets[cursor], y, 4, 3);
-		
+
 		if (gb.buttons.released(BUTTON_LEFT) && cursor > 0) {
 			cursor--;
 		}
