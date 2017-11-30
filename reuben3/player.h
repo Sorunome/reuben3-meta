@@ -13,6 +13,8 @@ enum class Direction : uint8_t {
 
 class Player {
 	private:
+		uint8_t render_cycle;
+		
 		float x;
 		float y;
 		bool isWalkable(float dx, float dy);
@@ -31,6 +33,7 @@ class Player {
 		uint16_t exp_next;
 		uint16_t gold;
 		uint16_t gold_max;
+		void setAnimationFrame();
 	public:
 		uint8_t armor;
 		uint8_t wait;
