@@ -7,7 +7,10 @@
 #include "misc.h"
 
 
-uint8_t decompression_buffer[2048]; // 2048 > 12*8*2*8 = 1536
+
+#include "battle.h"
+
+uint8_t decompression_buffer[max(2048, ENEMY_SPRITES_MAX_SIZE)]; // 2048 > 12*8*2*8 = 1536
 
 void setup() {
 	gb.begin();
@@ -16,6 +19,8 @@ void setup() {
 	board.load(WORLD_OVERWORLD, TILEMAP_37);
 	board.postload();
 	player.init();
+	
+	battle.fight(2);
 }
 
 

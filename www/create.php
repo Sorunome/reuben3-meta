@@ -157,20 +157,6 @@ foreach($texts as $s){
 		}
 	}
 }
-/*
-foreach($charsInUse as $c){
-	$sql->query("UPDATE `font` SET `use`=1 WHERE `char`='%s'",[$c]);
-}
-$sql->query("UPDATE `font` SET `asm_id`=1 WHERE `char`='0'");
-$sql->query("UPDATE `font` SET `asm_id`=2 WHERE `char`='1'");
-$sql->query("UPDATE `font` SET `asm_id`=3 WHERE `char`='2'");
-$sql->query("UPDATE `font` SET `asm_id`=4 WHERE `char`='3'");
-$sql->query("UPDATE `font` SET `asm_id`=5 WHERE `char`='4'");
-$sql->query("UPDATE `font` SET `asm_id`=6 WHERE `char`='5'");
-$sql->query("UPDATE `font` SET `asm_id`=7 WHERE `char`='6'");
-$sql->query("UPDATE `font` SET `asm_id`=8 WHERE `char`='7'");
-$sql->query("UPDATE `font` SET `asm_id`=9 WHERE `char`='8'");
-$sql->query("UPDATE `font` SET `asm_id`=10 WHERE `char`='9'");*/
 
 
 $mapDimensions = [
@@ -252,18 +238,47 @@ $html .= $file.'</textarea><h1>Big Sprite Data</h1><textarea style="width:100%;h
 
 $idCounter = 0;
 $file = '';
-$largeSpritesHeader = "EnemySprites:\n";
+$largeSpritesHeader = "const uint8_t* const EnemySprites[] = {\n";
+$defines['enemy_sprites_max_size'] = 0;
 
-function getBigSpriteData($data,&$file,$idCounter){
-	$file .= "EnemySprites_".$idCounter."_Size:\n\t.db ".($data['width']*8).','.$data['height']."\n\t.db ";
+function getBigSpriteData($data,&$file,$idCounter) {
+	global $defines;
+	$file .= "const uint8_t EnemySprites_${idCounter}_buffer[] = {\n\t";
+	$size = ($data['width']*8*$data['height'] / 2) + 2;
+	if ($size > $defines['enemy_sprites_max_size']) {
+		$defines['enemy_sprites_max_size'] = $size;
+	}
+	$hex = [$data['width']*8, $data['height']];
+	$s = '';
 	for($i = 0;$i < strlen($data['frontBuf']);$i += 2){
-		$file .= "$".substr($data['frontBuf'],$i,2).",";
-		$file .= "$".substr($data['backBuf'],$i,2).",";
+		$b1 = hex2binstr(substr($data['frontBuf'],$i,2));
+		$b2 = hex2binstr(substr($data['backBuf'],$i,2));
+		$alt = false;
+		for ($j = 0; $j < 8; $j++) {
+			$n = ($b1[$j] == '1')*2 + ($b2[$j] == '1')*1;
+			if (!$alt) {
+				$s .= '0x';
+			}
+			$s .= ['7', '6', '5', '0'][$n];
+			if ($alt) {
+				$hex[] = $s;
+				$s = '';
+			}
+			$alt = !$alt;
+		}
+		if ($alt) {
+			$hex[] = $s.'0';
+			$s = '';
+		}
+	}
+	$hex = compress($hex);
+	for($i = 0; $i < sizeof($hex); $i++) {
+		$file .= $hex[$i].', ';
 	}
 	
-	$file = substr($file,0,-1)."\n";
+	$file .= "\n};\n";
 }
-$enemiesFile = "enemies:\n";
+$enemiesFile = "const Enemy_Data enemies[] = {\n";
 $enemiesLUT = [];
 $enemies = $sql->query("SELECT `name`,`enemyData`,`id` FROM `enemies` WHERE 1");
 foreach($enemies as $e){
@@ -272,54 +287,42 @@ foreach($enemies as $e){
 	}
 	$defines['bigsprite_'.$e['id']] = $idCounter;
 	
-	$largeSpritesHeader .= "\t.dw EnemySprites_".$idCounter."_Size\n";
+	$largeSpritesHeader .= "\tEnemySprites_${idCounter}_buffer,\n";
 	
 	$data = json_decode($e['enemyData'],true);
 	getBigSpriteData($data,$file,$idCounter);
 	$enemiesLUT[(int)$e['id']] = $idCounter;
 	$defines['enemy_'.$e['name']] = $idCounter;
-	$enemiesFile .= "\n\t.db ".$idCounter.",".$data['level']."\n";
-	$enemiesFile .= "\t.dw ".$data['hp'].",".$data['exp']."\n";
-	$enemiesFile .= "\t.db $".dechexpad2($data['sl1']*16 + $data['firedef']).",$".dechexpad2($data['sl2']*16 + $data['icedef']).",$".dechexpad2($data['sl3']*16 + $data['boltdef']).",$".dechexpad2($data['sl4']*16 + $data['bombdef']).",$".dechexpad2($data['sl5']*16 + ($data['boss']?0:1))."\n";
-	$enemiesFile .= "\t.db ".$data['xpos'].",".$data['ypos'].",".$data['wait']."\n";
+	$enemiesFile .= "\t{ ".$idCounter.", ".$data['level'].", ";
+	$enemiesFile .= $data['hp'].", ".$data['exp'].", ";
+	$enemiesFile .= "0x".dechexpad2($data['sl1']*16 + $data['firedef']).", 0x".dechexpad2($data['sl2']*16 + $data['icedef']).", 0x".dechexpad2($data['sl3']*16 + $data['boltdef']).", 0x".dechexpad2($data['sl4']*16 + $data['bombdef']).", 0x".dechexpad2($data['sl5']*16 + ($data['boss']?0:1)).", ";
+	$enemiesFile .= "".$data['xpos'].", ".$data['ypos'].", ".$data['wait']." },\n";
 	$idCounter++;
 }
+$enemiesFile .= "};\n";
 
 $largeSprites = $sql->query("SELECT `name`,`data` FROM `bigSprites` WHERE 1");
-$file2 = '';
-$file2header = "BigSprites_Offpage_Sizes:\n";
 foreach($largeSprites as $e){
 	if($e['name']!=''){
 		$defines['bigsprite_'.$e['name']] = $idCounter;
 	}
 	$defines['bigsprite_'.$idCounter] = $idCounter;
 	
-	$largeSpritesHeader .= "\t.dw EnemySprites_".$idCounter."_Size\n";
+	$largeSpritesHeader .= "\tEnemySprites_${idCounter}_buffer,\n";
 	
 	$data = json_decode($e['data'],true);
-	if($idCounter >= $bigSpritesPerPage){
-		$size = strlen($data['frontBuf']) + 2; // no need for backbuf as they are hex-encoded anyways so we already have twice the size, +2 for the dimensions
-		if($size > 828){
-			$file2header .= '.fail "sprite too large, prod sorunome"'."\n";
-		}
-		$file2header .= "\t.dw $size\n";
-		getBigSpriteData($data,$file2,$idCounter);
-	}else{
-		getBigSpriteData($data,$file,$idCounter);
-	}
+	getBigSpriteData($data,$file,$idCounter);
 	$idCounter++;
 }
-$defines['bigsprites_pageswitch'] = $bigSpritesPerPage;
+$largeSpritesHeader .= "};\n";
 
-$file = $largeSpritesHeader.$file;
-$file2 = $file2header.$file2;
+$file = $file.$largeSpritesHeader;
 
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/largeSprites.asm',$file);
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/largeSprites2.asm',$file2);
+file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/largeSprites.h',$file);
 
 $html .= $file.'</textarea><h1>Enemies</h1><textarea style="width:100%;height:500px;">';
 
-file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/enemies.asm',$enemiesFile);
+file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/enemies.h',$enemiesFile);
 
 $html .= $enemiesFile.'</textarea><h1>Areas</h1><textarea style="width:100%;height:500px;">';
 $file = "const uint8_t area_enemies[] = {\n";

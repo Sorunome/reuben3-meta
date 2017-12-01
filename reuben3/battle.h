@@ -3,6 +3,21 @@
 
 #include <Arduino.h>
 
+struct Enemy_Data {
+	const uint8_t id;
+	const uint8_t lvl;
+	const uint16_t hp;
+	const uint16_t exp;
+	const uint8_t sl1;
+	const uint8_t sl2;
+	const uint8_t sl3;
+	const uint8_t sl4;
+	const uint8_t sl5;
+	const uint8_t xpos;
+	const uint8_t ypos;
+	const uint8_t wait;
+};
+
 enum class Battle_Player_States : uint8_t {
 	normal,
 	magic,
@@ -39,8 +54,11 @@ class Battle {
 		uint16_t calcPlayerDamage();
 		uint16_t calcEnemyDamage();
 		void loop();
+		uint8_t i;
 	public:
-		
+		bool fight(uint8_t _i);
 };
+
+extern Battle battle;
 
 #endif // _BATTLE_H_

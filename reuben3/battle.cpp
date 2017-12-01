@@ -2,6 +2,12 @@
 
 #include <Gamebuino-Meta.h>
 #include "misc.h"
+#include "depack.h"
+
+#include "data/enemies.h"
+#include "data/largeSprites.h"
+
+extern uint8_t decompression_buffer[];
 
 uint16_t Battle::calcPlayerDamage() {
 	uint16_t upper = (2*p.lvl*p.lvl + random(10*p.lvl) + 2) * p.sword;
@@ -15,11 +21,15 @@ uint16_t Battle::calcEnemyDamage() {
 	return ((upper + (lower - 1)) / lower) * 5;
 }
 
+Image enemyImage;
+
 void Battle::loop() {
 	while(1) {
 		if (!gb.update()) {
 			continue;
 		}
+		gb.display.clear(WHITE);
+		gb.display.drawImage(enemies[i].xpos, enemies[i].ypos, enemyImage);
 		if (gb.buttons.pressed(BUTTON_C)) {
 			statsMenu();
 			continue; // make sure we do accidental shadowbutton triggers
@@ -59,3 +69,17 @@ void Battle::loop() {
 		}
 	}
 }
+
+bool Battle::fight(uint8_t _i) {
+	i = _i;
+	e.lvl = enemies[i].lvl;
+	e.hp = enemies[i].hp;
+	e.wait = enemies[i].wait;
+	e.curwait = e.wait;
+	aP_depack(EnemySprites[i], decompression_buffer);
+	enemyImage.init(decompression_buffer);
+	loop();
+}
+
+
+Battle battle;
