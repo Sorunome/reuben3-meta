@@ -18,7 +18,7 @@ struct Enemy_Data {
 	const uint8_t wait;
 };
 
-enum class Battle_Player_States : uint8_t {
+enum class Battle_Player_State : uint8_t {
 	normal,
 	magic,
 };
@@ -34,7 +34,7 @@ struct Battle_Player {
 	uint8_t curwait;
 	uint8_t stuncounter;
 	uint8_t poison;
-	Battle_Player_States state;
+	Battle_Player_State state;
 };
 
 

@@ -42,6 +42,10 @@ class Player {
 		uint8_t fright;
 		uint8_t bombs;
 		uint8_t bombs_max;
+		uint8_t getLvl();
+		uint16_t getHp();
+		uint8_t getMp();
+		
 		void init();
 		void hide();
 		void show();

@@ -300,7 +300,7 @@ foreach($enemies as $e){
 	$idCounter++;
 }
 $enemiesFile .= "};\n";
-
+/*
 $largeSprites = $sql->query("SELECT `name`,`data` FROM `bigSprites` WHERE 1");
 foreach($largeSprites as $e){
 	if($e['name']!=''){
@@ -314,6 +314,7 @@ foreach($largeSprites as $e){
 	getBigSpriteData($data,$file,$idCounter);
 	$idCounter++;
 }
+*/
 $largeSpritesHeader .= "};\n";
 
 $file = $file.$largeSpritesHeader;

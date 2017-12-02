@@ -124,6 +124,18 @@ void Player::init() {
 	focus();
 }
 
+uint8_t Player::getLvl() {
+	return lvl;
+}
+
+uint16_t Player::getHp() {
+	return hp;
+}
+
+uint8_t Player::getMp() {
+	return mp;
+}
+
 void Player::hide() {
 	visible = false;
 }
