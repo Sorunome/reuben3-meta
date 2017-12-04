@@ -132,6 +132,10 @@ uint16_t Player::getHp() {
 	return hp;
 }
 
+uint16_t Player::getHpMax() {
+	return hp_max;
+}
+
 uint8_t Player::getMp() {
 	return mp;
 }

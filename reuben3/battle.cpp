@@ -35,13 +35,13 @@ Image reuben_image(reuben_buffer);
 uint16_t Battle::calcPlayerDamage() {
 	uint16_t upper = (2*p.lvl*p.lvl + random(10*p.lvl) + 2) * p.sword;
 	uint16_t lower = 2*e.lvl;
-	return (upper + (lower - 1)) / lower;
+	return (upper + (lower / 2)) / lower;
 }
 
 uint16_t Battle::calcEnemyDamage() {
 	uint16_t upper = 5 + random(10*e.lvl) + e.lvl*e.lvl*e.lvl;
 	uint16_t lower = 2*p.lvl + 4*(random(p.armor) + p.armor) + p.armor*p.armor;
-	return ((upper + (lower - 1)) / lower) * 5;
+	return ((upper + (lower / 2)) / lower) * 5;
 }
 
 Image enemyImage;
@@ -74,6 +74,15 @@ void Battle::loop() {
 			gb.display.setColor(RED);
 			gb.display.drawFastHLine(54, 64 - 16 - 8 - 9, 24 * (p.wait - p.curwait) / p.wait);
 		} else {
+			gb.display.setColor(BLACK);
+			gb.display.setCursor(52, 17);
+			gb.display.println("Attack");
+			gb.display.setCursorX(52);
+			gb.display.println("Magic");
+			gb.display.setCursorX(52);
+			gb.display.println("Item");
+			gb.display.setCursorX(52);
+			gb.display.println("Run");
 			switch(p.state) {
 				case Battle_Player_State::normal:
 					// Normal attack menu
@@ -121,7 +130,6 @@ bool Battle::fight(uint8_t _i) {
 	p.armor = player.armor;
 	p.wait = player.wait;
 	p.sword = player.sword;
-	p.curwait = p.wait;
 	p.stuncounter = 0;
 	p.poison = 0;
 	p.state = Battle_Player_State::normal;
@@ -129,7 +137,27 @@ bool Battle::fight(uint8_t _i) {
 	e.lvl = enemies[i].lvl;
 	e.hp = enemies[i].hp;
 	e.wait = enemies[i].wait;
+	
+	// time to check for dynamic lvl / exp / wait
+	if (e.lvl > 200)  {
+		int16_t lvl = p.lvl - random(e.lvl & 0x0F) - 2;
+		e.lvl = lvl <= 0 ? 1 : lvl;
+	}
+	if (e.hp >= 0xFF00) {
+		e.hp &= 0xFF;
+		e.hp = (player.getHpMax() + (e.hp/2)) / e.hp;
+	}
+	if (p.lvl - e.lvl > 6) {
+		e.lvl = random(p.lvl - e.lvl - 1);
+		if ((e.wait - p.wait) > 30) {
+			e.wait = e.wait - random(e.wait - p.wait);
+		}
+	}
+	
+	
+	p.curwait = p.wait;
 	e.curwait = e.wait;
+	
 	aP_depack(EnemySprites[i], decompression_buffer);
 	enemyImage.init(decompression_buffer);
 	loop();

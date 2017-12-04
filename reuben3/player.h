@@ -44,6 +44,7 @@ class Player {
 		uint8_t bombs_max;
 		uint8_t getLvl();
 		uint16_t getHp();
+		uint16_t getHpMax();
 		uint8_t getMp();
 		
 		void init();
