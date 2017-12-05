@@ -363,4 +363,11 @@ void Player::addGold(uint16_t num) {
 	gold = _gold;
 }
 
+uint16_t Player::damage(uint16_t dmg) {
+	if (dmg > hp) {
+		return hp = 0;
+	}
+	return hp -= dmg;
+}
+
 Player player;

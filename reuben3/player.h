@@ -64,6 +64,8 @@ class Player {
 		void setEvent(uint8_t e);
 		void clearEvent(uint8_t e);
 		void addGold(uint16_t num);
+		
+		uint16_t damage(uint16_t dmg);
 };
 
 extern Player player;

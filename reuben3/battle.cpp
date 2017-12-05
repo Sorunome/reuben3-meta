@@ -32,10 +32,14 @@ const uint8_t reuben_buffer[] = {
 
 Image reuben_image(reuben_buffer);
 
-uint16_t Battle::calcPlayerDamage() {
+uint16_t Battle::calcPlayerDamage(Battle_Attack_Type type) {
 	uint16_t upper = (2*p.lvl*p.lvl + random(10*p.lvl) + 2) * p.sword;
 	uint16_t lower = 2*e.lvl;
-	return (upper + (lower / 2)) / lower;
+	uint16_t ret = (upper + (lower / 2)) / lower;
+	if (type == Battle_Attack_Type::normal) {
+		return ret;
+	}
+	return (e.slots[(uint8_t)type - 1] & 0x0F) * ret;
 }
 
 uint16_t Battle::calcEnemyDamage() {
@@ -44,16 +48,64 @@ uint16_t Battle::calcEnemyDamage() {
 	return ((upper + (lower / 2)) / lower) * 5;
 }
 
+void Battle::playerAttack(Battle_Attack_Type type) {
+	uint16_t damage = calcPlayerDamage(type);
+	render();
+	gb.display.setCursor(52, 16);
+	gb.display.print(damage);
+	waitCycles(45);
+	if (damage > e.hp) {
+		e.hp = 0;
+	} else {
+		e.hp -= damage;
+	}
+	p.state = Battle_Player_State::normal;
+	p.curwait = p.wait;
+}
+
+void Battle::enemyNormalAttack() {
+	uint8_t damage = calcEnemyDamage();
+	render();
+	gb.display.setCursor(60, 20);
+	gb.display.print(damage);
+	waitCycles(45);
+	p.hp = player.damage(damage);
+}
+
+void Battle::enemyFireAttack() {
+	uint8_t damage = calcEnemyDamage()*2;
+	render();
+	gb.display.setCursor(60, 20);
+	gb.display.print(damage);
+	waitCycles(45);
+	p.hp = player.damage(damage);
+}
+
+void Battle::enemyBoltAttack() {
+	uint8_t damage = calcEnemyDamage()*4;
+	render();
+	gb.display.setCursor(57, 20);
+	gb.display.print(damage);
+	waitCycles(45);
+	p.hp = player.damage(damage);
+}
+
 Image enemyImage;
 
-void Battle::loop() {
+void Battle::render() {
+	gb.display.clear(WHITE);
+	gb.display.drawImage(enemies[i].xpos, enemies[i].ypos, enemyImage);
+	gb.display.drawImage(80 - 16 - 2, 64 - 16 - 8, reuben_image);
+}
+
+bool Battle::loop() {
+	uint8_t cursor_menu = 0;
+	uint8_t cursor_magic = 0;
 	while(1) {
 		if (!gb.update()) {
 			continue;
 		}
-		gb.display.clear(WHITE);
-		gb.display.drawImage(enemies[i].xpos, enemies[i].ypos, enemyImage);
-		gb.display.drawImage(80 - 16, 64 - 16 - 8, reuben_image);
+		render();
 		
 		bool player_disp_hp = true;
 		if (gb.buttons.pressed(BUTTON_C)) {
@@ -66,6 +118,7 @@ void Battle::loop() {
 		} else if (p.curwait) {
 			// we still have to wait
 			p.curwait--;
+			cursor_menu = 0;
 			gb.display.setColor(BROWN);
 			gb.display.drawFastHLine(54, 64 - 16 - 8 - 8, 24);
 			gb.display.drawFastHLine(54, 64 - 16 - 8 - 10, 24);
@@ -74,22 +127,121 @@ void Battle::loop() {
 			gb.display.setColor(RED);
 			gb.display.drawFastHLine(54, 64 - 16 - 8 - 9, 24 * (p.wait - p.curwait) / p.wait);
 		} else {
-			gb.display.setColor(BLACK);
-			gb.display.setCursor(52, 17);
-			gb.display.println("Attack");
-			gb.display.setCursorX(52);
-			gb.display.println("Magic");
-			gb.display.setCursorX(52);
-			gb.display.println("Item");
-			gb.display.setCursorX(52);
-			gb.display.println("Run");
 			switch(p.state) {
 				case Battle_Player_State::normal:
+				{
 					// Normal attack menu
+					if (gb.buttons.pressed(BUTTON_UP)) {
+						if (cursor_menu) {
+							cursor_menu--;
+						} else {
+							cursor_menu = 3;
+						}
+					}
+					
+					if (gb.buttons.pressed(BUTTON_DOWN)) {
+						if (cursor_menu < 3) {
+							cursor_menu++;
+						} else {
+							cursor_menu = 0;
+						}
+					}
+					
+					gb.display.setColor(BROWN);
+					gb.display.drawFastHLine(54, 6, 6*4 + 1);
+					gb.display.drawFastHLine(54, 8 + 6*4, 6*4 + 1);
+					gb.display.drawFastVLine(53, 7, 6*4 + 1);
+					gb.display.drawFastVLine(55 + 6*4, 7, 6*4 + 1);
+					
+					gb.display.setColor(BEIGE);
+					gb.display.fillRect(54, 7 + 6*cursor_menu, 6*4 + 1, 7);
+					gb.display.setColor(BLACK);
+					gb.display.setCursor(55, 8);
+					gb.display.println("Attack");
+					gb.display.setCursorX(55);
+					gb.display.println("Magic");
+					gb.display.setCursorX(55);
+					gb.display.println("Item");
+					gb.display.setCursorX(55);
+					gb.display.println("Run");
+					
+					
+					if (gb.buttons.pressed(BUTTON_A)) {
+						switch(cursor_menu) {
+							case 0:
+								playerAttack(Battle_Attack_Type::normal);
+								break;
+							case 1:
+								p.state = Battle_Player_State::magic;
+								cursor_magic = 0;
+								break;
+							case 2:
+								break;
+							case 3:
+								break;
+						}
+					}
 					break;
+				}
 				case Battle_Player_State::magic:
 					// Magic attack menu
 					player_disp_hp = false;
+					
+					if (gb.buttons.pressed(BUTTON_UP)) {
+						if (cursor_magic) {
+							cursor_magic--;
+						} else {
+							cursor_magic = 3;
+						}
+					}
+					
+					if (gb.buttons.pressed(BUTTON_DOWN)) {
+						if (cursor_magic < 3) {
+							cursor_magic++;
+						} else {
+							cursor_magic = 0;
+						}
+					}
+					
+					gb.display.setColor(BROWN);
+					gb.display.drawFastHLine(54, 6, 6*4 + 1);
+					gb.display.drawFastHLine(54, 8 + 6*4, 6*4 + 1);
+					gb.display.drawFastVLine(53, 7, 6*4 + 1);
+					gb.display.drawFastVLine(55 + 6*4, 7, 6*4 + 1);
+					
+					gb.display.setColor(BEIGE);
+					gb.display.fillRect(54, 7 + 6*cursor_magic, 6*4 + 1, 7);
+					gb.display.setColor(BLACK);
+					gb.display.setCursor(55, 8);
+					gb.display.println("Fire");
+					gb.display.setCursorX(55);
+					gb.display.println("Ice");
+					gb.display.setCursorX(55);
+					gb.display.println("Bolt");
+					gb.display.setCursorX(55);
+					gb.display.println("Stun");
+					
+					if (gb.buttons.pressed(BUTTON_A)) {
+						switch(cursor_magic) {
+							case 0:
+								playerAttack(Battle_Attack_Type::fire);
+								break;
+							case 1:
+								playerAttack(Battle_Attack_Type::ice);
+								break;
+							case 2:
+								playerAttack(Battle_Attack_Type::bolt);
+								break;
+							case 3:
+								e.stuncounter = 0xFF;
+								p.state = Battle_Player_State::normal;
+								p.curwait = p.wait;
+								break;
+						}
+					}
+					if (gb.buttons.pressed(BUTTON_B)) {
+						p.state = Battle_Player_State::normal;
+					}
 					break;
 			}
 		}
@@ -111,6 +263,28 @@ void Battle::loop() {
 			e.curwait--;
 		} else if (!random(25)) {
 			// ATTACK!!!
+			e.curwait = e.wait;
+			switch(e.slots[random(5)] & 0xF0) {
+				case 0x00:
+				default:
+					// normal attack
+					enemyNormalAttack();
+					break;
+				case 0x10:
+					// fire attack
+					enemyFireAttack();
+					break;
+				case 0x20:
+					// bolt attack
+					enemyBoltAttack();
+					break;
+				case 0x30:
+					// poison
+					break;
+				case 0x40:
+					// stun
+					break;
+			}
 		}
 		
 		if (p.poison) {
@@ -118,6 +292,12 @@ void Battle::loop() {
 				// POISOOOOOON!
 				p.poison = e.wait;
 			}
+		}
+		if (p.hp <= 0) {
+			return false;
+		}
+		if (e.hp <= 0) {
+			return true;
 		}
 	}
 }
@@ -134,9 +314,18 @@ bool Battle::fight(uint8_t _i) {
 	p.poison = 0;
 	p.state = Battle_Player_State::normal;
 	
+	p.lvl = 4;
+	p.wait = 50;
+	p.sword = WEAPON_STICK;
+	
 	e.lvl = enemies[i].lvl;
 	e.hp = enemies[i].hp;
 	e.wait = enemies[i].wait;
+	e.slots[0] = enemies[i].sl1;
+	e.slots[1] = enemies[i].sl2;
+	e.slots[2] = enemies[i].sl3;
+	e.slots[3] = enemies[i].sl4;
+	e.slots[4] = enemies[i].sl5;
 	
 	// time to check for dynamic lvl / exp / wait
 	if (e.lvl > 200)  {
@@ -160,7 +349,7 @@ bool Battle::fight(uint8_t _i) {
 	
 	aP_depack(EnemySprites[i], decompression_buffer);
 	enemyImage.init(decompression_buffer);
-	loop();
+	return loop();
 }
 
 

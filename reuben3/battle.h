@@ -23,6 +23,14 @@ enum class Battle_Player_State : uint8_t {
 	magic,
 };
 
+enum class Battle_Attack_Type : uint8_t {
+	normal = 0,
+	fire,
+	ice,
+	bolt,
+	bomb,
+};
+
 struct Battle_Player {
 	uint8_t lvl;
 	uint16_t hp;
@@ -42,6 +50,7 @@ struct Battle_Enemy {
 	uint8_t lvl;
 	uint16_t hp;
 	uint8_t wait;
+	uint8_t slots[5];
 	
 	uint8_t curwait;
 	uint8_t stuncounter;
@@ -51,10 +60,17 @@ class Battle {
 	private:
 		Battle_Player p;
 		Battle_Enemy e;
-		uint16_t calcPlayerDamage();
+		uint16_t calcPlayerDamage(Battle_Attack_Type type);
 		uint16_t calcEnemyDamage();
-		void loop();
+		bool loop();
 		uint8_t i;
+		void playerAttack(Battle_Attack_Type type);
+		
+		void enemyNormalAttack();
+		void enemyFireAttack();
+		void enemyBoltAttack();
+		
+		void render();
 	public:
 		bool fight(uint8_t _i);
 };
