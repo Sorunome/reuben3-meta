@@ -20,7 +20,7 @@ void setup() {
 	board.postload();
 	player.init();
 	
-	battle.fight(2);
+	//battle.fight(2);
 }
 
 

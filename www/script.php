@@ -63,7 +63,7 @@ class Parser{
 	private function getVar16($var) {
 		if (strpos($var, '|') !== false) {
 			$vars = explode('|', $var);
-			return $this->getVar($vars[1]).$this->getVar($vars[0]);
+			return $this->getVar($vars[0]).$this->getVar($vars[1]);
 		}
 		$var = (int)$var;
 		$upper = $var >> 8;
