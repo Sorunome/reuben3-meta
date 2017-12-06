@@ -40,16 +40,119 @@ void renderAll() {
 }
 
 void statsMenu() {
+	bool have_items[7] = {
+		player.isEvent(EVENT_ITEM_BOTTLE1),
+		player.isEvent(EVENT_ITEM_BOTTLE2),
+		player.isEvent(EVENT_ITEM_BOTTLE3),
+		player.isEvent(EVENT_ITEM_BOTTLE4),
+		player.isEvent(EVENT_ITEM_HOOKSHOT),
+		player.isEvent(EVENT_ITEM_BOMB),
+		player.isEvent(EVENT_ITEM_PROTECT),
+	};
+	uint8_t cur_item = player.getCurItem();
+	uint8_t cursor = cur_item;
+	if (!cursor) {
+		cursor = 1;
+	}
+	const uint8_t devider = 9*4 + 6;
+	gb.display.clear(BEIGE);
+	gb.display.setColor(BLACK);
+	gb.display.drawFastHLine(1, 0, devider-1);
+	gb.display.drawFastHLine(devider+1, 0, gb.display.width()-devider-2);
+	gb.display.drawFastHLine(1, gb.display.height()-1, devider-1);
+	gb.display.drawFastHLine(devider+1, gb.display.height()-1, gb.display.width()-devider-2);
+	gb.display.drawFastVLine(0, 1, gb.display.height()-2);
+	gb.display.drawFastVLine(gb.display.width()-1, 1, gb.display.height()-2);
+	gb.display.drawFastVLine(devider, 1, gb.display.height()-2);
+	
+	if (have_items[0]) {
+		gb.display.setCursor(6, 4);
+		gb.display.print("Bottle");
+	}
+	if (have_items[1]) {
+		gb.display.setCursor(6, 10);
+		gb.display.print("Bottle");
+	}
+	if (have_items[2]) {
+		gb.display.setCursor(6, 16);
+		gb.display.print("Bottle");
+	}
+	if (have_items[3]) {
+		gb.display.setCursor(6, 22);
+		gb.display.print("Bottle");
+	}
+	if (have_items[4]) {
+		gb.display.setCursor(6, 28);
+		gb.display.print("Hookshot");
+	}
+	if (have_items[5]) {
+		gb.display.setCursor(6, 34);
+		gb.display.print("Bombs:");
+		gb.display.print(player.bombs);
+	}
+	if (have_items[6]) {
+		gb.display.setCursor(6, 40);
+		gb.display.print("Protect");
+	}
+	
+	gb.display.setCursor(devider + 2, 4);
+	gb.display.print("HP:");
+	gb.display.setCursor(devider + 2, 10);
+	gb.display.print(player.getHp());
+	gb.display.print("/");
+	gb.display.print(player.getHpMax());
+	
+	gb.display.setCursor(devider + 2, 16);
+	gb.display.print("MP:");
+	gb.display.setCursor(devider + 2, 22);
+	gb.display.print(player.getMp());
+	gb.display.print("/");
+	gb.display.print(player.getMpMax());
 	while(1) {
 		if (!gb.update()) {
 			continue;
 		}
+		gb.display.setColor(BEIGE);
+		if (cur_item) {
+			gb.display.fillRect(8*4 + 6, 6*(cur_item - 1) + 4, 4, 6);
+		}
+		gb.display.fillRect(2, 6*(cursor - 1) + 4, 4, 6);
+		
 		if (gb.buttons.pressed(BUTTON_C)) {
 			return;
 		}
-		gb.display.clear(BEIGE);
-		gb.display.drawFastHLine(1, 0, gb.display.width()-2);
-		gb.display.drawFastHLine(1, gb.display.height()-1, gb.display.width()-2);
+		
+		if (gb.buttons.pressed(BUTTON_UP)) {
+			if (!--cursor) {
+				cursor = 7;
+			}
+		}
+		
+		if (gb.buttons.pressed(BUTTON_DOWN)) {
+			if (++cursor > 7) {
+				cursor = 1;
+			}
+		}
+		
+		if (gb.buttons.pressed(BUTTON_A)) {
+			if (have_items[cursor - 1]) {
+				player.setCurItem(cursor);
+				cur_item = cursor;
+			}
+		}
+		
+		gb.display.setColor(BLACK);
+		if (cur_item) {
+			gb.display.setCursor(8*4 + 6, 6*(cur_item - 1) + 4);
+			gb.display.print('\4');
+		}
+		gb.display.setCursor(2, 6*(cursor - 1) + 4);
+		gb.display.print('\x1A');
+		
+		
+//		gb.display.setCursor(0, 0);
+//		gb.display.setColor(BLACK, WHITE);
+//		gb.display.print(gb.getCpuLoad());
 	}
 }
 

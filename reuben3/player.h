@@ -23,7 +23,7 @@ class Player {
 		void item();
 		void interact();
 		bool visible;
-		uint8_t curItem;
+		uint8_t cur_item;
 		uint8_t lvl;
 		uint16_t hp;
 		uint16_t hp_max;
@@ -46,6 +46,7 @@ class Player {
 		uint16_t getHp();
 		uint16_t getHpMax();
 		uint8_t getMp();
+		uint8_t getMpMax();
 		
 		void init();
 		void hide();
@@ -67,6 +68,9 @@ class Player {
 		
 		uint16_t damage(uint16_t dmg);
 		uint8_t useMp(uint8_t amount);
+		
+		uint8_t getCurItem();
+		void setCurItem(uint8_t i);
 };
 
 extern Player player;

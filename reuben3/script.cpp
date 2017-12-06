@@ -338,6 +338,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 			case SCRIPT_RELOAD_MAP:
 				board.load();
 				board.postload();
+				renderAll();
 				continue;
 			case SCRIPT_FADE_TO_MAP_AND_WORLD_POS:
 				if (isHome) {

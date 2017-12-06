@@ -103,8 +103,7 @@ void Player::init() {
 	y = 3*8;
 	direction = Direction::down;
 	visible = true;
-	curItem = ITEM_NONE;
-	curItem = ITEM_HOOKSHOT;
+	cur_item = I_ITEM_NONE;
 	lvl = 1;
 	hp = 120;
 	hp_max = 120;
@@ -138,6 +137,10 @@ uint16_t Player::getHpMax() {
 
 uint8_t Player::getMp() {
 	return mp;
+}
+
+uint8_t Player::getMpMax() {
+	return mp_max;
 }
 
 void Player::hide() {
@@ -187,17 +190,17 @@ void Player::item() {
 	if (!gb.buttons.released(BUTTON_B)) {
 		return;
 	}
-	switch(curItem) {
-		case ITEM_BOTTLE1:
-		case ITEM_BOTTLE2:
-		case ITEM_BOTTLE3:
-		case ITEM_BOTTLE4:
+	switch(cur_item) {
+		case I_ITEM_BOTTLE1:
+		case I_ITEM_BOTTLE2:
+		case I_ITEM_BOTTLE3:
+		case I_ITEM_BOTTLE4:
 			// let's bottle this up
 			return;
-		case ITEM_HOOKSHOT:
+		case I_ITEM_HOOKSHOT:
 			hookshot(x, y, direction);
 			return;
-		case ITEM_BOMB:
+		case I_ITEM_BOMB:
 			bomb(x + 3, y + 5);
 			return;
 	}
@@ -375,6 +378,14 @@ uint8_t Player::useMp(uint8_t amount) {
 		return mp;
 	}
 	return mp -= amount;
+}
+
+uint8_t Player::getCurItem() {
+	return cur_item;
+}
+
+void Player::setCurItem(uint8_t i) {
+	cur_item = i;
 }
 
 Player player;
