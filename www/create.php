@@ -90,6 +90,45 @@ function getTextASM($s) {
 	}
 	return $s;
 }
+
+function rgbToIndex($rgb) {
+	$r = ($rgb >> 16) & 0xFF;
+	$g = ($rgb >> 8) & 0xFF;
+	$b = $rgb & 0xFF;
+	$index = [
+		[  0,   0,   0], // black
+		[  0,  67, 133], // darkblue
+		[142,  68, 207], // purple
+		[  0, 139,  80], // green
+		[207, 142,  68], // brown
+		[117,  90,  57], // darkgray
+		[170, 153, 133], // gray
+		[255, 255, 255], // white
+		[219,  29,  35], // red
+		[255, 168,  17], // orange
+		[245, 231,   0], // yellow
+		[133, 207,  68], // lightgreen
+		[125, 187, 255], // lightblue
+		[ 68, 133, 207], // blue
+		[207,  68, 133], // pink
+		[255, 214, 144], // beige
+	];
+	for ($i = 0; $i < sizeof($index); $i++) {
+		if ($r == $index[$i][0] && $g == $index[$i][1] && $b == $index[$i][2]) {
+			return dechex($i);
+		}
+	}
+	$min_index = 0;
+	$min_diff = 0xFFFFFF;
+	for ($i = 0; $i < sizeof($index); $i++) {
+		$diff = abs($index[$i][0] - $r) + abs($index[$i][1] - $g) + abs($index[$i][2] - $b);
+		if ($diff < $min_diff) {
+			$min_diff = $diff;
+			$min_index = $i;
+		}
+	}
+	return dechex($i);
+}
 //$sql->query("UPDATE `sprites` SET `in_use`=0 WHERE 1");
 
 foreach($sql->query("SELECT `id` FROM `maps` WHERE `use`=1") as $m){
@@ -184,7 +223,7 @@ foreach($mapIds as $m){
 $html = '<h1>Sprites</h1><textarea style="width:100%;height:500px;">';
 
 $SPRITESROOT = '/var/www/www.sorunome.de/reuben3-meta/sprites/';
-$file = "const uint16_t sprites_data[] = {\n\t8, 8,\n";
+$file = "const uint8_t sprites_data[] = {\n\t8, 8,\n";
 $spriteData = [];
 foreach($sql->query("SELECT `buffer1`,`buffer2`,`name`,`id` FROM `sprites` WHERE `id` IN (".implode(',',array_map('intval',$spritesWithId)).")") as $s){
 	if($s['name']){
@@ -196,24 +235,36 @@ foreach($sql->query("SELECT `buffer1`,`buffer2`,`name`,`id` FROM `sprites` WHERE
 		$i = imagecreatetruecolor(8, 8);
 		imagecopy($i, $ii, 0, 0, 0, 0, 8, 8);
 		imagedestroy($ii);
+		$alt = false;
 		for ($y = 0; $y < 8; $y++) {
 			for ($x = 0; $x < 8; $x++) {
 				$rgb = imagecolorat($i, $x, $y);
-				$r = ($rgb >> 16) & 0xFF;
-				$g = ($rgb >> 8) & 0xFF;
-				$b = $rgb & 0xFF;
-				$c = (($r & 0xF8) << 8) | (($g & 0xFC) << 3) | ($b >> 3);
-				$out .= '0x'.dechexpad($c, 4).',';
+				if (!$alt) {
+					$out .= '0x';
+				}
+				$out .= rgbToIndex($rgb);
+				if ($alt) {
+					$out .= ', ';
+				}
+				$alt = !$alt;
 			}
 		}
 		imagedestroy($i);
 	} else {
+		$alt = false;
 		for($i = 0;$i < 16;$i += 2){
 			$b1 = hex2binstr(substr($s['buffer1'],$i,2));
 			$b2 = hex2binstr(substr($s['buffer2'],$i,2));
 			for ($j = 0; $j < 8; $j++) {
 				$n = ($b1[$j] == '1')*2 + ($b2[$j] == '1')*1;
-				$out .= ['0xFFFF', '0xACD0', '0x72C7', '0x0000'][$n].',';
+				if (!$alt) {
+					$out .= '0x';
+				}
+				$out .= ['7', '6', '5', '0'][$n];
+				if ($alt) {
+					$out .= ', ';
+				}
+				$alt = !$alt;
 			}
 		}
 	}

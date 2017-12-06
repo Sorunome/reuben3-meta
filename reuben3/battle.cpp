@@ -63,6 +63,51 @@ void Battle::playerAttack(Battle_Attack_Type type) {
 	p.curwait = p.wait;
 }
 
+bool Battle::useMp(uint8_t amount) {
+	if (amount > p.mp) {
+		return false;
+	}
+	p.mp = player.useMp(amount);
+	return true;
+}
+
+
+void Battle::enemyAttack() {
+	e.curwait = e.wait;
+	switch(e.slots[random(5)] & 0xF0) {
+		case 0x00:
+		default:
+			// normal attack
+			enemyNormalAttack();
+			break;
+		case 0x10:
+			// fire attack
+			enemyFireAttack();
+			break;
+		case 0x20:
+			// bolt attack
+			enemyBoltAttack();
+			break;
+		case 0x30:
+			// poison
+			if (p.poison) {
+				enemyNormalAttack();
+				break;
+			}
+			p.poison = e.wait;
+			break;
+		case 0x40:
+			// stun
+			if (p.stuncounter) {
+				enemyNormalAttack();
+				break;
+			}
+			p.stuncounter = e.wait;
+			enemyAttack();
+			break;
+	}
+}
+
 void Battle::enemyNormalAttack() {
 	uint8_t damage = calcEnemyDamage();
 	render();
@@ -98,7 +143,7 @@ void Battle::render() {
 	gb.display.drawImage(80 - 16 - 2, 64 - 16 - 8, reuben_image);
 }
 
-bool Battle::loop() {
+Battle_Done Battle::loop() {
 	uint8_t cursor_menu = 0;
 	uint8_t cursor_magic = 0;
 	while(1) {
@@ -176,8 +221,18 @@ bool Battle::loop() {
 								cursor_magic = 0;
 								break;
 							case 2:
+								// TODO: items
 								break;
 							case 3:
+								if (!(e.slots[4] & 0x0F)) {
+									break;
+								}
+								// TODO: no running away from maru
+								if (!random(2)) {
+									return Battle_Done::run;
+								}
+								p.state = Battle_Player_State::normal;
+								p.curwait = p.wait;
 								break;
 						}
 					}
@@ -224,18 +279,26 @@ bool Battle::loop() {
 					if (gb.buttons.pressed(BUTTON_A)) {
 						switch(cursor_magic) {
 							case 0:
-								playerAttack(Battle_Attack_Type::fire);
+								if (useMp(5)) {
+									playerAttack(Battle_Attack_Type::fire);
+								}
 								break;
 							case 1:
-								playerAttack(Battle_Attack_Type::ice);
+								if (useMp(5)) {
+									playerAttack(Battle_Attack_Type::ice);
+								}
 								break;
 							case 2:
-								playerAttack(Battle_Attack_Type::bolt);
+								if (useMp(5)) {
+									playerAttack(Battle_Attack_Type::bolt);
+								}
 								break;
 							case 3:
-								e.stuncounter = 0xFF;
-								p.state = Battle_Player_State::normal;
-								p.curwait = p.wait;
+								if (useMp(10)) {
+									e.stuncounter = 0xFF;
+									p.state = Battle_Player_State::normal;
+									cursor_menu = 0;
+								}
 								break;
 						}
 					}
@@ -263,42 +326,32 @@ bool Battle::loop() {
 			e.curwait--;
 		} else if (!random(25)) {
 			// ATTACK!!!
-			e.curwait = e.wait;
-			switch(e.slots[random(5)] & 0xF0) {
-				case 0x00:
-				default:
-					// normal attack
-					enemyNormalAttack();
-					break;
-				case 0x10:
-					// fire attack
-					enemyFireAttack();
-					break;
-				case 0x20:
-					// bolt attack
-					enemyBoltAttack();
-					break;
-				case 0x30:
-					// poison
-					break;
-				case 0x40:
-					// stun
-					break;
-			}
+			enemyAttack();
 		}
 		
 		if (p.poison) {
 			if (!(--p.poison)) {
 				// POISOOOOOON!
+				uint8_t damage = e.lvl;
+				render();
+				gb.display.setCursor(57, 20);
+				gb.display.print(damage);
+				waitCycles(45);
+				p.hp = player.damage(damage);
+				
 				p.poison = e.wait;
 			}
 		}
 		if (p.hp <= 0) {
-			return false;
+			return Battle_Done::lose;
 		}
 		if (e.hp <= 0) {
-			return true;
+			return Battle_Done::win;
 		}
+		
+		gb.display.setCursor(0, 0);
+		gb.display.setColor(BLACK, WHITE);
+		gb.display.print(gb.getCpuLoad());
 	}
 }
 
@@ -349,7 +402,7 @@ bool Battle::fight(uint8_t _i) {
 	
 	aP_depack(EnemySprites[i], decompression_buffer);
 	enemyImage.init(decompression_buffer);
-	return loop();
+	return loop() != Battle_Done::lose;
 }
 
 

@@ -115,39 +115,47 @@ bool Script::run(const uint8_t* _script, uint8_t _trigger) {
 }
 
 void fade_to_white() {
-	const uint8_t steps = 17;
-	uint16_t limit = gb.display.width() * gb.display.height();
+	const uint8_t steps = 20;
+	Color* origPalette = gb.display.colorIndex;
+	Color palette[16];
+	gb.display.colorIndex = palette;
+	
 	for (uint8_t i = 0; i <= steps; i++) {
-		renderAll();
-		for (uint16_t j = 0; j < limit; j++) {
-			uint16_t c = gb.display._buffer[j];
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)origPalette[j];
 			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
 			rgb.r += (0xFF - rgb.r)*i / steps;
 			rgb.g += (0xFF - rgb.g)*i / steps;
 			rgb.b += (0xFF - rgb.b)*i / steps;
 			c = Gamebuino_Meta::rgb888Torgb565(rgb);
-			gb.display._buffer[j] = c;
+			palette[j] = (Color)c;
 		}
+		renderAll();
 		while(!gb.update());
 	}
+	gb.display.colorIndex = origPalette;
 }
 
 void fade_from_white() {
-	const uint8_t steps = 17;
-	uint16_t limit = gb.display.width() * gb.display.height();
+	const uint8_t steps = 20;
+	Color* origPalette = gb.display.colorIndex;
+	Color palette[16];
+	gb.display.colorIndex = palette;
+	
 	for (uint8_t i = 0; i <= steps; i++) {
-		renderAll();
-		for (uint16_t j = 0; j < limit; j++) {
-			uint16_t c = gb.display._buffer[j];
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)origPalette[j];
 			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
 			rgb.r += (0xFF - rgb.r)*(steps - i) / steps;
 			rgb.g += (0xFF - rgb.g)*(steps - i) / steps;
 			rgb.b += (0xFF - rgb.b)*(steps - i) / steps;
 			c = Gamebuino_Meta::rgb888Torgb565(rgb);
-			gb.display._buffer[j] = c;
+			palette[j] = (Color)c;
 		}
+		renderAll();
 		while(!gb.update());
 	}
+	gb.display.colorIndex = origPalette;
 }
 
 bool Script::run(uint8_t* _script, uint8_t _trigger) {

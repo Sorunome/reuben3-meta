@@ -370,4 +370,11 @@ uint16_t Player::damage(uint16_t dmg) {
 	return hp -= dmg;
 }
 
+uint8_t Player::useMp(uint8_t amount) {
+	if (amount > mp) {
+		return mp;
+	}
+	return mp -= amount;
+}
+
 Player player;

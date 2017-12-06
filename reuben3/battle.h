@@ -56,16 +56,24 @@ struct Battle_Enemy {
 	uint8_t stuncounter;
 };
 
+enum class Battle_Done : uint8_t {
+	win,
+	lose,
+	run,
+};
+
 class Battle {
 	private:
 		Battle_Player p;
 		Battle_Enemy e;
 		uint16_t calcPlayerDamage(Battle_Attack_Type type);
 		uint16_t calcEnemyDamage();
-		bool loop();
+		Battle_Done loop();
 		uint8_t i;
 		void playerAttack(Battle_Attack_Type type);
+		bool useMp(uint8_t amount);
 		
+		void enemyAttack();
 		void enemyNormalAttack();
 		void enemyFireAttack();
 		void enemyBoltAttack();

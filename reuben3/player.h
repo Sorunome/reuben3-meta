@@ -66,6 +66,7 @@ class Player {
 		void addGold(uint16_t num);
 		
 		uint16_t damage(uint16_t dmg);
+		uint8_t useMp(uint8_t amount);
 };
 
 extern Player player;
