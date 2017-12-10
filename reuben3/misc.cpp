@@ -108,6 +108,12 @@ void statsMenu() {
 	gb.display.print(player.getMp());
 	gb.display.print("/");
 	gb.display.print(player.getMpMax());
+	
+	gb.display.setCursor(devider + 2, 28);
+	gb.display.print("Gold:");
+	gb.display.setCursor(devider + 2, 34);
+	gb.display.print(player.getGold());
+	
 	while(1) {
 		if (!gb.update()) {
 			continue;

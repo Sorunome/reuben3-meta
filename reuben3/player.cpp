@@ -143,6 +143,10 @@ uint8_t Player::getMpMax() {
 	return mp_max;
 }
 
+uint16_t Player::getGold() {
+	return gold;
+}
+
 void Player::hide() {
 	visible = false;
 }

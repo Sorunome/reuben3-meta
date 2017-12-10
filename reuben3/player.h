@@ -47,6 +47,7 @@ class Player {
 		uint16_t getHpMax();
 		uint8_t getMp();
 		uint8_t getMpMax();
+		uint16_t getGold();
 		
 		void init();
 		void hide();
