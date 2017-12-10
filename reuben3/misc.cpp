@@ -34,9 +34,22 @@ void waitRelease() {
 void renderAll() {
 	board.render();
 	player.render();
-	gb.display.setCursor(0, 0);
-	gb.display.setColor(BLACK, WHITE);
-	gb.display.print(gb.getCpuLoad());
+//	gb.display.setCursor(0, 0);
+//	gb.display.setColor(BLACK, WHITE);
+//	gb.display.print(gb.getCpuLoad());
+}
+
+const char* getBottleString(uint8_t i) {
+	const char* strs[] = {
+		"Bottle",
+		"badWater",
+		"Water",
+		"Herb",
+		"Potion",
+		"Ginseng",
+		"Elixir",
+	};
+	return strs[(uint8_t)player.getBottle(i)];
 }
 
 void statsMenu() {
@@ -67,19 +80,19 @@ void statsMenu() {
 	
 	if (have_items[0]) {
 		gb.display.setCursor(6, 4);
-		gb.display.print("Bottle");
+		gb.display.print(getBottleString(0));
 	}
 	if (have_items[1]) {
 		gb.display.setCursor(6, 10);
-		gb.display.print("Bottle");
+		gb.display.print(getBottleString(1));
 	}
 	if (have_items[2]) {
 		gb.display.setCursor(6, 16);
-		gb.display.print("Bottle");
+		gb.display.print(getBottleString(2));
 	}
 	if (have_items[3]) {
 		gb.display.setCursor(6, 22);
-		gb.display.print("Bottle");
+		gb.display.print(getBottleString(3));
 	}
 	if (have_items[4]) {
 		gb.display.setCursor(6, 28);

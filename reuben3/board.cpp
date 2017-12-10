@@ -6,7 +6,7 @@
 #include "depack.h"
 #include "player.h"
 #include "script.h"
-
+#include "text.h"
 
 #include "data/defines.h"
 #include "data/maps.h"
@@ -275,7 +275,14 @@ int8_t Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 }
 
 int8_t Board::interact(uint8_t x, uint8_t y) {
-	switch(getTile(x, y)) {
+	uint16_t t = getTile(x, y);
+	if (t >= SPRITE_FIRST_WATER && t < SPRITE_AFTER_WATER) {
+		if (player.isCurItemBottle() && text.box(STRING_BOTTLE_ASKWATER, player.getY() > 28)) {
+			player.setCurBottle(Bottle::dirty_water);
+		}
+		return 1;
+	}
+	switch(t) {
 		case SPRITE_105: // shrub on grass
 			setTile(x, y, SPRITE_1);
 			return 1;

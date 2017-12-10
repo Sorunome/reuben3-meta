@@ -11,6 +11,16 @@ enum class Direction : uint8_t {
 	left,
 };
 
+enum class Bottle : uint8_t {
+	empty = 0,
+	dirty_water,
+	water,
+	herb,
+	potion,
+	ginseng,
+	elixir,
+};
+
 class Player {
 	private:
 		uint8_t render_cycle;
@@ -19,6 +29,7 @@ class Player {
 		float y;
 		bool isWalkable(float dx, float dy);
 		uint8_t events[(TOTAL_EVENTS + 7) / 8];
+		Bottle bottles[4];
 		Direction direction;
 		void item();
 		void interact();
@@ -65,13 +76,20 @@ class Player {
 		bool isEvent(uint8_t e);
 		void setEvent(uint8_t e);
 		void clearEvent(uint8_t e);
+		void addHp(uint16_t num);
+		void addMp(uint8_t num);
 		void addGold(uint16_t num);
 		
 		uint16_t damage(uint16_t dmg);
 		uint8_t useMp(uint8_t amount);
 		
 		uint8_t getCurItem();
+		bool isCurItemBottle();
 		void setCurItem(uint8_t i);
+		void setCurBottle(Bottle b);
+		Bottle getCurBottle();
+		Bottle getBottle(uint8_t i);
+		void emptyCurBottle();
 };
 
 extern Player player;

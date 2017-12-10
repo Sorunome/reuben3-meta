@@ -3,6 +3,7 @@
 #include "board.h"
 #include "data/defines.h"
 #include "misc.h"
+#include "text.h"
 
 const uint8_t reuben_sprite_data[] = {
 	8, 9,
@@ -99,6 +100,7 @@ void Player::init() {
 	render_cycle = 0;
 	
 	memset(events, 0, sizeof(events));
+	memset(bottles, 0, sizeof(bottles));
 	x = 8*8;
 	y = 3*8;
 	direction = Direction::down;
@@ -199,8 +201,52 @@ void Player::item() {
 		case I_ITEM_BOTTLE2:
 		case I_ITEM_BOTTLE3:
 		case I_ITEM_BOTTLE4:
+		{
 			// let's bottle this up
+			bool up = player.getY() > 28;
+			switch(getCurBottle()) {
+				case Bottle::empty:
+					break;
+				case Bottle::dirty_water:
+					if (text.box(STRING_BOTTLE_ASKDIRTYWATER_DRINK, up)) {
+						addHp(150);
+						emptyCurBottle();
+					}
+					break;
+				case Bottle::water:
+					if (text.box(STRING_BOTTLE_ASKWATER_DRINK, up)) {
+						addHp(300);
+						emptyCurBottle();
+					}
+					break;
+				case Bottle::herb:
+					if (text.box(STRING_BOTTLE_ASKHERB_DRINK, up)) {
+						addHp(600);
+						emptyCurBottle();
+					}
+					break;
+				case Bottle::potion:
+					if (text.box(STRING_BOTTLE_ASKPOTION_DRINK, up)) {
+						addHp(999);
+						emptyCurBottle();
+					}
+					break;
+				case Bottle::ginseng:
+					if (text.box(STRING_BOTTLE_ASKGINSENG_DRINK, up)) {
+						addMp(50);
+						emptyCurBottle();
+					}
+					break;
+				case Bottle::elixir:
+					if (text.box(STRING_BOTTLE_ASKELIXIR_DRINK, up)) {
+						hp = hp_max;
+						mp = mp_max;
+						emptyCurBottle();
+					}
+					break;
+			}
 			return;
+		}
 		case I_ITEM_HOOKSHOT:
 			hookshot(x, y, direction);
 			return;
@@ -360,6 +406,26 @@ void Player::clearEvent(uint8_t e) {
 	events[offset] &= ~mask;
 }
 
+void Player::addHp(uint16_t num) {
+	// we temporary put hp to a 32-bit var to prevent overflows
+	uint32_t _hp = hp;
+	_hp += num;
+	if (_hp > hp_max) {
+		_hp = hp_max;
+	}
+	hp = _hp;
+}
+
+void Player::addMp(uint8_t num) {
+	// we temporary put mp to a 16-bit var to prevent overflows
+	uint16_t _mp = mp;
+	_mp += num;
+	if (_mp > mp_max) {
+		_mp = mp_max;
+	}
+	mp = _mp;
+}
+
 void Player::addGold(uint16_t num) {
 	// we temporary put gold to a 32-bit var to prevent overflows
 	uint32_t _gold = gold;
@@ -388,8 +454,37 @@ uint8_t Player::getCurItem() {
 	return cur_item;
 }
 
+bool Player::isCurItemBottle() {
+	return cur_item >= I_ITEM_BOTTLE1 && cur_item <= I_ITEM_BOTTLE4;
+}
+
 void Player::setCurItem(uint8_t i) {
 	cur_item = i;
+}
+
+void Player::setCurBottle(Bottle b) {
+	if (!isCurItemBottle()) {
+		return;
+	}
+	bottles[cur_item - 1] = b;
+}
+
+Bottle Player::getCurBottle() {
+	if (!isCurItemBottle()) {
+		return Bottle::empty;
+	}
+	return bottles[cur_item - 1];
+}
+
+Bottle Player::getBottle(uint8_t i) {
+	if (i >= 4) {
+		return Bottle::empty;
+	}
+	return bottles[i];
+}
+
+void Player::emptyCurBottle() {
+	setCurBottle(Bottle::empty);
 }
 
 Player player;
