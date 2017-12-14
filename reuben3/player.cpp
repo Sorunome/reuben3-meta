@@ -115,13 +115,13 @@ void Player::init() {
 	exp_next = 5;
 	gold = 0;
 	gold_max = 100;
+	bombs = 10;
+	bombs_max = 10;
 	armor = ARMOR_WOUNDS;
 	wait = 0xFF;
 	sword = WEAPON_NONE;
 	tradequest = TRADEQUEST_NONE;
 	fright = 0;
-	bombs = 10;
-	bombs_max = 10;
 	focus();
 }
 
@@ -147,6 +147,10 @@ uint8_t Player::getMpMax() {
 
 uint16_t Player::getGold() {
 	return gold;
+}
+
+uint8_t Player::getBombs() {
+	return bombs;
 }
 
 void Player::hide() {
@@ -203,42 +207,41 @@ void Player::item() {
 		case I_ITEM_BOTTLE4:
 		{
 			// let's bottle this up
-			bool up = player.getY() > 28;
 			switch(getCurBottle()) {
 				case Bottle::empty:
 					break;
 				case Bottle::dirty_water:
-					if (text.box(STRING_BOTTLE_ASKDIRTYWATER_DRINK, up)) {
+					if (text.boxPlayer(STRING_BOTTLE_ASKDIRTYWATER_DRINK)) {
 						addHp(150);
 						emptyCurBottle();
 					}
 					break;
 				case Bottle::water:
-					if (text.box(STRING_BOTTLE_ASKWATER_DRINK, up)) {
+					if (text.boxPlayer(STRING_BOTTLE_ASKWATER_DRINK)) {
 						addHp(300);
 						emptyCurBottle();
 					}
 					break;
 				case Bottle::herb:
-					if (text.box(STRING_BOTTLE_ASKHERB_DRINK, up)) {
+					if (text.boxPlayer(STRING_BOTTLE_ASKHERB_DRINK)) {
 						addHp(600);
 						emptyCurBottle();
 					}
 					break;
 				case Bottle::potion:
-					if (text.box(STRING_BOTTLE_ASKPOTION_DRINK, up)) {
+					if (text.boxPlayer(STRING_BOTTLE_ASKPOTION_DRINK)) {
 						addHp(999);
 						emptyCurBottle();
 					}
 					break;
 				case Bottle::ginseng:
-					if (text.box(STRING_BOTTLE_ASKGINSENG_DRINK, up)) {
+					if (text.boxPlayer(STRING_BOTTLE_ASKGINSENG_DRINK)) {
 						addMp(50);
 						emptyCurBottle();
 					}
 					break;
 				case Bottle::elixir:
-					if (text.box(STRING_BOTTLE_ASKELIXIR_DRINK, up)) {
+					if (text.boxPlayer(STRING_BOTTLE_ASKELIXIR_DRINK)) {
 						hp = hp_max;
 						mp = mp_max;
 						emptyCurBottle();
@@ -251,7 +254,10 @@ void Player::item() {
 			hookshot(x, y, direction);
 			return;
 		case I_ITEM_BOMB:
-			bomb(x + 3, y + 5);
+			if (bombs) {
+				bombs--;
+				bomb(x + 3, y + 5);
+			}
 			return;
 	}
 }
@@ -434,6 +440,23 @@ void Player::addGold(uint16_t num) {
 		_gold = gold_max;
 	}
 	gold = _gold;
+}
+
+bool Player::payGold(uint16_t num) {
+	if (gold < num) {
+		return false;
+	}
+	gold -= num;
+	return true;
+}
+
+void Player::addBombs(uint8_t num) {
+	uint16_t _bombs = bombs;
+	_bombs += num;
+	if (_bombs > bombs_max) {
+		_bombs = bombs_max;
+	}
+	bombs = _bombs;
 }
 
 uint16_t Player::damage(uint16_t dmg) {

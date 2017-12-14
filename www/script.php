@@ -15,7 +15,7 @@ class Parser{
 	private $if_stack = [];
 	private $while_stack = [];
 	private $defines = [];
-	private $extra_vars = ['camera_x', 'camera_y', 'script_trigger', 'armor', 'wait', 'sword', 'tradequest', 'fright', 'bombs', 'bombs_max'];
+	private $extra_vars = ['camera_x', 'camera_y', 'script_trigger', 'armor', 'wait', 'sword', 'tradequest', 'fright'];
 	private $firstPass = true;
 	private $labels = [];
 	private $genericLabelCounter = 0;
@@ -385,6 +385,40 @@ class Parser{
 				'args_max' => 1,
 				'fn' => function($args) {
 					return '23'.$this->getVar16($args[0]);
+				}
+			],
+			'shop' => [
+				'args_min' => 2,
+				'args_max' => 2,
+				'fn' => function($args) {
+					$i = $this->defines['string_'.$args[0]] ?? $args[0];
+					$i = $this->getVar16($i);
+					return '24'.$i.$this->getVar16($args[1]);
+				}
+			],
+			'shop_bottle' => [
+				'args_min' => 2,
+				'args_max' => 2,
+				'fn' => function($args) {
+					$i = $this->defines['string_'.$args[0]] ?? $args[0];
+					$i = $this->getVar16($i);
+					return '25'.$i.$this->getVar16($args[1]);
+				}
+			],
+			'set_bottle' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					$i = $this->defines['bottle_content_'.$args[0]] ?? $args[0];
+					$i = $this->getVar($i);
+					return '26'.$i;
+				}
+			],
+			'add_bombs' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					return '27'.$this->getVar($args[0]);
 				}
 			],
 

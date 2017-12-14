@@ -7,6 +7,7 @@ class Text {
 		void drawBox(bool up);
 	public:
 		int8_t box(uint16_t i, bool up = false);
+		int8_t boxPlayer(uint16_t i);
 };
 
 extern Text text;

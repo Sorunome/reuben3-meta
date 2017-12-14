@@ -1,6 +1,7 @@
 #include "text.h"
 #include "depack.h"
 #include "misc.h"
+#include "player.h"
 #include <Gamebuino-Meta.h>
 
 struct Strings_LUT {
@@ -147,6 +148,10 @@ textloop_entry:
 			cursor++;
 		}
 	}
+}
+
+int8_t Text::boxPlayer(uint16_t i) {
+	box(i, player.getY() > 28);
 }
 
 

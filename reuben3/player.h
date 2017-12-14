@@ -44,6 +44,8 @@ class Player {
 		uint16_t exp_next;
 		uint16_t gold;
 		uint16_t gold_max;
+		uint8_t bombs;
+		uint8_t bombs_max;
 		void setAnimationFrame();
 	public:
 		uint8_t armor;
@@ -51,14 +53,13 @@ class Player {
 		uint8_t sword;
 		uint8_t tradequest;
 		uint8_t fright;
-		uint8_t bombs;
-		uint8_t bombs_max;
 		uint8_t getLvl();
 		uint16_t getHp();
 		uint16_t getHpMax();
 		uint8_t getMp();
 		uint8_t getMpMax();
 		uint16_t getGold();
+		uint8_t getBombs();
 		
 		void init();
 		void hide();
@@ -79,6 +80,8 @@ class Player {
 		void addHp(uint16_t num);
 		void addMp(uint8_t num);
 		void addGold(uint16_t num);
+		bool payGold(uint16_t num);
+		void addBombs(uint8_t num);
 		
 		uint16_t damage(uint16_t dmg);
 		uint8_t useMp(uint8_t amount);

@@ -277,7 +277,7 @@ int8_t Board::runScript(uint8_t x, uint8_t y, uint8_t trigger) {
 int8_t Board::interact(uint8_t x, uint8_t y) {
 	uint16_t t = getTile(x, y);
 	if (t >= SPRITE_FIRST_WATER && t < SPRITE_AFTER_WATER) {
-		if (player.isCurItemBottle() && text.box(STRING_BOTTLE_ASKWATER, player.getY() > 28)) {
+		if (player.isCurItemBottle() && text.boxPlayer(STRING_BOTTLE_ASKWATER)) {
 			player.setCurBottle(Bottle::dirty_water);
 		}
 		return 1;

@@ -12,4 +12,6 @@ void statsMenu();
 void bomb(int8_t x, int8_t y);
 void hookshot(int8_t x, int8_t y, Direction dir);
 
+bool shop(uint16_t ask, uint16_t price, bool bottle);
+
 #endif // _MISC_H_

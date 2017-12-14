@@ -726,6 +726,14 @@ $defines['i_item_hookshot'] = 5;
 $defines['i_item_bomb'] = 6;
 $defines['i_item_protect'] = 7;
 
+$defines['bottle_content_empty'] = 0;
+$defines['bottle_content_dirty_water'] = 1;
+$defines['bottle_content_water'] = 2;
+$defines['bottle_content_herb'] = 3;
+$defines['bottle_content_potion'] = 4;
+$defines['bottle_content_ginseng'] = 5;
+$defines['bottle_content_elixir'] = 6;
+
 $defines['script_walk'] = 0;
 $defines['script_action'] = 1;
 $defines['script_bomb'] = 2;

@@ -3,6 +3,7 @@
 #include "board.h"
 #include "player.h"
 #include "camera.h"
+#include "text.h"
 #include "data/defines.h"
 #include <Gamebuino-Meta.h>
 
@@ -101,7 +102,7 @@ void statsMenu() {
 	if (have_items[5]) {
 		gb.display.setCursor(6, 34);
 		gb.display.print("Bombs:");
-		gb.display.print(player.bombs);
+		gb.display.print(player.getBombs());
 	}
 	if (have_items[6]) {
 		gb.display.setCursor(6, 40);
@@ -628,4 +629,24 @@ void hookshot(int8_t x, int8_t y, Direction dir) {
 			hookshot_left(x, y);
 			break;
 	}
+}
+
+
+bool shop(uint16_t ask, uint16_t price, bool bottle) {
+	if (!text.boxPlayer(ask)) {
+		return false;
+	}
+	
+	if (bottle && !player.isCurItemBottle()) {
+		text.boxPlayer(STRING_NEED_BOTTLE);
+		return false;
+	}
+	
+	if (!player.payGold(price)) {
+		text.boxPlayer(STRING_NOT_ENOUGH_GOLD);
+		return false;
+	}
+	
+	text.boxPlayer(STRING_SHOP_THANKS);
+	return true;
 }
