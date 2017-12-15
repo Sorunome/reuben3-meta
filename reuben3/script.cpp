@@ -50,6 +50,7 @@
 #define SCRIPT_SHOP_BOTTLE 0x25
 #define SCRIPT_SET_BOTTLE 0x26
 #define SCRIPT_ADD_BOMBS 0x27
+#define SCRIPT_GET_SWIMSUIT 0x28
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -371,6 +372,9 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				continue;
 			case SCRIPT_ADD_BOMBS:
 				player.addBombs(getNum());
+				continue;
+			case SCRIPT_GET_SWIMSUIT:
+				player.getSwimsuit();
 				continue;
 
 			case SCRIPT_RETURN_FALSE:

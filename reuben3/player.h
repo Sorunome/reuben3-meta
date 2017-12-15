@@ -34,6 +34,7 @@ class Player {
 		void item();
 		void interact();
 		bool visible;
+		uint16_t after_walkable;
 		uint8_t cur_item;
 		uint8_t lvl;
 		uint16_t hp;
@@ -54,6 +55,8 @@ class Player {
 		uint8_t tradequest;
 		uint8_t fright;
 		uint8_t tmp_map;
+		
+		void getSwimsuit();
 		
 		uint8_t getLvl();
 		uint16_t getHp();

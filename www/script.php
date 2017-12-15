@@ -421,6 +421,13 @@ class Parser{
 					return '27'.$this->getVar($args[0]);
 				}
 			],
+			'get_swimsuit' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '28';
+				}
+			],
 
 			'add_enemy' => [
 				'args_min' => 3,

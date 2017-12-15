@@ -105,6 +105,7 @@ void Player::init() {
 	y = 3*8;
 	direction = Direction::down;
 	visible = true;
+	after_walkable = SPRITE_AFTER_WALK;
 	cur_item = I_ITEM_NONE;
 	lvl = 1;
 	hp = 120;
@@ -124,6 +125,10 @@ void Player::init() {
 	fright = 0;
 	tmp_map = 0;
 	focus();
+}
+
+void Player::getSwimsuit() {
+	after_walkable = SPRITE_AFTER_SWIM;
 }
 
 uint8_t Player::getLvl() {
@@ -198,7 +203,7 @@ bool Player::isWalkable(float dx, float dy) {
 		return true;
 	}
 	uint16_t tile = board.getTile(_x, _y);
-	return tile < SPRITE_AFTER_WALK;
+	return tile < after_walkable;
 }
 
 void Player::item() {
