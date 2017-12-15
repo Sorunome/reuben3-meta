@@ -631,6 +631,92 @@ void hookshot(int8_t x, int8_t y, Direction dir) {
 	}
 }
 
+void pushblock_up(int8_t x, int8_t y) {
+	if (y <= 0) {
+		return;
+	}
+	if (board.getTile(x, y-1) >= SPRITE_AFTER_WALK) {
+		return;
+	}
+	board.eraseTile(x, y);
+	for (uint8_t i = 0; i < 9; i++) {
+		board.render();
+		board.drawTile(x*8, y*8 - i, SPRITE_BLOCK);
+		player.render();
+		while(!gb.update());
+	}
+	board.setTile(x, y-1, SPRITE_BLOCK);
+}
+
+void pushblock_right(int8_t x, int8_t y) {
+	if (x >= 11) {
+		return;
+	}
+	if (board.getTile(x+1, y) >= SPRITE_AFTER_WALK) {
+		return;
+	}
+	board.eraseTile(x, y);
+	for (uint8_t i = 0; i < 9; i++) {
+		board.render();
+		board.drawTile(x*8 + i, y*8, SPRITE_BLOCK);
+		player.render();
+		while(!gb.update());
+	}
+	board.setTile(x + 1, y, SPRITE_BLOCK);
+}
+
+void pushblock_down(int8_t x, int8_t y) {
+	if (y >= 7) {
+		return;
+	}
+	if (board.getTile(x, y+1) >= SPRITE_AFTER_WALK) {
+		return;
+	}
+	board.eraseTile(x, y);
+	for (uint8_t i = 0; i < 9; i++) {
+		board.render();
+		board.drawTile(x*8, y*8 + i, SPRITE_BLOCK);
+		player.render();
+		while(!gb.update());
+	}
+	board.setTile(x, y+1, SPRITE_BLOCK);
+}
+
+void pushblock_left(int8_t x, int8_t y) {
+	if (x <= 0) {
+		return;
+	}
+	if (board.getTile(x-1, y) >= SPRITE_AFTER_WALK) {
+		return;
+	}
+	board.eraseTile(x, y);
+	for (uint8_t i = 0; i < 9; i++) {
+		board.render();
+		board.drawTile(x*8 - i, y*8, SPRITE_BLOCK);
+		player.render();
+		while(!gb.update());
+	}
+	board.setTile(x-1, y, SPRITE_BLOCK);
+}
+
+void pushblock(int8_t x, int8_t y, Direction dir) {
+	switch(dir) {
+		case Direction::up:
+			pushblock_up(x, y);
+			break;
+		case Direction::right:
+			pushblock_right(x, y);
+			break;
+		case Direction::down:
+			pushblock_down(x, y);
+			break;
+		case Direction::left:
+			pushblock_left(x, y);
+			break;
+	}
+}
+
+
 
 bool shop(uint16_t ask, uint16_t price, bool bottle) {
 	if (!text.boxPlayer(ask)) {

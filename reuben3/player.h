@@ -60,6 +60,7 @@ class Player {
 		uint8_t getMpMax();
 		uint16_t getGold();
 		uint8_t getBombs();
+		Direction getDirection();
 		
 		void init();
 		void hide();

@@ -7,6 +7,7 @@
 #include "player.h"
 #include "script.h"
 #include "text.h"
+#include "misc.h"
 
 #include "data/defines.h"
 #include "data/maps.h"
@@ -299,6 +300,11 @@ int8_t Board::interact(uint8_t x, uint8_t y) {
 				} else {
 					setTile(x, y, SPRITE_309);
 				}
+			}
+			return 1;
+		case SPRITE_BLOCK:
+			if (player.isEvent(EVENT_PUSH_BLOCKS)) {
+				pushblock(x, y, player.getDirection());
 			}
 			return 1;
 		default:

@@ -153,6 +153,10 @@ uint8_t Player::getBombs() {
 	return bombs;
 }
 
+Direction Player::getDirection() {
+	return direction;
+}
+
 void Player::hide() {
 	visible = false;
 }
