@@ -15,7 +15,7 @@ class Parser{
 	private $if_stack = [];
 	private $while_stack = [];
 	private $defines = [];
-	private $extra_vars = ['camera_x', 'camera_y', 'script_trigger', 'armor', 'wait', 'sword', 'tradequest', 'fright'];
+	private $extra_vars = ['camera_x', 'camera_y', 'script_trigger', 'armor', 'wait', 'sword', 'tradequest', 'fright', 'tmp_map'];
 	private $firstPass = true;
 	private $labels = [];
 	private $genericLabelCounter = 0;

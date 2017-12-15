@@ -53,6 +53,8 @@ class Player {
 		uint8_t sword;
 		uint8_t tradequest;
 		uint8_t fright;
+		uint8_t tmp_map;
+		
 		uint8_t getLvl();
 		uint16_t getHp();
 		uint16_t getHpMax();

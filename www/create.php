@@ -227,7 +227,7 @@ $file = "const uint8_t sprites_data[] = {\n\t8, 8,\n";
 $spriteData = [];
 foreach($sql->query("SELECT `buffer1`,`buffer2`,`name`,`id` FROM `sprites` WHERE `id` IN (".implode(',',array_map('intval',$spritesWithId)).")") as $s){
 	if($s['name']){
-		$defines['sprite_'.$s['name']] = '0x'.$spritesLUT[$s['id']];
+		$defines['sprite_'.strtolower($s['name'])] = '0x'.$spritesLUT[$s['id']];
 	}
 	$out = "";
 	if (file_exists($SPRITESROOT.$s['id'].'.png')) {
@@ -334,7 +334,7 @@ $enemiesLUT = [];
 $enemies = $sql->query("SELECT `name`,`enemyData`,`id` FROM `enemies` WHERE 1");
 foreach($enemies as $e){
 	if($e['name']!=''){
-		$defines['bigsprite_'.$e['name']] = $idCounter;
+		$defines['bigsprite_'.strtolower($e['name'])] = $idCounter;
 	}
 	$defines['bigsprite_'.$e['id']] = $idCounter;
 	
@@ -343,7 +343,7 @@ foreach($enemies as $e){
 	$data = json_decode($e['enemyData'],true);
 	getBigSpriteData($data,$file,$idCounter);
 	$enemiesLUT[(int)$e['id']] = $idCounter;
-	$defines['enemy_'.$e['name']] = $idCounter;
+	$defines['enemy_'.strtolower($e['name'])] = $idCounter;
 	$enemiesFile .= "\t{ ".$idCounter.", ".$data['level'].", ";
 	$enemiesFile .= $data['hp'].", ".$data['exp'].", ";
 	$enemiesFile .= "0x".dechexpad2($data['sl1']*16 + $data['firedef']).", 0x".dechexpad2($data['sl2']*16 + $data['icedef']).", 0x".dechexpad2($data['sl3']*16 + $data['boltdef']).", 0x".dechexpad2($data['sl4']*16 + $data['bombdef']).", 0x".dechexpad2($data['sl5']*16 + ($data['boss']?0:1)).", ";
@@ -385,7 +385,7 @@ foreach($sql->query("SELECT `id`,`name`,`enemies` FROM `areas` WHERE 1") as $a){
 		$areasLUT[(int)$a['id']] = $idCounter;
 		$defines['area_'.$a['id']] = $idCounter;
 		if($a['name'] != ''){
-			$defines['area_'.$a['name']] = $idCounter;
+			$defines['area_'.strtolower($a['name'])] = $idCounter;
 			if($a['enemies']){
 				foreach(json_decode($a['enemies'],true) as $ae){
 					if(isset($enemiesLUT[$ae])){
@@ -478,7 +478,7 @@ $stringLUT = "const Strings_LUT stringsLut[] = {\n";
 $strings = $sql->query("SELECT `name`,`string`,`compress` FROM `strings` WHERE `compress`=1");
 $stringCounter = 0;
 foreach($strings as $s) {
-	$defines['string_'.$s['name']] = $stringCounter;
+	$defines['string_'.strtolower($s['name'])] = $stringCounter;
 	$stringCounter++;
 	$arrayCount = array_count_values($hexData);
 	
@@ -576,7 +576,7 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 	$name = $m['name'];
 	$mapId = (int)$m['id'];
 	
-	$defines['world_'.$name] = $worldASMId;
+	$defines['world_'.strtolower($name)] = $worldASMId;
 	$defines['world_'.$mapId] = $worldASMId;
 	
 	// we adjust the pointers here as in the parsing we'd have to decrease them else first
@@ -743,7 +743,7 @@ $scriptId = 0;
 
 foreach ($sql->query("SELECT `id`, `name`, `code` FROM `scripts`") as $s) {
 	$s['code'] .= "\nreturn(true)";
-	$defines['script_'.$s['name']] = $scriptId;
+	$defines['script_'.strtolower($s['name'])] = $scriptId;
 	$defines['script_'.(string)$s['id']] = $scriptId;
 	$code = bin2hex($parser->parse($s['code'], 0, $defines));
 	$scriptfile .= "const uint8_t script_${scriptId}[] = {\n\t";

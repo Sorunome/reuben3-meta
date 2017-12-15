@@ -66,7 +66,7 @@ union View32 {
 
 uint8_t* Script::getVar() {
 	uint8_t i = *script++;
-	const uint8_t* ptrs[] = {(uint8_t*)&(camera.x), (uint8_t*)&(camera.y), &trigger, &(player.armor), &(player.wait), &(player.sword), &(player.tradequest), &(player.fright)};
+	const uint8_t* ptrs[] = {(uint8_t*)&(camera.x), (uint8_t*)&(camera.y), &trigger, &(player.armor), &(player.wait), &(player.sword), &(player.tradequest), &(player.fright), &(player.tmp_map)};
 	const uint8_t len = sizeof(ptrs) / sizeof(const uint8_t*);
 	if (0xFF - i <= len) {
 		return (uint8_t*)(ptrs[0xFF - i]);

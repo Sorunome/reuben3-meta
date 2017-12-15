@@ -122,6 +122,7 @@ void Player::init() {
 	sword = WEAPON_NONE;
 	tradequest = TRADEQUEST_NONE;
 	fright = 0;
+	tmp_map = 0;
 	focus();
 }
 
