@@ -600,7 +600,7 @@ foreach($sql->query("SELECT `name`,`id` FROM `maps` WHERE `id` IN (".implode(','
 		//$sql->query("UPDATE `tilemaps` SET `asm_id`='%s' WHERE `id`=%d",[dechexpad2($mapId),$t['id']]);
 		
 		
-		$defines['tilemap_'.$t['id']] = "0x".dechexpad2($mapId);
+		$defines['tilemap_'.$t['id']] = $mapId;
 		$tileEvents = $sql->query("SELECT `id`,`x`,`y`,`code`,`add_jump` FROM `eventTiles` WHERE `refId`=%d",[$t['id']]);
 		$dynTiles = $sql->query("SELECT t1.`id`,t1.`x`,t1.`y`,t1.`newTile`,t2.`id` AS eventId FROM `dynTiles` AS t1 INNER JOIN `events` AS t2 ON t1.`event`=t2.`id` WHERE t1.`refId`=%d",[$t['id']]);
 		if(isset($areasLUT[(int)$t['area']])){

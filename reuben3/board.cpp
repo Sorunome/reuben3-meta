@@ -89,6 +89,24 @@ void Board::postload() {
 	memcpy(board, decompression_buffer + (mapsize_bytes*map->chunk), mapsize_bytes);
 }
 
+void Board::saveBackup() {
+	memcpy(board_backup, board, mapsize_bytes);
+}
+
+void Board::loadBackup(uint8_t _world, uint8_t _map) {
+	worldId = _world;
+	mapId = _map;
+	uint8_t i = 0;
+	while(1) {
+		if (worlds[worldId].maps[i].id == mapId) {
+			map = &worlds[worldId].maps[i];
+			break;
+		}
+		i++;
+	}
+	memcpy(board, board_backup, mapsize_bytes);
+}
+
 uint16_t Board::getTile(uint8_t x, uint8_t y) {
 	return board[y*width + x];
 }

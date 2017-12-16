@@ -15,9 +15,12 @@ class Script {
 		uint8_t* script;
 		uint8_t* script_entry;
 		bool isHome;
+		int8_t homeX;
+		int8_t homeY;
 		uint8_t homeMap;
 		uint8_t homeWorld;
 		uint8_t trigger;
+		void checkHome();
 	public:
 		bool run(const uint8_t* _script, uint8_t _trigger = 0);
 		bool run(uint8_t* _script, uint8_t _trigger = 0);

@@ -167,6 +167,17 @@ void fade_from_white() {
 	gb.display.colorIndex = origPalette;
 }
 
+void Script::checkHome() {
+	if (isHome) {
+		isHome = false;
+		homeMap = board.getMapId();
+		homeWorld = board.getWorldId();
+		homeX = player.getX();
+		homeY = player.getY();
+		board.saveBackup();
+	}
+}
+
 bool Script::run(uint8_t* _script, uint8_t _trigger) {
 	script_entry = script = _script;
 	trigger = _trigger;
@@ -195,9 +206,9 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				continue;
 			case SCRIPT_FADE_HOME:
 				fade_to_white();
-				board.setWorld(homeWorld);
-				board.load(homeMap);
-				board.postload();
+				board.loadBackup(homeWorld, homeMap);
+				isHome = true;
+				player.moveTo(homeX, homeY);
 				player.show();
 				player.focus();
 				fade_from_white();
@@ -303,11 +314,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				continue;
 			}
 			case SCRIPT_FADE_TO_MAP_AND_WORLD:
-				if (isHome) {
-					isHome = false;
-					homeMap = board.getMapId();
-					homeWorld = board.getWorldId();
-				}
+				checkHome();
 				fade_to_white();
 				player.hide();
 				board.setWorld(getNum());
@@ -316,11 +323,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				fade_from_white();
 				continue;
 			case SCRIPT_FADE_TO_MAP:
-				if (isHome) {
-					isHome = false;
-					homeMap = board.getMapId();
-					homeWorld = board.getWorldId();
-				}
+				checkHome();
 				fade_to_white();
 				player.hide();
 				board.load(getNum());
@@ -350,11 +353,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				renderAll();
 				continue;
 			case SCRIPT_FADE_TO_MAP_AND_WORLD_POS:
-				if (isHome) {
-					isHome = false;
-					homeMap = board.getMapId();
-					homeWorld = board.getWorldId();
-				}
+				checkHome();
 				fade_to_white();
 				player.hide();
 				board.setWorld(getNum());

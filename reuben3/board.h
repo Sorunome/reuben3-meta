@@ -39,6 +39,7 @@ class Board {
 		static const uint8_t width = 12;
 		static const uint8_t height = 8;
 		uint16_t board[width*height];
+		uint16_t board_backup[width*height];
 		uint8_t worldId;
 		uint8_t mapId;
 		const Tilemaps_Data* map;
@@ -56,6 +57,10 @@ class Board {
 		void load(uint8_t _map);
 		void load();
 		void postload();
+		
+		void saveBackup();
+		void loadBackup(uint8_t _world, uint8_t _map);
+		
 		void render();
 		uint16_t getTile(uint8_t x, uint8_t y);
 		void eraseTile(uint8_t x, uint8_t y);
