@@ -343,7 +343,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 			{
 				uint8_t x = getNum();
 				uint8_t y = getNum();
-				uint8_t s = getNum16();
+				uint16_t s = getNum16();
 				board.drawTile(x, y, s);
 				continue;
 			}
