@@ -163,6 +163,10 @@ Direction Player::getDirection() {
 	return direction;
 }
 
+void Player::setDirection(Direction d) {
+	direction = d;
+}
+
 void Player::hide() {
 	visible = false;
 }

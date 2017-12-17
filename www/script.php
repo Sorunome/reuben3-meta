@@ -84,6 +84,7 @@ class Parser{
 			preg_match_all('/(?:\\(|,)([^(),]*(?:\\([^)]+[^),]*\\))?)/',$matches[2],$matches,PREG_SET_ORDER);
 			foreach($matches as $m){
 				if (isset($this->functions[$function]) && isset($this->functions[$function]['unparsed_args']) && $this->functions[$function]['unparsed_args']) {
+				} else if (isset($this->functions[$function]) && isset($this->functions[$function]['unparsed_word_args']) && $this->functions[$function]['unparsed_word_args'] && preg_match('/^\w+$/', $m[1])){
 				} else {
 					$m[1] = strtr(trim($m[1]), $this->defines);
 					if (preg_match('/^[\d\s*+\\/\\-()a-eA-Exo ]+$/', $m[1]) && !preg_match('/^[a-eA-Exo]+$/', $m[1])) {
@@ -258,6 +259,7 @@ class Parser{
 			'is_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
+				'unparsed_word_args' => true,
 				'fn' => function($args) {
 					return '12'.(isset($this->defines['event_'.$args[0]])?dechexpad($this->defines['event_'.$args[0]], 2):$this->getVar($args[0]));
 				}
@@ -265,6 +267,7 @@ class Parser{
 			'set_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
+				'unparsed_word_args' => true,
 				'fn' => function($args) {
 					return '13'.(isset($this->defines['event_'.$args[0]])?dechexpad($this->defines['event_'.$args[0]], 2):$this->getVar($args[0]));
 				}
@@ -272,6 +275,7 @@ class Parser{
 			'clear_event' => [
 				'args_min' => 1,
 				'args_max' => 1,
+				'unparsed_word_args' => true,
 				'fn' => function($args) {
 					return '14'.(isset($this->defines['event_'.$args[0]])?dechexpad($this->defines['event_'.$args[0]], 2):$this->getVar($args[0]));
 				}
@@ -286,6 +290,7 @@ class Parser{
 			'text' => [
 				'args_min' => 1,
 				'args_max' => 2,
+				'unparsed_word_args' => true,
 				'fn' => function($args) {
 					$i = $this->defines['string_'.$args[0]] ?? $args[0];
 					$i = $this->getVar16($i);
@@ -426,6 +431,17 @@ class Parser{
 				'args_max' => 0,
 				'fn' => function($args) {
 					return '28';
+				}
+			],
+			'transition_portal' => [
+				'args_min' => 6,
+				'args_max' => 6,
+				'fn' => function($args) {
+					$s = '29';
+					foreach($args as $a) {
+						$s .= $this->getVar($a);
+					}
+					return $s;
 				}
 			],
 

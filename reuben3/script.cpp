@@ -51,6 +51,7 @@
 #define SCRIPT_SET_BOTTLE 0x26
 #define SCRIPT_ADD_BOMBS 0x27
 #define SCRIPT_GET_SWIMSUIT 0x28
+#define SCRIPT_TRANSITION_PORTAL 0x29
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -317,8 +318,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				checkHome();
 				fade_to_white();
 				player.hide();
-				board.setWorld(getNum());
-				board.load(getNum());
+				board.load(getNum(), getNum());
 				board.postload();
 				fade_from_white();
 				continue;
@@ -356,8 +356,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				checkHome();
 				fade_to_white();
 				player.hide();
-				board.setWorld(getNum());
-				board.load(getNum());
+				board.load(getNum(), getNum());
 				player.moveTo(getNum(), getNum());
 				player.focus();
 				board.postload();
@@ -374,6 +373,9 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				continue;
 			case SCRIPT_GET_SWIMSUIT:
 				player.getSwimsuit();
+				continue;
+			case SCRIPT_TRANSITION_PORTAL:
+				board.transitionPortal(getNum(), getNum(), getNum(), getNum(), getNum(), getNum());
 				continue;
 
 			case SCRIPT_RETURN_FALSE:

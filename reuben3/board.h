@@ -57,6 +57,7 @@ class Board {
 		void load(uint8_t _map);
 		void load();
 		void postload();
+		void transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world, uint8_t _map, uint8_t player_x, uint8_t player_y);
 		
 		void saveBackup();
 		void loadBackup(uint8_t _world, uint8_t _map);

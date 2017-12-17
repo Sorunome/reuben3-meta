@@ -66,6 +66,7 @@ class Player {
 		uint16_t getGold();
 		uint8_t getBombs();
 		Direction getDirection();
+		void setDirection(Direction d);
 		
 		void init();
 		void hide();

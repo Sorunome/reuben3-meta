@@ -1,6 +1,7 @@
 #include "board.h"
 #include "camera.h"
 #include <Gamebuino-Meta.h>
+#include <utility/Misc.h> // pixel to rgb converters
 #include "sprites.h"
 
 #include "depack.h"
@@ -88,6 +89,77 @@ void Board::load() {
 void Board::postload() {
 	memcpy(board, decompression_buffer + (mapsize_bytes*map->chunk), mapsize_bytes);
 }
+
+void line(int8_t x1, int8_t y1, int8_t x2, int8_t y2) {
+	gb.display.drawLine(x1 - camera.x, y1 - camera.y, x2 - camera.x, y2 - camera.y);
+}
+
+void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world, uint8_t _map, uint8_t player_x, uint8_t player_y) {
+	portal_x *= 8;
+	portal_x += 4;
+	portal_y *= 8;
+	portal_y += 4;
+	int16_t line_right = portal_x - 5*8;
+	int16_t line_left = portal_x + 5*8;
+	int16_t line_up = portal_y - 5*8;
+	int16_t line_down = portal_y + 5*8;
+	
+	const uint8_t steps = 5*4;
+	Color* origPalette = gb.display.colorIndex;
+	Color palette[16];
+	gb.display.colorIndex = palette;
+	for (uint8_t i = 0; i <= steps; i++) {
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)origPalette[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r = rgb.r*(steps - i) / steps;
+			rgb.g = rgb.g*(steps - i) / steps;
+			rgb.b = rgb.b*(steps - i) / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			palette[j] = (Color)c;
+		}
+		renderAll();
+		gb.display.setColor(BLACK);
+		line(line_right, portal_y, -1, portal_y);
+		line(line_right, portal_y - 1, 0, portal_y - 1);
+		
+		line(line_left, portal_y, 12*8, portal_y);
+		line(line_left, portal_y - 1, 12*8, portal_y - 1);
+		
+		line(portal_x, line_up, portal_x, -1);
+		line(portal_x - 1, line_up, portal_x - 1, 0);
+		
+		line(portal_x, line_down, portal_x, 8*8);
+		line(portal_x - 1, line_down, portal_x - 1, 8*8);
+		
+		line_right += 2;
+		line_left -= 2;
+		line_up += 2;
+		line_down -= 2;
+		
+		while(!gb.update());
+	}
+	load(_world, _map);
+	player.moveTo(player_x, player_y);
+	player.setDirection(Direction::down);
+	player.focus();
+	postload();
+	for (uint8_t i = 0; i <= steps; i++) {
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)origPalette[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r = rgb.r*i / steps;
+			rgb.g = rgb.g*i / steps;
+			rgb.b = rgb.b*i / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			palette[j] = (Color)c;
+		}
+		renderAll();
+		while(!gb.update());
+	}
+	gb.display.colorIndex = origPalette;
+}
+
 
 void Board::saveBackup() {
 	memcpy(board_backup, board, mapsize_bytes);
@@ -318,6 +390,11 @@ int8_t Board::interact(uint8_t x, uint8_t y) {
 				} else {
 					setTile(x, y, SPRITE_309);
 				}
+			}
+			return 1;
+		case SPRITE_456: // rock on grass
+			if (player.isEvent(EVENT_PICKAXE)) {
+				setTile(x, y, SPRITE_1);
 			}
 			return 1;
 		case SPRITE_BLOCK:
