@@ -35,9 +35,10 @@ function addSpriteSheet($name){
 	$name = strtolower($name);
 	$defines['sprite_first_'.$name] = '0x'.dechexpad($idCounter, 4);
 	foreach($sheet as $s){
-		if(in_array($s,$spritesInUse)){
+		if(in_array($s,$spritesInUse) && !isset($spritesLUT[$s])){
 			$asmId = dechexpad($idCounter, 4);
 			//$sql->query("UPDATE `sprites` SET `asm_id`='%s' WHERE `id`=%d",[$asmId,$s]);
+			
 			$spritesLUT[$s] = $asmId;
 			$idCounter++;
 			$spritesWithId[] = $s;
