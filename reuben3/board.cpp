@@ -29,6 +29,7 @@ uint16_t Board::getDefaultTile() {
 		case WORLD_AERILON_CASTLE:
 		case WORLD_SAND_CASTLE_PRESENT:
 		case WORLD_SAND_CASTLE_PAST:
+		case WORLD_DUNGEON_HOOKSHOT:
 			return SPRITE_308;
 		case WORLD_HOUSES:
 			return SPRITE_193;

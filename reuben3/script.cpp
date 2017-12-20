@@ -52,6 +52,7 @@
 #define SCRIPT_ADD_BOMBS 0x27
 #define SCRIPT_GET_SWIMSUIT 0x28
 #define SCRIPT_TRANSITION_PORTAL 0x29
+#define SCRIPT_MOVE_LEFT_AND_SHAKE_SCREEN 0x2A
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -377,6 +378,36 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 			case SCRIPT_TRANSITION_PORTAL:
 				board.transitionPortal(getNum(), getNum(), getNum(), getNum(), getNum(), getNum());
 				continue;
+			case SCRIPT_MOVE_LEFT_AND_SHAKE_SCREEN:
+			{
+				uint8_t px = player.getX();
+				bool up = true;
+				int8_t j = 0;
+				while (px) {
+					camera.setY(j*2);
+					if (up) {
+						if (j < 4) {
+							j++;
+						} else {
+							up = false;
+						}
+					} else {
+						if (j > 0) {
+							j--;
+						} else {
+							up = true;
+						}
+					}
+					player.moveX(px);
+					renderAll();
+					px--;
+					while(!gb.update());
+				}
+				camera.setY(0);
+				renderAll();
+				gb.update();
+				continue;
+			}
 
 			case SCRIPT_RETURN_FALSE:
 				return false;

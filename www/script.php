@@ -444,6 +444,13 @@ class Parser{
 					return $s;
 				}
 			],
+			'move_left_and_shake_screen' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '2A';
+				}
+			],
 
 			'add_enemy' => [
 				'args_min' => 3,
