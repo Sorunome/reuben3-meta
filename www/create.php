@@ -738,14 +738,19 @@ $defines['bottle_content_elixir'] = 6;
 $defines['script_walk'] = 0;
 $defines['script_action'] = 1;
 $defines['script_bomb'] = 2;
+$defines['script_pushblock'] = 3;
 $scriptfile = '';
 $scriptfileLut = "const uint8_t* scripts[] = {\n";
 $scriptId = 0;
-
 foreach ($sql->query("SELECT `id`, `name`, `code` FROM `scripts`") as $s) {
-	$s['code'] .= "\nreturn(true)";
 	$defines['script_'.strtolower($s['name'])] = $scriptId;
 	$defines['script_'.(string)$s['id']] = $scriptId;
+	$scriptId++;
+}
+$scriptId = 0;
+foreach ($sql->query("SELECT `id`, `name`, `code` FROM `scripts`") as $s) {
+	$s['code'] .= "\nreturn(true)";
+	
 	$code = bin2hex($parser->parse($s['code'], 0, $defines));
 	$scriptfile .= "const uint8_t script_${scriptId}[] = {\n\t";
 	if ($code == '') {

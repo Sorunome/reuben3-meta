@@ -121,8 +121,8 @@ bool Script::condition() {
 	return false;
 }
 
-bool Script::run(const uint8_t* _script, uint8_t _trigger) {
-	return run((uint8_t*) _script, _trigger);
+bool Script::run(const uint8_t* _script, uint8_t _trigger, bool _isHome) {
+	return run((uint8_t*) _script, _trigger, _isHome);
 }
 
 void fade_to_white() {
@@ -180,10 +180,10 @@ void Script::checkHome() {
 	}
 }
 
-bool Script::run(uint8_t* _script, uint8_t _trigger) {
+bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 	script_entry = script = _script;
 	trigger = _trigger;
-	isHome = true;
+	isHome = _isHome;
 	while(1) {
 		switch(*script++) {
 			case SCRIPT_FADE_TO_WHITE:
@@ -255,7 +255,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger) {
 				uint8_t a = getNum();
 				uint8_t* _script = script;
 				uint8_t* _script_entry = script_entry;
-				run(scripts[a], trigger);
+				run(scripts[a], trigger, isHome);
 				script = _script;
 				script_entry = _script_entry;
 				continue;

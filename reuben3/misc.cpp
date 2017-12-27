@@ -714,6 +714,7 @@ void pushblock(int8_t x, int8_t y, Direction dir) {
 			pushblock_left(x, y);
 			break;
 	}
+	board.runScript(x, y, SCRIPT_PUSHBLOCK);
 }
 
 

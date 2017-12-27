@@ -22,8 +22,8 @@ class Script {
 		uint8_t trigger;
 		void checkHome();
 	public:
-		bool run(const uint8_t* _script, uint8_t _trigger = 0);
-		bool run(uint8_t* _script, uint8_t _trigger = 0);
+		bool run(const uint8_t* _script, uint8_t _trigger = 0, bool _isHome = true);
+		bool run(uint8_t* _script, uint8_t _trigger = 0, bool _isHome = true);
 };
 
 extern Script script;
