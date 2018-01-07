@@ -7,6 +7,10 @@
 
 const uint8_t reuben_sprite_data[] = {
 	8, 9,
+	0x08, 0x00,
+	0,
+	0x0E,
+	0x01,
 	// up
 	0xEE, 0x00, 0x00, 0xEE,
 	0xE0, 0xCC, 0xCC, 0x0E,
@@ -92,11 +96,9 @@ const uint8_t reuben_sprite_data[] = {
 	0xEE, 0xE0, 0xDD, 0x00,
 };
 
-Image reuben_sprite(reuben_sprite_data, 8, 0);
+Image reuben_sprite(reuben_sprite_data);
 
 void Player::init() {
-	reuben_sprite.setTransparentColor(INDEX_PINK);
-	
 	render_cycle = 0;
 	
 	memset(events, 0, sizeof(events));

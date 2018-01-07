@@ -3,4 +3,4 @@
 #include "data/sprites.h"
 #include "data/defines.h"
 
-Image sprites(sprites_data, SPRITES_TOTAL, 0);
+Image sprites(sprites_data);

@@ -15,6 +15,11 @@ extern uint8_t decompression_buffer[];
 
 const uint8_t buttonsBuffer[] = {
 	4, 4,
+	0x03, 0x00,
+	0,
+	0xFF,
+	0x01,
+	
 	0xFF, 0xFF,
 	0x55, 0x5F,
 	0xF5, 0xFF,
@@ -30,7 +35,7 @@ const uint8_t buttonsBuffer[] = {
 	0x55, 0x5F,
 	0xFF, 0xFF,
 };
-Image buttons(buttonsBuffer, 3, 0);
+Image buttons(buttonsBuffer);
 
 void Text::drawBox(bool up) {
 	gb.display.setColor(BROWN);

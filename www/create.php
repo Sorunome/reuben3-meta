@@ -225,6 +225,9 @@ $html = '<h1>Sprites</h1><textarea style="width:100%;height:500px;">';
 
 $SPRITESROOT = '/var/www/www.sorunome.de/reuben3-meta/sprites/';
 $file = "const uint8_t sprites_data[] = {\n\t8, 8,\n";
+$amount = dechexpad(sizeof($spritesWithId), 4);
+$file .= "\t0x$amount[2]$amount[3], 0x$amount[0]$amount[1],\n";
+$file .= "\t0, 0xFF, 1,\n\n";
 $spriteData = [];
 foreach($sql->query("SELECT `buffer1`,`buffer2`,`name`,`id` FROM `sprites` WHERE `id` IN (".implode(',',array_map('intval',$spritesWithId)).")") as $s){
 	if($s['name']){
@@ -300,7 +303,7 @@ function getBigSpriteData($data,&$file,$idCounter) {
 	if ($size > $defines['enemy_sprites_max_size']) {
 		$defines['enemy_sprites_max_size'] = $size;
 	}
-	$hex = [$data['width']*8, $data['height']];
+	$hex = [$data['width']*8, $data['height'], '00', '00', '00', 'FF', '01'];
 	$s = '';
 	for($i = 0;$i < strlen($data['frontBuf']);$i += 2){
 		$b1 = hex2binstr(substr($data['frontBuf'],$i,2));
