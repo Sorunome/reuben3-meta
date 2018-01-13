@@ -3,6 +3,11 @@
 
 #include <Arduino.h>
 
+struct Enemy_Background_Look {
+	const uint8_t frame_id;
+	const uint16_t sprites[4];
+};
+
 struct Enemy_Data {
 	const uint8_t id;
 	const uint8_t lvl;
@@ -66,6 +71,7 @@ class Battle {
 	private:
 		Battle_Player p;
 		Battle_Enemy e;
+		const Enemy_Background_Look* background_look;
 		uint16_t calcPlayerDamage(Battle_Attack_Type type);
 		uint16_t calcEnemyDamage();
 		Battle_Done loop();

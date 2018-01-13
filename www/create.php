@@ -128,7 +128,8 @@ function rgbToIndex($rgb) {
 			$min_index = $i;
 		}
 	}
-	return dechex($i);
+	
+	return dechex($min_index);
 }
 //$sql->query("UPDATE `sprites` SET `in_use`=0 WHERE 1");
 
@@ -296,34 +297,105 @@ $file = '';
 $largeSpritesHeader = "const uint8_t* const EnemySprites[] = {\n";
 $defines['enemy_sprites_max_size'] = 0;
 
+$ENEMIESROOT = '/var/www/www.sorunome.de/reuben3-meta/enemies/';
+
 function getBigSpriteData($data,&$file,$idCounter) {
-	global $defines;
+	global $defines, $ENEMIESROOT;
 	$file .= "const uint8_t EnemySprites_${idCounter}_buffer[] = {\n\t";
 	$size = ($data['width']*8*$data['height'] / 2) + 2;
 	if ($size > $defines['enemy_sprites_max_size']) {
 		$defines['enemy_sprites_max_size'] = $size;
 	}
-	$hex = [$data['width']*8, $data['height'], '00', '00', '00', 'FF', '01'];
+	$hex = [];
 	$s = '';
-	for($i = 0;$i < strlen($data['frontBuf']);$i += 2){
-		$b1 = hex2binstr(substr($data['frontBuf'],$i,2));
-		$b2 = hex2binstr(substr($data['backBuf'],$i,2));
-		$alt = false;
-		for ($j = 0; $j < 8; $j++) {
-			$n = ($b1[$j] == '1')*2 + ($b2[$j] == '1')*1;
-			if (!$alt) {
-				$s .= '0x';
+	$fname = $ENEMIESROOT.str_pad($idCounter, 4, '0', STR_PAD_LEFT).'_color.png';
+	if (file_exists($fname)) {
+		$d = getimagesize($fname);
+		$w = $d[0];
+		$h = $d[1];
+		$ii = imagecreatefrompng($fname);
+		$i = imagecreatetruecolor($w, $h);
+		$alphabg = imagecolorallocatealpha($i, 0, 0, 0, 127);
+		imagefill($i, 0, 0, $alphabg);
+		imagealphablending($i, false);
+		imagesavealpha($i, true);
+		imagecopy($i, $ii, 0, 0, 0, 0, $w, $h);
+		imagedestroy($ii);
+
+
+		// first determine transparent color
+		$transColors = [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true];
+		for($y = 0; $y < $h; $y++) {
+			for ($x = 0; $x < $w; $x++) {
+				$rgba = imagecolorat($i, $x, $y);
+				$alpha = ($rgba >> 24) & 0x7F;
+				if (!$alpha) {
+					$transColors[hexdec(rgbToIndex($rgba))] = false;
+				}
 			}
-			$s .= ['7', '6', '5', '0'][$n];
+		}
+		$transparentColor = -1;
+		for($j = 0; $j < 16; $j++) {
+			if ($transColors[$j]) {
+				$transparentColor = $j;
+				break;
+			}
+		}
+		if ($transparentColor == -1) {
+			die('nuuuu');
+		}
+		
+		// now actually create the image
+		$hex = array_merge($hex, [$w, $h, '0x01', '0x00', '0x00', '0x0'.dechex($transparentColor), '0x01']);
+		for($y = 0; $y < $h; $y++) {
+			$alt = false;
+			$s = '';
+			for ($x = 0; $x < $w; $x++) {
+				if (!$alt) {
+					$s .= '0x';
+				}
+				$rgba = imagecolorat($i, $x, $y);
+				$alpha = ($rgba >> 24) & 0x7F;
+				if ($alpha) {
+					$s .= dechex($transparentColor);
+				} else {
+					$s .= rgbToIndex($rgba);
+				}
+				
+				if ($alt) {
+					$hex[] = $s;
+					$s = '';
+				}
+				$alt = !$alt;
+			}
 			if ($alt) {
-				$hex[] = $s;
+				$hex[] = $s.'0';
+			}
+		}
+		
+		imagedestroy($i);
+	} else {
+		$hex = array_merge($hex, [$data['width']*8, $data['height'], '01', '00', '00', 'FF', '01']);
+		for($i = 0;$i < strlen($data['frontBuf']);$i += 2){
+			$b1 = hex2binstr(substr($data['frontBuf'],$i,2));
+			$b2 = hex2binstr(substr($data['backBuf'],$i,2));
+			$alt = false;
+			for ($j = 0; $j < 8; $j++) {
+				$n = ($b1[$j] == '1')*2 + ($b2[$j] == '1')*1;
+				if (!$alt) {
+					$s .= '0x';
+				}
+				$s .= ['7', '6', '5', '0'][$n];
+				if ($alt) {
+					$hex[] = $s;
+					$s = '';
+				}
+				$alt = !$alt;
+			}
+			if ($alt) {
+				$hex[] = $s.'0';
 				$s = '';
 			}
-			$alt = !$alt;
-		}
-		if ($alt) {
-			$hex[] = $s.'0';
-			$s = '';
 		}
 	}
 	$hex = compress($hex);
