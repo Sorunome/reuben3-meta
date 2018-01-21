@@ -88,6 +88,7 @@ class Battle {
 		void enemyBoltAttack();
 		
 		void render(bool render_reuben = true);
+		void drawText(uint8_t x, uint8_t y, char* text);
 	public:
 		bool fight(uint8_t _i);
 };
