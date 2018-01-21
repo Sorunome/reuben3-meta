@@ -79,6 +79,9 @@ class Battle {
 		void playerAttackAnimation();
 		void playerJump();
 		
+		void fireAnimation(uint8_t x, uint8_t y);
+		void boltAnimation(uint8_t x, uint8_t y);
+		
 		void playerAttack(Battle_Attack_Type type);
 		bool useMp(uint8_t amount);
 		
