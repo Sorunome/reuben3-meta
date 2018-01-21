@@ -76,6 +76,9 @@ class Battle {
 		uint16_t calcEnemyDamage();
 		Battle_Done loop();
 		uint8_t i;
+		void playerAttackAnimation();
+		void playerJump();
+		
 		void playerAttack(Battle_Attack_Type type);
 		bool useMp(uint8_t amount);
 		
@@ -84,7 +87,7 @@ class Battle {
 		void enemyFireAttack();
 		void enemyBoltAttack();
 		
-		void render();
+		void render(bool render_reuben = true);
 	public:
 		bool fight(uint8_t _i);
 };
