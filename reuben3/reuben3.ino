@@ -20,8 +20,8 @@ void setup() {
 	board.postload();
 	player.init();
 	
-	battle.fight(3);
 	gb.sound.play("songs/home.wav", true);
+	battle.fight(3);
 }
 
 

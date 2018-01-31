@@ -78,11 +78,13 @@ class Battle {
 		uint8_t i;
 		void playerAttackAnimation();
 		void playerJump();
+		void enemyBlink();
 		
 		void fireAnimation(uint8_t x, uint8_t y);
 		void boltAnimation(uint8_t x, uint8_t y);
 		void iceAnimation();
 		void stunAnimation();
+		
 		
 		void playerAttack(Battle_Attack_Type type);
 		bool useMp(uint8_t amount);
@@ -91,8 +93,9 @@ class Battle {
 		void enemyNormalAttack();
 		void enemyFireAttack();
 		void enemyBoltAttack();
+		void enemyPoison();
 		
-		void render(bool render_reuben = true);
+		void render(bool render_reuben = true, bool render_enemy = true, int8_t y_offset = 0);
 		void drawText(uint8_t x, uint8_t y, char* text);
 	public:
 		bool fight(uint8_t _i);
