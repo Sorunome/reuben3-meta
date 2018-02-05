@@ -79,15 +79,20 @@ class Battle {
 		void playerAttackAnimation();
 		void playerJump();
 		void enemyBlink();
+		void playerBlink();
 		
 		void fireAnimation(uint8_t x, uint8_t y);
 		void boltAnimation(uint8_t x, uint8_t y);
 		void iceAnimation();
 		void stunAnimation();
+		void bombAnimation();
 		
 		
 		void playerAttack(Battle_Attack_Type type);
 		bool useMp(uint8_t amount);
+		void useBottle();
+		void addHp(uint16_t amount);
+		void addMp(uint8_t amount);
 		
 		void enemyAttack();
 		void enemyNormalAttack();

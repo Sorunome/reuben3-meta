@@ -270,8 +270,7 @@ void Player::item() {
 			hookshot(x, y, direction);
 			return;
 		case I_ITEM_BOMB:
-			if (bombs) {
-				bombs--;
+			if (useBomb()) {
 				bomb(x + 3, y + 5);
 			}
 			return;
@@ -473,6 +472,14 @@ void Player::addBombs(uint8_t num) {
 		_bombs = bombs_max;
 	}
 	bombs = _bombs;
+}
+
+bool Player::useBomb() {
+	if (bombs) {
+		bombs--;
+		return true;
+	}
+	return false;
 }
 
 uint16_t Player::damage(uint16_t dmg) {
