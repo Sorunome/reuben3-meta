@@ -26,9 +26,7 @@ void setup() {
 
 
 void loop() {
-	if (!gb.update()) {
-		return;
-	}
+	waitCycles(1);
 	if (gb.buttons.pressed(BUTTON_C)) {
 		statsMenu();
 		return; // make sure we do accidental shadowbutton triggers

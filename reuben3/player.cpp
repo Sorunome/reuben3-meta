@@ -482,6 +482,30 @@ bool Player::useBomb() {
 	return false;
 }
 
+bool Player::addExp(uint16_t num) {
+	if (lvl >= 40) {
+		return false;
+	}
+	const uint16_t exp_lut[] = {10,13,16,20,24,31,38,48,60,75,93,116,146,182,227,284,355,444,555,694,867,1084,1355,1694,2118,2647,3309,4136,5170,6462,8078,10097,12622,15777,19722,24652,30815,48148,60185};
+	exp += num;
+	if (exp < exp_next) {
+		return false;
+	}
+	exp -= exp_next;
+	mp_max += 5;
+	mp += 5;
+	
+	uint16_t new_hp_max = lvl*lvl*10 + 120;
+	hp += new_hp_max - hp_max;
+	hp_max = new_hp_max;
+	
+	exp_next = exp_lut[lvl - 1];
+	lvl++;
+	
+	return true;
+}
+
+
 uint16_t Player::damage(uint16_t dmg) {
 	if (dmg > hp) {
 		return hp = 0;

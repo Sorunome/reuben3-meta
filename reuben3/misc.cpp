@@ -15,7 +15,7 @@ void waitCycles(uint8_t num) {
 
 bool waitCyclesButton(uint8_t num) {
 	for (uint8_t i = 0; i < num; i++) {
-		while(!gb.update());
+		waitCycles(1);
 		if (gb.buttons.pressed(BUTTON_A) || gb.buttons.pressed(BUTTON_B) || gb.buttons.pressed(BUTTON_LEFT) || gb.buttons.pressed(BUTTON_RIGHT)) {
 			return true;
 		}
@@ -25,7 +25,7 @@ bool waitCyclesButton(uint8_t num) {
 
 void waitRelease() {
 	while(1) {
-		while(!gb.update());
+		waitCycles(1);
 		if (gb.buttons.released(BUTTON_A) || gb.buttons.released(BUTTON_B) || gb.buttons.released(BUTTON_LEFT) || gb.buttons.released(BUTTON_RIGHT)) {
 			return;
 		}
@@ -129,9 +129,7 @@ void statsMenu() {
 	gb.display.print(player.getGold());
 	
 	while(1) {
-		if (!gb.update()) {
-			continue;
-		}
+		waitCycles(1);
 		gb.display.setColor(BEIGE);
 		if (cur_item) {
 			gb.display.fillRect(8*4 + 6, 6*(cur_item - 1) + 4, 4, 6);
@@ -251,7 +249,7 @@ const uint8_t bomb_frames[] = {
 void bomb(int8_t x, int8_t y) {
 	Image img(bomb_frames);
 	for (uint8_t i = 0; i < 2*2 - 1; i++) {
-		while(!gb.update());
+		waitCycles(1);
 		renderAll();
 		gb.display.drawImage(x - 3 - 8 - camera.x, y - 5 - 8 - camera.y, img);
 	}
@@ -262,7 +260,7 @@ void bomb(int8_t x, int8_t y) {
 	}
 	img.setFrame(1);
 	for (uint8_t i = 0; i < 2*2; i++) {
-		while(!gb.update());
+		waitCycles(1);
 		renderAll();
 		gb.display.drawImage(x - 3 - 8 - camera.x, y - 5 - 8 - camera.y, img);
 	}
@@ -314,7 +312,7 @@ void hookshot_up(int8_t x, int8_t y) {
 			camera.centerOn(_x + 4, y + 4); // _x as we don't want random jumping
 			renderAll();
 			hookshot_draw_updown(x, y, _y);
-			while(!gb.update());
+			waitCycles(1);
 		}
 		if (y <= 0) {
 			break;
@@ -359,7 +357,7 @@ void hookshot_up(int8_t x, int8_t y) {
 				player.focus();
 				renderAll();
 				hookshot_draw_updown(x, y, _y);
-				while(!gb.update());
+				waitCycles(1);
 			}
 		}
 		player.moveTo(_x, y);
@@ -371,7 +369,7 @@ void hookshot_up(int8_t x, int8_t y) {
 			camera.centerOn(_x + 4, y + 4);
 			renderAll();
 			hookshot_draw_updown(x, y, _y);
-			while(!gb.update());
+			waitCycles(1);
 		}
 	}
 }
@@ -394,7 +392,7 @@ void hookshot_right(int8_t x, int8_t y) {
 			camera.centerOn(x + 4, _y + 4); // _y as we don't want random jumping
 			renderAll();
 			hookshot_draw_leftright(x, _x + 7, y);
-			while(!gb.update());
+			waitCycles(1);
 		}
 		if (x >= 12*8) {
 			break;
@@ -439,7 +437,7 @@ void hookshot_right(int8_t x, int8_t y) {
 				player.focus();
 				renderAll();
 				hookshot_draw_leftright(x, _x + 7, y);
-				while(!gb.update());
+				waitCycles(1);
 			}
 		}
 		player.moveTo(x - 7, _y);
@@ -451,7 +449,7 @@ void hookshot_right(int8_t x, int8_t y) {
 			camera.centerOn(x + 4, _y + 4);
 			renderAll();
 			hookshot_draw_leftright(x, _x + 7, y);
-			while(!gb.update());
+			waitCycles(1);
 		}
 	}
 	player.focus();
@@ -474,7 +472,7 @@ void hookshot_down(int8_t x, int8_t y) {
 			camera.centerOn(_x + 4, y + 4); // _x as we don't want random jumping
 			renderAll();
 			hookshot_draw_updown(x, y, _y + 7);
-			while(!gb.update());
+			waitCycles(1);
 		}
 		if (y >= 8*8) {
 			break;
@@ -519,7 +517,7 @@ void hookshot_down(int8_t x, int8_t y) {
 				player.focus();
 				renderAll();
 				hookshot_draw_updown(x, y, _y + 7);
-				while(!gb.update());
+				waitCycles(1);
 			}
 		}
 		player.moveTo(_x, y - 7);
@@ -531,7 +529,7 @@ void hookshot_down(int8_t x, int8_t y) {
 			camera.centerOn(_x + 4, y + 4);
 			renderAll();
 			hookshot_draw_updown(x, y, _y + 7);
-			while(!gb.update());
+			waitCycles(1);
 		}
 	}
 }
@@ -553,7 +551,7 @@ void hookshot_left(int8_t x, int8_t y) {
 			camera.centerOn(x + 4, _y + 4); // _y as we don't want random jumping
 			renderAll();
 			hookshot_draw_leftright(x, _x, y);
-			while(!gb.update());
+			waitCycles(1);
 		}
 		if (x <= 0) {
 			break;
@@ -599,7 +597,7 @@ void hookshot_left(int8_t x, int8_t y) {
 				player.focus();
 				renderAll();
 				hookshot_draw_leftright(x, _x, y);
-				while(!gb.update());
+				waitCycles(1);
 			}
 		}
 		player.moveTo(x, _y);
@@ -611,7 +609,7 @@ void hookshot_left(int8_t x, int8_t y) {
 			camera.centerOn(x + 4, _y + 4);
 			renderAll();
 			hookshot_draw_leftright(x, _x, y);
-			while(!gb.update());
+			waitCycles(1);
 		}
 	}
 	player.focus();
@@ -646,7 +644,7 @@ void pushblock_up(int8_t x, int8_t y) {
 		board.render();
 		board.drawTile(x*8, y*8 - i, SPRITE_BLOCK);
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	board.setTile(x, y-1, SPRITE_BLOCK);
 }
@@ -663,7 +661,7 @@ void pushblock_right(int8_t x, int8_t y) {
 		board.render();
 		board.drawTile(x*8 + i, y*8, SPRITE_BLOCK);
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	board.setTile(x + 1, y, SPRITE_BLOCK);
 }
@@ -680,7 +678,7 @@ void pushblock_down(int8_t x, int8_t y) {
 		board.render();
 		board.drawTile(x*8, y*8 + i, SPRITE_BLOCK);
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	board.setTile(x, y+1, SPRITE_BLOCK);
 }
@@ -697,7 +695,7 @@ void pushblock_left(int8_t x, int8_t y) {
 		board.render();
 		board.drawTile(x*8 - i, y*8, SPRITE_BLOCK);
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	board.setTile(x-1, y, SPRITE_BLOCK);
 }

@@ -90,6 +90,7 @@ class Player {
 		bool payGold(uint16_t num);
 		void addBombs(uint8_t num);
 		bool useBomb();
+		bool addExp(uint16_t num);
 		
 		uint16_t damage(uint16_t dmg);
 		uint8_t useMp(uint8_t amount);

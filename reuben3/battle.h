@@ -86,6 +86,7 @@ class Battle {
 		void iceAnimation();
 		void stunAnimation();
 		void bombAnimation();
+		void runAnimation();
 		
 		
 		void playerAttack(Battle_Attack_Type type);

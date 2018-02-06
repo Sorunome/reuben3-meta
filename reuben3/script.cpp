@@ -142,7 +142,7 @@ void fade_to_white() {
 			palette[j] = (Color)c;
 		}
 		renderAll();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	gb.display.colorIndex = origPalette;
 }
@@ -164,7 +164,7 @@ void fade_from_white() {
 			palette[j] = (Color)c;
 		}
 		renderAll();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	gb.display.colorIndex = origPalette;
 }
@@ -288,23 +288,23 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 			case SCRIPT_SHAKE_SCREEN:
 				for (uint8_t i = 0; i < 2; i++) {
 					for (uint8_t j = 0; j < 4; j++) {
-						while(!gb.update());
+						waitCycles(1);
 						camera.setY(j*2);
 						renderAll();
 					}
 					for (int8_t j = 4; j > 0; j--) {
-						while(!gb.update());
+						waitCycles(1);
 						camera.setY(j*2);
 						renderAll();
 					}
 				}
-				while(!gb.update());
+				waitCycles(1);
 				camera.setY(0);
 				renderAll();
 				gb.update(); // send the screen out
 				continue;
 			case SCRIPT_UPDATE_SCREEN:
-				while(!gb.update());
+				waitCycles(1);
 				gb.update(); // send the screen out
 				continue;
 			case SCRIPT_SET_TILE:
@@ -401,7 +401,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 					player.moveX(px);
 					renderAll();
 					px--;
-					while(!gb.update());
+					waitCycles(1);
 				}
 				camera.setY(0);
 				renderAll();

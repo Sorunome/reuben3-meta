@@ -138,7 +138,7 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 		line_up += 2;
 		line_down -= 2;
 		
-		while(!gb.update());
+		waitCycles(1);
 	}
 	load(_world, _map);
 	player.moveTo(player_x, player_y);
@@ -156,7 +156,7 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 			palette[j] = (Color)c;
 		}
 		renderAll();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	gb.display.colorIndex = origPalette;
 }
@@ -219,7 +219,7 @@ void Board::scrollLeft() {
 		}
 		player.moveX(i*8 - max(0, min(i, 8)));
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	
 	postload();
@@ -249,7 +249,7 @@ void Board::scrollRight() {
 		}
 		player.moveX(i*8 - max(0, min(i, 8)));
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	
 	postload();
@@ -277,7 +277,7 @@ void Board::scrollUp() {
 		}
 		player.moveY(i*8 - max(0, min(i, 8)));
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	
 	postload();
@@ -305,7 +305,7 @@ void Board::scrollDown() {
 		}
 		player.moveY(i*8 - max(0, min(i, 8)));
 		player.render();
-		while(!gb.update());
+		waitCycles(1);
 	}
 	
 	postload();
@@ -323,7 +323,7 @@ void Board::postloadHouseAnimation() {
 			player.render(singleLine, 0, -y*8 - i);
 			gb.display.drawImage(0, y*8 + i, singleLine);
 		}
-		while(!gb.update());
+		waitCycles(1);
 	}
 	postload();
 }
