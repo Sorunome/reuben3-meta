@@ -3,12 +3,9 @@
 #include "camera.h"
 #include "player.h"
 #include "data/defines.h"
-
+#include "stats.h"
 #include "misc.h"
 
-
-
-#include "battle.h"
 
 uint8_t decompression_buffer[max(2048, ENEMY_SPRITES_MAX_SIZE)]; // 2048 > 12*8*2*8 = 1536
 
@@ -21,7 +18,6 @@ void setup() {
 	player.init();
 	
 	gb.sound.play("songs/home.wav", true);
-	battle.fight(3);
 }
 
 

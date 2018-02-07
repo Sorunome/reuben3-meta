@@ -453,7 +453,7 @@ $html .= $file.'</textarea><h1>Enemies</h1><textarea style="width:100%;height:50
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/enemies.h',$enemiesFile);
 
 $html .= $enemiesFile.'</textarea><h1>Areas</h1><textarea style="width:100%;height:500px;">';
-$file = "const uint8_t area_enemies[] = {\n";
+$file = "const uint8_t area_enemies[][10] = {\n";
 $areasLUT = [];
 $idCounter = 0;
 foreach($sql->query("SELECT `id`,`name`,`enemies` FROM `areas` WHERE 1") as $a){
@@ -462,6 +462,7 @@ foreach($sql->query("SELECT `id`,`name`,`enemies` FROM `areas` WHERE 1") as $a){
 		$defines['area_'.$a['id']] = $idCounter;
 		if($a['name'] != ''){
 			$defines['area_'.strtolower($a['name'])] = $idCounter;
+			$file .= "\t{";
 			if($a['enemies']){
 				foreach(json_decode($a['enemies'],true) as $ae){
 					if(isset($enemiesLUT[$ae])){
@@ -473,7 +474,7 @@ foreach($sql->query("SELECT `id`,`name`,`enemies` FROM `areas` WHERE 1") as $a){
 			}else{
 				$file .= '255,255,255,255,255,255,255,255,255,255,';
 			}
-			$file .= "\n";
+			$file .= "},\n";
 		}
 		$idCounter++;
 	}

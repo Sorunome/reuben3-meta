@@ -42,11 +42,13 @@ class Board {
 		uint16_t board_backup[width*height];
 		uint8_t worldId;
 		uint8_t mapId;
+		uint8_t areaId;
 		const Tilemaps_Data* map;
 		uint16_t getDefaultTile();
 	public:
 		uint8_t getWorldId();
 		uint8_t getMapId();
+		uint8_t getAreaId();
 		void scrollLeft();
 		void scrollRight();
 		void scrollUp();

@@ -7,6 +7,7 @@
 #include "player.h"
 #include "board.h"
 #include "sprites.h"
+#include "stats.h"
 
 #include "data/enemies.h"
 #include "data/largeSprites.h"
@@ -737,6 +738,9 @@ void Battle::drawText(uint8_t x, uint8_t y, char* text) {
 }
 
 bool Battle::fight(uint8_t _i) {
+	if (_i == 0xFF) {
+		return true;
+	}
 	i = _i;
 	p.lvl = player.getLvl();
 	p.hp = player.getHp();
@@ -837,7 +841,7 @@ bool Battle::fight(uint8_t _i) {
 		}
 		return true;
 	}
-	// lose animation
+	// TODO: lose animation
 	return false;
 }
 

@@ -46,6 +46,10 @@ uint8_t Board::getMapId() {
 	return mapId;
 }
 
+uint8_t Board::getAreaId() {
+	return areaId;
+}
+
 void Board::setWorld(uint8_t _world) {
 	worldId = _world;
 }
@@ -62,13 +66,16 @@ void Board::load(uint8_t _map) {
 
 void Board::load() {
 	uint8_t i = 0;
+	uint8_t header;
 	while(1) {
 		if (worlds[worldId].maps[i].id == mapId) {
 			map = &worlds[worldId].maps[i];
+			header = worlds[worldId].maps[i].header;
 			break;
 		}
 		i++;
 	}
+	areaId = header & 0x3F;
 	aP_depack(map->block, decompression_buffer);
 	const Dyn_Data* d = worlds[worldId].dyn;
 	uint8_t* mapbuf = decompression_buffer + (mapsize_bytes*map->chunk);

@@ -27,6 +27,8 @@ class Player {
 		
 		float x;
 		float y;
+		float battle_counter;
+		void setBattleCounter();
 		bool isWalkable(float dx, float dy);
 		uint8_t events[(TOTAL_EVENTS + 7) / 8];
 		Bottle bottles[4];
@@ -63,6 +65,8 @@ class Player {
 		uint16_t getHpMax();
 		uint8_t getMp();
 		uint8_t getMpMax();
+		uint16_t getExp();
+		uint16_t getExpNext();
 		uint16_t getGold();
 		uint8_t getBombs();
 		Direction getDirection();

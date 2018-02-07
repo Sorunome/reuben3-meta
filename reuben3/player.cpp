@@ -4,6 +4,9 @@
 #include "data/defines.h"
 #include "misc.h"
 #include "text.h"
+#include "battle.h"
+
+#include "data/area_enemies.h"
 
 const uint8_t reuben_sprite_data[] = {
 	8, 9,
@@ -105,6 +108,7 @@ void Player::init() {
 	memset(bottles, 0, sizeof(bottles));
 	x = 8*8;
 	y = 3*8;
+	setBattleCounter();
 	direction = Direction::down;
 	visible = true;
 	after_walkable = SPRITE_AFTER_WALK;
@@ -129,6 +133,10 @@ void Player::init() {
 	focus();
 }
 
+void Player::setBattleCounter() {
+	battle_counter = random(180) + 80 - 4;
+}
+
 void Player::getSwimsuit() {
 	after_walkable = SPRITE_AFTER_SWIM;
 }
@@ -151,6 +159,14 @@ uint8_t Player::getMp() {
 
 uint8_t Player::getMpMax() {
 	return mp_max;
+}
+
+uint16_t Player::getExp() {
+	return exp;
+}
+
+uint16_t Player::getExpNext() {
+	return exp_next;
 }
 
 uint16_t Player::getGold() {
@@ -343,6 +359,7 @@ void Player::update() {
 		}
 		if (isWalkable(2 + dx, 4) && isWalkable(2 + dx, 7) && isWalkable(5 + dx, 4) && isWalkable(5 + dx, 7)) {
 			x += dx;
+			battle_counter -= abs(dx);
 		}
 	}
 	if (dy) {
@@ -353,6 +370,7 @@ void Player::update() {
 		}
 		if (isWalkable(2, 4 + dy) && isWalkable(5, 4 + dy) && isWalkable(2, 7 + dy) && isWalkable(5, 7 + dy)) {
 			y += dy;
+			battle_counter -= abs(dy);
 		}
 	}
 	if (x < -2) {
@@ -371,6 +389,20 @@ void Player::update() {
 	if (y >= 7*8 + 2) {
 		board.scrollDown();
 		return;
+	}
+	
+	SerialUSB.println(battle_counter);
+	if (battle_counter <= 0) {
+		SerialUSB.println("=====");
+		// time to fight!
+		setBattleCounter();
+		if (getCurItem() == I_ITEM_PROTECT && mp >= 5) {
+			useMp(5);
+		} else {
+			uint8_t e = area_enemies[board.getAreaId()][random(10)];
+			SerialUSB.println(e);
+			battle.fight(e);
+		}
 	}
 	
 	int8_t newtile_x = (x + 2 + 2) / 8;
