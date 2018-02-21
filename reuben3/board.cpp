@@ -410,6 +410,15 @@ int8_t Board::interact(uint8_t x, uint8_t y) {
 				pushblock(x, y, player.getDirection());
 			}
 			return 1;
+		case SPRITE_117: // save statue
+		case SPRITE_375:
+		case SPRITE_389:
+			player.addHp(player.getHpMax());
+			player.addMp(player.getMpMax());
+			player.setBattleCounter();
+			player.save();
+			text.boxPlayer(STRING_SAVE);
+			return 1;
 		default:
 			return runScript(x, y, SCRIPT_ACTION);
 	}

@@ -783,7 +783,7 @@ void increaseSpeedArena() {
 	if (!reply) {
 		return;
 	}
-	if (false && !player.payGold(price)) {
+	if (!player.payGold(price)) {
 		text.boxPlayer(STRING_NOT_ENOUGH_GOLD);
 		return;
 	}

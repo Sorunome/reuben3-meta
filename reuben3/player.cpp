@@ -101,7 +101,9 @@ const uint8_t reuben_sprite_data[] = {
 
 Image reuben_sprite(reuben_sprite_data);
 
-void Player::init() {
+void Player::init(uint8_t _slot) {
+	slot = _slot;
+	
 	render_cycle = 0;
 	
 	memset(events, 0, sizeof(events));
@@ -130,7 +132,82 @@ void Player::init() {
 	tradequest = TRADEQUEST_NONE;
 	fright = 0;
 	tmp_map = 0;
+	
+	board.load(WORLD_OVERWORLD, TILEMAP_37);
+	board.postload();
 	focus();
+}
+
+void Player::save() {
+	SaveData s;
+	s.x = x;
+	s.y = y;
+	memcpy(s.events, events, sizeof(events));
+	memcpy(s.bottles, bottles, sizeof(bottles));
+	
+	s.cur_item = cur_item;
+	s.lvl = lvl;
+	s.hp = hp;
+	s.hp_max = hp_max;
+	s.mp = mp;
+	s.mp_max = mp_max;
+	s.exp = exp;
+	s.exp_next = exp_next;
+	s.gold = gold;
+	s.gold_max = gold_max;
+	s.bombs = bombs;
+	s.bombs_max = bombs_max;
+	
+	s.armor = armor;
+	s.wait = wait;
+	s.sword = sword;
+	s.tradequest = tradequest;
+	s.fright = fright;
+	
+	s.world = board.getWorldId();
+	s.tilemap = board.getMapId();
+	
+	gb.save.set(slot*2, 1);
+	gb.save.set(slot*2 + 1, s);
+}
+
+void Player::load() {
+	if (!gb.save.get(slot*2)) {
+		return;
+	}
+	SaveData s;
+	gb.save.get(slot*2 + 1, s);
+	
+	x = s.x;
+	y = s.y;
+	memcpy(events, s.events, sizeof(events));
+	memcpy(bottles, s.bottles, sizeof(bottles));
+	
+	cur_item = s.cur_item;
+	lvl = s.lvl;
+	hp = s.hp;
+	hp_max = s.hp_max;
+	mp = s.mp;
+	mp_max = s.mp_max;
+	exp = s.exp;
+	exp_next = s.exp_next;
+	gold = s.gold;
+	gold_max = s.gold_max;
+	bombs = s.bombs;
+	bombs_max = s.bombs_max;
+	
+	armor = s.armor;
+	wait = s.wait;
+	sword = s.sword;
+	tradequest = s.tradequest;
+	fright = s.fright;
+	
+	board.load(s.world, s.tilemap);
+	board.postload();
+	focus();
+	if (isEvent(EVENT_CAN_SWIM)) {
+		getSwimsuit();
+	}
 }
 
 void Player::setBattleCounter() {
@@ -420,7 +497,7 @@ void Player::update() {
 		} else {
 			// TODO: die
 			uint8_t e = area_enemies[board.getAreaId()][random(10)];
-			//battle.fight(e);
+			battle.fight(e);
 		}
 	}
 	

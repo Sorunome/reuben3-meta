@@ -21,6 +21,36 @@ enum class Bottle : uint8_t {
 	elixir,
 };
 
+struct SaveData {
+	int8_t x;
+	int8_t y;
+	
+	uint8_t events[(TOTAL_EVENTS + 7) / 8];
+	Bottle bottles[4];
+	
+	uint8_t cur_item;
+	uint8_t lvl;
+	uint16_t hp;
+	uint16_t hp_max;
+	uint8_t mp;
+	uint8_t mp_max;
+	uint16_t exp;
+	uint16_t exp_next;
+	uint16_t gold;
+	uint16_t gold_max;
+	uint8_t bombs;
+	uint8_t bombs_max;
+	
+	uint8_t armor;
+	uint8_t wait;
+	uint8_t sword;
+	uint8_t tradequest;
+	uint8_t fright;
+	
+	uint8_t world;
+	uint8_t tilemap;
+};
+
 class Player {
 	private:
 		uint8_t render_cycle;
@@ -28,7 +58,6 @@ class Player {
 		float x;
 		float y;
 		float battle_counter;
-		void setBattleCounter();
 		bool isWalkable(float dx, float dy);
 		uint8_t events[(TOTAL_EVENTS + 7) / 8];
 		Bottle bottles[4];
@@ -50,6 +79,8 @@ class Player {
 		uint8_t bombs;
 		uint8_t bombs_max;
 		void setAnimationFrame();
+		
+		uint8_t slot;
 	public:
 		uint8_t armor;
 		uint8_t wait;
@@ -58,6 +89,7 @@ class Player {
 		uint8_t fright;
 		uint8_t tmp_map;
 		
+		void setBattleCounter();
 		void getSwimsuit();
 		
 		uint8_t getLvl();
@@ -76,7 +108,9 @@ class Player {
 		Direction getDirection();
 		void setDirection(Direction d);
 		
-		void init();
+		void init(uint8_t _slot);
+		void save();
+		void load();
 		void hide();
 		void show();
 		void moveTo(int8_t _x, int8_t _y);

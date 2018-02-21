@@ -1,6 +1,4 @@
 #include <Gamebuino-Meta.h>
-#include "board.h"
-#include "camera.h"
 #include "player.h"
 #include "data/defines.h"
 #include "stats.h"
@@ -9,13 +7,23 @@
 
 uint8_t decompression_buffer[max(2048, ENEMY_SPRITES_MAX_SIZE)]; // 2048 > 12*8*2*8 = 1536
 
+const SaveDefault savefileDefaults[] = {
+	{ 0, SAVETYPE_INT, 0, 0 },
+	{ 1, SAVETYPE_BLOB, sizeof(SaveData), 0 },
+	{ 2, SAVETYPE_INT, 0, 0 },
+	{ 3, SAVETYPE_BLOB, sizeof(SaveData), 0 },
+	{ 4, SAVETYPE_INT, 0, 0 },
+	{ 5, SAVETYPE_BLOB, sizeof(SaveData), 0 },
+};
+
 void setup() {
 	gb.begin();
+	gb.save.config(savefileDefaults);
+
 	SerialUSB.begin(115200);
-	//while(!SerialUSB);
-	board.load(WORLD_OVERWORLD, TILEMAP_37);
-	board.postload();
-	player.init();
+	
+	player.init(0);
+	player.load();
 	
 	gb.sound.play("songs/home.wav", true);
 }
