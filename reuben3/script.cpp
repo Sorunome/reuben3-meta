@@ -1,7 +1,6 @@
 #include "script.h"
 
 #include <Gamebuino-Meta.h>
-#include <utility/Misc.h> // pixel to rgb converters
 #include "player.h"
 #include "camera.h"
 #include "board.h"
@@ -53,6 +52,7 @@
 #define SCRIPT_GET_SWIMSUIT 0x28
 #define SCRIPT_TRANSITION_PORTAL 0x29
 #define SCRIPT_MOVE_LEFT_AND_SHAKE_SCREEN 0x2A
+#define SCRIPT_BATTLE_INSTRUCTIONS 0x2B
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -123,50 +123,6 @@ bool Script::condition() {
 
 bool Script::run(const uint8_t* _script, uint8_t _trigger, bool _isHome) {
 	return run((uint8_t*) _script, _trigger, _isHome);
-}
-
-void fade_to_white() {
-	const uint8_t steps = 20;
-	Color* origPalette = gb.display.colorIndex;
-	Color palette[16];
-	gb.display.colorIndex = palette;
-	
-	for (uint8_t i = 0; i <= steps; i++) {
-		for (uint8_t j = 0; j < 16; j++) {
-			uint16_t c = (uint16_t)origPalette[j];
-			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
-			rgb.r += (0xFF - rgb.r)*i / steps;
-			rgb.g += (0xFF - rgb.g)*i / steps;
-			rgb.b += (0xFF - rgb.b)*i / steps;
-			c = Gamebuino_Meta::rgb888Torgb565(rgb);
-			palette[j] = (Color)c;
-		}
-		renderAll();
-		waitCycles(1);
-	}
-	gb.display.colorIndex = origPalette;
-}
-
-void fade_from_white() {
-	const uint8_t steps = 20;
-	Color* origPalette = gb.display.colorIndex;
-	Color palette[16];
-	gb.display.colorIndex = palette;
-	
-	for (uint8_t i = 0; i <= steps; i++) {
-		for (uint8_t j = 0; j < 16; j++) {
-			uint16_t c = (uint16_t)origPalette[j];
-			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
-			rgb.r += (0xFF - rgb.r)*(steps - i) / steps;
-			rgb.g += (0xFF - rgb.g)*(steps - i) / steps;
-			rgb.b += (0xFF - rgb.b)*(steps - i) / steps;
-			c = Gamebuino_Meta::rgb888Torgb565(rgb);
-			palette[j] = (Color)c;
-		}
-		renderAll();
-		waitCycles(1);
-	}
-	gb.display.colorIndex = origPalette;
 }
 
 void Script::checkHome() {
@@ -408,6 +364,9 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 				gb.update();
 				continue;
 			}
+			case SCRIPT_BATTLE_INSTRUCTIONS:
+				battleInstructions();
+				continue;
 
 			case SCRIPT_RETURN_FALSE:
 				return false;

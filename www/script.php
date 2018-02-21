@@ -451,6 +451,13 @@ class Parser{
 					return '2A';
 				}
 			],
+			'battle_instructions' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '2B';
+				}
+			],
 
 			'add_enemy' => [
 				'args_min' => 3,

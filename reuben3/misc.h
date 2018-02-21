@@ -14,4 +14,9 @@ void pushblock(int8_t x, int8_t y, Direction dir);
 
 bool shop(uint16_t ask, uint16_t price, bool bottle);
 
+void fade_to_white();
+void fade_from_white();
+
+void battleInstructions();
+
 #endif // _MISC_H_

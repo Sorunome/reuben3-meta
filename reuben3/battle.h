@@ -69,14 +69,11 @@ enum class Battle_Done : uint8_t {
 
 class Battle {
 	private:
-		Battle_Player p;
-		Battle_Enemy e;
 		const Enemy_Background_Look* background_look;
 		uint16_t calcPlayerDamage(Battle_Attack_Type type);
 		uint16_t calcEnemyDamage();
 		Battle_Done loop();
 		uint8_t i;
-		void playerAttackAnimation();
 		void playerJump();
 		void enemyBlink();
 		void playerBlink();
@@ -101,9 +98,16 @@ class Battle {
 		void enemyBoltAttack();
 		void enemyPoison();
 		
-		void render(bool render_reuben = true, bool render_enemy = true, int8_t y_offset = 0);
-		void drawText(uint8_t x, uint8_t y, char* text);
 	public:
+		Battle_Player p;
+		Battle_Enemy e;
+		void render(bool render_reuben = true, bool render_enemy = true, int8_t y_offset = 0);
+		void renderBar();
+		void renderHpMp(bool player_disp_hp = true);
+		void renderMenu(uint8_t cursor_menu = 0);
+		void playerAttackAnimation();
+		void drawText(uint8_t x, uint8_t y, char* text);
+		void load(uint8_t _i);
 		bool fight(uint8_t _i);
 };
 

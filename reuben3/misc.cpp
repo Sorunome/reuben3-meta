@@ -5,7 +5,9 @@
 #include "camera.h"
 #include "text.h"
 #include "data/defines.h"
+#include "battle.h"
 #include <Gamebuino-Meta.h>
+#include <utility/Misc.h> // pixel to rgb converters
 
 void waitCycles(uint8_t num) {
 	for (uint8_t i = 0; i < num; i++) {
@@ -603,4 +605,108 @@ bool shop(uint16_t ask, uint16_t price, bool bottle) {
 	
 	text.boxPlayer(STRING_SHOP_THANKS);
 	return true;
+}
+
+//typedef void (__stdcall *RenderFunction)();
+
+void fade_to_white(void (*r)(void)) {
+	const uint8_t steps = 20;
+	Color* origPalette = gb.display.colorIndex;
+	Color palette[16];
+	gb.display.colorIndex = palette;
+	
+	for (uint8_t i = 0; i <= steps; i++) {
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)origPalette[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r += (0xFF - rgb.r)*i / steps;
+			rgb.g += (0xFF - rgb.g)*i / steps;
+			rgb.b += (0xFF - rgb.b)*i / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			palette[j] = (Color)c;
+		}
+		(*r)();
+		waitCycles(1);
+	}
+	gb.display.colorIndex = origPalette;
+}
+
+void fade_to_white() {
+	fade_to_white(&renderAll);
+}
+
+void fade_from_white(void (*r)(void)) {
+	const uint8_t steps = 20;
+	Color* origPalette = gb.display.colorIndex;
+	Color palette[16];
+	gb.display.colorIndex = palette;
+	
+	for (uint8_t i = 0; i <= steps; i++) {
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)origPalette[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r += (0xFF - rgb.r)*(steps - i) / steps;
+			rgb.g += (0xFF - rgb.g)*(steps - i) / steps;
+			rgb.b += (0xFF - rgb.b)*(steps - i) / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			palette[j] = (Color)c;
+		}
+		(*r)();
+		waitCycles(1);
+	}
+	gb.display.colorIndex = origPalette;
+}
+
+void fade_from_white() {
+	fade_from_white(&renderAll);
+}
+
+void renderBattleBar() {
+	battle.render();
+	battle.renderBar();
+	battle.renderHpMp();
+}
+
+void renderBattle() {
+	battle.render();
+}
+
+void battleInstructions() {
+	if (text.boxPlayer(STRING_PERSON_DOGGLEN_BATTLE_INSTRUCTIONS_ASK)) {
+		return;
+	}
+	fade_to_white();
+	battle.load(ENEMY_MOUSE);
+	battle.p.wait = battle.p.curwait = 24;
+	fade_from_white(&renderBattleBar);
+	renderBattleBar();
+	
+	waitCycles(20);
+	text.box(STRING_PERSON_DOGGLEN_BATTLE_INSTRUCTIONS_BAR, false);
+	battle.load(ENEMY_MOUSE);
+	battle.p.wait = battle.p.curwait = 24;
+	renderBattleBar();
+	while(battle.p.curwait--) {
+		battle.renderBar();
+		waitCycles(1);
+	}
+	
+	battle.render();
+	battle.renderMenu();
+	battle.renderHpMp();
+	waitCycles(20);
+	text.box(STRING_PERSON_DOGGLEN_BATTLE_INSTRUCTIONS_ATTACK_MENU, false);
+	battle.load(ENEMY_MOUSE);
+	battle.render();
+	battle.renderMenu();
+	battle.renderHpMp();
+	waitCycles(20);
+	battle.render();
+	battle.playerAttackAnimation();
+	battle.drawText(52, 16, "42");
+	
+	waitCycles(45);
+	fade_to_white(&renderBattle);
+	fade_from_white();
+	text.boxPlayer(STRING_PERSON_DOGGLEN_BATTLE_INSTRUCTIONS_DONE);
 }

@@ -91,10 +91,22 @@ const uint8_t armorStringsLUT[] = {
 	2,
 };
 
+const char* tradequestStrings[] = {
+	"Letter",
+	"Letter 2",
+	"Food",
+	"Fish Rod",
+	"Fish",
+	"Necklace",
+	"Shell",
+	"Rug",
+	"Fox",
+};
+
 void drawStatsMenuPage(uint8_t i) {
 	gb.display.setColor(BEIGE);
 	const uint8_t devider = 9*4 + 6;
-	gb.display.fillRect(devider+1, 1, gb.display.width() - devider - 2, 5*6 + 2);
+	gb.display.fillRect(devider+1, 1, gb.display.width() - devider - 2, 6*6 + 3);
 	gb.display.setColor(BLACK);
 	switch (i) {
 		case 0:
@@ -110,6 +122,11 @@ void drawStatsMenuPage(uint8_t i) {
 			
 			gb.display.setCursor(devider + 2, 28);
 			gb.display.printf("Gold:%d", player.getGold());
+			
+			if (player.isEvent(EVENT_SEARCH_QUEST)) {
+				gb.display.setCursor(devider + 2, 34);
+				gb.display.printf("Scare:%d", player.fright);
+			}
 			break;
 		case 1:
 			gb.display.setCursor(devider + 2, 4);
@@ -125,21 +142,29 @@ void drawStatsMenuPage(uint8_t i) {
 			gb.display.print("Armor:");
 			gb.display.setCursor(devider + 2, 28);
 			gb.display.print(armorStrings[armorStringsLUT[player.armor]]);
+			
+			gb.display.setCursor(devider + 2, 34);
+			gb.display.printf("Speed:%d", player.wait);
 			break;
 		case 2:
-			gb.display.setCursor(devider + 2, 4);
-			gb.display.printf("Speed:%d", player.wait);
 			
-			gb.display.setCursor(devider + 2, 10);
+			gb.display.setCursor(devider + 2, 4);
 			gb.display.printf("EXP:%d", player.getExp());
 			
-			gb.display.setCursor(devider + 2, 16);
+			gb.display.setCursor(devider + 2, 10);
 			gb.display.print("Next EXP:");
-			gb.display.setCursor(devider + 2, 22);
+			gb.display.setCursor(devider + 2, 16);
 			if (player.getLvl() >= 40) {
 				gb.display.print("---");
 			} else {
 				gb.display.print(player.getExpNext());
+			}
+			
+			if (player.tradequest && player.tradequest < TRADEQUEST_DONE) {
+				gb.display.setCursor(devider + 2, 22);
+				gb.display.print("TradeItm:");
+				gb.display.setCursor(devider + 2, 28);
+				gb.display.print(tradequestStrings[player.tradequest-1]);
 			}
 	}
 }
