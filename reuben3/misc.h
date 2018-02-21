@@ -19,5 +19,6 @@ void fade_from_white();
 
 void battleInstructions();
 void increaseSpeedArena();
+void searchquestPerson();
 
 #endif // _MISC_H_

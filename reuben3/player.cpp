@@ -173,8 +173,28 @@ uint16_t Player::getGold() {
 	return gold;
 }
 
+uint16_t Player::getGoldMax() {
+	return gold_max;
+}
+
+void Player::setGoldMax(uint16_t max) {
+	if (max > gold_max) {
+		gold_max = max;
+	}
+}
+
 uint8_t Player::getBombs() {
 	return bombs;
+}
+
+uint8_t Player::getBombsMax() {
+	return bombs_max;
+}
+
+void Player::setBombsMax(uint8_t max) {
+	if (max > bombs_max) {
+		bombs_max = max;
+	}
 }
 
 Direction Player::getDirection() {

@@ -465,6 +465,13 @@ class Parser{
 					return '2C';
 				}
 			],
+			'searchquest_person' => [
+				'args_min' => 0,
+				'args_max' => 0,
+				'fn' => function($args) {
+					return '2D';
+				}
+			],
 
 			'add_enemy' => [
 				'args_min' => 3,

@@ -607,7 +607,6 @@ bool shop(uint16_t ask, uint16_t price, bool bottle) {
 	return true;
 }
 
-//typedef void (__stdcall *RenderFunction)();
 
 void fade_to_white(void (*r)(void)) {
 	const uint8_t steps = 20;
@@ -671,6 +670,7 @@ void renderBattle() {
 	battle.render();
 }
 
+
 void battleInstructions() {
 	if (text.boxPlayer(STRING_PERSON_DOGGLEN_BATTLE_INSTRUCTIONS_ASK)) {
 		return;
@@ -710,6 +710,7 @@ void battleInstructions() {
 	fade_from_white();
 	text.boxPlayer(STRING_PERSON_DOGGLEN_BATTLE_INSTRUCTIONS_DONE);
 }
+
 
 const uint8_t maruEnemies1[] = {
 	ENEMY_MOUSE,
@@ -814,4 +815,50 @@ void increaseSpeedArena() {
 	}
 	player.wait = new_wait;
 	text.boxPlayer(STRING_MARU_SUCCESS);
+}
+
+
+void searchquestPerson() {
+	if (!player.isEvent(EVENT_SEARCH_QUEST)) {
+		if (!text.boxPlayer(STRING_PERSON_AERILON_MOVELESS)) {
+			player.setEvent(EVENT_SEARCH_QUEST);
+		}
+		return;
+	}
+	
+	if (player.fright >= 1 && player.getGoldMax() < 200) {
+		text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_WALLET_200);
+		player.setGoldMax(200);
+		return;
+	}
+	
+	if (player.fright >= 3 && player.getGoldMax() < 500) {
+		text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_WALLET_500);
+		player.setGoldMax(500);
+		return;
+	}
+	
+	if (player.fright >= 5 && player.getGoldMax() < 999) {
+		text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_WALLET_999);
+		player.setGoldMax(999);
+		return;
+	}
+	
+	if (player.fright >= 7 && player.getBombsMax() < 30) {
+		text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_BOMBS_30);
+		player.setBombsMax(30);
+		return;
+	}
+	
+	if (player.fright >= 11) {
+		if (player.getBombsMax() < 99) {
+			text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_BOMBS_99);
+			player.setBombsMax(99);
+		} else {
+			text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_DONE);
+		}
+		return;
+	}
+	
+	text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_THANKS);
 }

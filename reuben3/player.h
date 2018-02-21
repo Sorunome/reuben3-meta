@@ -68,7 +68,11 @@ class Player {
 		uint16_t getExp();
 		uint16_t getExpNext();
 		uint16_t getGold();
+		uint16_t getGoldMax();
+		void setGoldMax(uint16_t max);
 		uint8_t getBombs();
+		uint8_t getBombsMax();
+		void setBombsMax(uint8_t max);
 		Direction getDirection();
 		void setDirection(Direction d);
 		
