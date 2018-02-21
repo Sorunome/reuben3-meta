@@ -148,6 +148,13 @@ class Parser{
 					return $s;
 				}
 			],
+			'battle' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					return '05'.$this->getVar($args[0]);
+				}
+			],
 			'focus_cam' => [
 				'args_min' => 0,
 				'args_max' => 0,

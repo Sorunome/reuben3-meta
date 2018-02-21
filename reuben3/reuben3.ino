@@ -22,21 +22,36 @@ void setup() {
 
 	SerialUSB.begin(115200);
 	
-	player.init(0);
-	player.load();
 	
 	gb.sound.play("songs/home.wav", true);
 }
 
+void gameLoop() {
+	while (!player.isDead()) {
+		waitCycles(1);
+		if (gb.buttons.pressed(BUTTON_C)) {
+			statsMenu();
+			continue; // make sure we do accidental shadowbutton triggers
+		}
+		player.update();
+		
+		renderAll();
+	}
+	if (player.isDead()) {
+		gb.display.clear();
+		gb.display.println("Game Over");
+		gb.display.println("Press A");
+		while(1) {
+			while(!gb.update());
+			if (gb.buttons.pressed(BUTTON_A)) {
+				break;
+			}
+		}
+	}
+}
 
 void loop() {
-	waitCycles(1);
-	if (gb.buttons.pressed(BUTTON_C)) {
-		statsMenu();
-		return; // make sure we do accidental shadowbutton triggers
-	}
-	player.update();
-	
-	
-	renderAll();
+	player.init(0);
+	player.load();
+	gameLoop();
 }

@@ -509,9 +509,9 @@ void Battle::render(bool render_reuben, bool render_enemy, int8_t y_offset) {
 		}
 	}
 	
-	gb.display.setCursor(0, 0);
-	gb.display.setColor(BLACK, WHITE);
-	gb.display.print(gb.getCpuLoad());
+//	gb.display.setCursor(0, 0);
+//	gb.display.setColor(BLACK, WHITE);
+//	gb.display.print(gb.getCpuLoad());
 }
 
 void Battle::renderBar() {

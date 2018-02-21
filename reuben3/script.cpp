@@ -6,6 +6,7 @@
 #include "board.h"
 #include "text.h"
 #include "misc.h"
+#include "battle.h"
 
 #include "data/scripts.h"
 
@@ -14,7 +15,7 @@
 #define SCRIPT_FADE_FROM_WHITE 0x02
 #define SCRIPT_TRANSITION_MAP_AND_WORLD 0x03
 #define SCRIPT_TRANSITION_MAP 0x04
-#define SCRIPT_ADD_ENEMY 0x05
+#define SCRIPT_BATTLE 0x05
 #define SCRIPT_FOCUS_CAM 0x06
 #define SCRIPT_FADE_HOME 0x07
 #define SCRIPT_SET_VAR 0x08
@@ -159,8 +160,14 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 				player.focus();
 				board.postloadHouseAnimation();
 				continue;
-			case SCRIPT_ADD_ENEMY:
+			case SCRIPT_BATTLE:
+			{
+				bool ret = battle.fight(getNum());
+				if (!ret) {
+					return false;
+				}
 				continue;
+			}
 			case SCRIPT_FOCUS_CAM:
 				player.focus();
 				continue;

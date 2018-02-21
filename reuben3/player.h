@@ -81,6 +81,7 @@ class Player {
 		void setAnimationFrame();
 		
 		uint8_t slot;
+		bool dead;
 	public:
 		uint8_t armor;
 		uint8_t wait;
@@ -107,6 +108,7 @@ class Player {
 		void setBombsMax(uint8_t max);
 		Direction getDirection();
 		void setDirection(Direction d);
+		bool isDead();
 		
 		void init(uint8_t _slot);
 		void save();

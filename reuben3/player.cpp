@@ -132,6 +132,7 @@ void Player::init(uint8_t _slot) {
 	tradequest = TRADEQUEST_NONE;
 	fright = 0;
 	tmp_map = 0;
+	dead = false;
 	
 	board.load(WORLD_OVERWORLD, TILEMAP_37);
 	board.postload();
@@ -201,6 +202,8 @@ void Player::load() {
 	sword = s.sword;
 	tradequest = s.tradequest;
 	fright = s.fright;
+	
+	dead = false;
 	
 	board.load(s.world, s.tilemap);
 	board.postload();
@@ -280,6 +283,10 @@ Direction Player::getDirection() {
 
 void Player::setDirection(Direction d) {
 	direction = d;
+}
+
+bool Player::isDead() {
+	return dead;
 }
 
 void Player::hide() {
@@ -418,6 +425,9 @@ void Player::interact() {
 	_y /= 8;
 	if (board.getTile(_x, _y) >= SPRITE_AFTER_SWIM) {
 		int8_t res = board.interact(_x, _y);
+		if (res == 0) {
+			dead = true;
+		}
 	}
 }
 
@@ -497,7 +507,9 @@ void Player::update() {
 		} else {
 			// TODO: die
 			uint8_t e = area_enemies[board.getAreaId()][random(10)];
-			battle.fight(e);
+			if (!battle.fight(e)) {
+				dead = true;
+			}
 		}
 	}
 	
