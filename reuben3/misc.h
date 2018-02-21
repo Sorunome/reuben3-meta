@@ -18,5 +18,6 @@ void fade_to_white();
 void fade_from_white();
 
 void battleInstructions();
+void increaseSpeedArena();
 
 #endif // _MISC_H_

@@ -141,7 +141,7 @@ void drawStatsMenuPage(uint8_t i) {
 			gb.display.setCursor(devider + 2, 22);
 			gb.display.print("Armor:");
 			gb.display.setCursor(devider + 2, 28);
-			gb.display.print(armorStrings[armorStringsLUT[player.armor]]);
+			gb.display.print(armorStrings[armorStringsLUT[player.armor - ARMOR_WOUNDS]]);
 			
 			gb.display.setCursor(devider + 2, 34);
 			gb.display.printf("Speed:%d", player.wait);

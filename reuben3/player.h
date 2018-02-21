@@ -89,6 +89,7 @@ class Player {
 		void setEvent(uint8_t e);
 		void clearEvent(uint8_t e);
 		void addHp(uint16_t num);
+		void setHp(uint16_t num);
 		void addMp(uint8_t num);
 		void addGold(uint16_t num);
 		bool payGold(uint16_t num);

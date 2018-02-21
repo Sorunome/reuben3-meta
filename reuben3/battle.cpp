@@ -604,11 +604,17 @@ Battle_Done Battle::loop() {
 								playerAttack(Battle_Attack_Type::normal);
 								break;
 							case 1:
+								if (maru) {
+									break;
+								}
 								p.state = Battle_Player_State::magic;
 								cursor_magic = 0;
 								break;
 							case 2:
-								// TODO: no items with maru
+								if (maru) {
+									break;
+								}
+								
 								if (player.isCurItemBottle()) {
 									useBottle();
 									break;
@@ -621,10 +627,9 @@ Battle_Done Battle::loop() {
 								}
 								break;
 							case 3:
-								if (!(e.slots[4] & 0x0F)) {
+								if (maru || !(e.slots[4] & 0x0F)) {
 									break;
 								}
-								// TODO: no running away from maru
 								if (true || !random(2)) {
 									runAnimation();
 									return Battle_Done::run;
@@ -770,7 +775,7 @@ void Battle::load(uint8_t _i) {
 	e.slots[3] = enemies[i].sl4;
 	e.slots[4] = enemies[i].sl5;
 	
-	background_look = &enemy_background_looks[enemy_backgrounds[board.getWorldId()]];
+	background_look = &(enemy_background_looks[enemy_backgrounds[board.getAreaId()]]);
 	enemy_backgrounds_image.setFrame(background_look->frame_id);
 	
 	// time to check for dynamic lvl / exp / wait
@@ -797,12 +802,13 @@ void Battle::load(uint8_t _i) {
 	enemyImage.init(decompression_buffer);
 }
 
-bool Battle::fight(uint8_t _i) {
+bool Battle::fight(uint8_t _i, bool _maru) {
 	if (_i == 0xFF) {
 		return true;
 	}
 	
 	load(_i);
+	maru = _maru;
 	
 	Battle_Done reply = loop();
 	if (reply == Battle_Done::run) {
@@ -812,21 +818,20 @@ bool Battle::fight(uint8_t _i) {
 	if (reply == Battle_Done::win) {
 		bool leveldUp = false;
 		
-		// TODO: no leveling/gold for maru
-		player.addGold(random(2));
-		if (player.isEvent(EVENT_ITEM_BOMB) && !random(50)) {
-			player.addBombs(1);
+		if (!maru) {
+			player.addGold(random(2));
+			if (player.isEvent(EVENT_ITEM_BOMB) && !random(50)) {
+				player.addBombs(1);
+			}
+			
+			if (player.addExp(enemies[i].exp)) {
+				leveldUp = true;
+			}
 		}
-		
-		if (player.addExp(enemies[i].exp)) {
-			leveldUp = true;
-		}
-		
 		
 		const uint8_t steps = 20;
 		render(true, false);
 		if (leveldUp) {
-			// TODO: draw leveld up image
 			Image level_up(battle_level_up_data);
 			gb.display.drawImage(43, 56, level_up);
 		}

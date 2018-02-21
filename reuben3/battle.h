@@ -74,6 +74,7 @@ class Battle {
 		uint16_t calcEnemyDamage();
 		Battle_Done loop();
 		uint8_t i;
+		bool maru;
 		void playerJump();
 		void enemyBlink();
 		void playerBlink();
@@ -108,7 +109,7 @@ class Battle {
 		void playerAttackAnimation();
 		void drawText(uint8_t x, uint8_t y, char* text);
 		void load(uint8_t _i);
-		bool fight(uint8_t _i);
+		bool fight(uint8_t _i, bool _maru = false);
 };
 
 extern Battle battle;

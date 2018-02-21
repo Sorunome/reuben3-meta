@@ -53,6 +53,7 @@
 #define SCRIPT_TRANSITION_PORTAL 0x29
 #define SCRIPT_MOVE_LEFT_AND_SHAKE_SCREEN 0x2A
 #define SCRIPT_BATTLE_INSTRUCTIONS 0x2B
+#define SCRIPT_INCREASE_SPEED_ARENA 0x2C
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -366,6 +367,9 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 			}
 			case SCRIPT_BATTLE_INSTRUCTIONS:
 				battleInstructions();
+				continue;
+			case SCRIPT_INCREASE_SPEED_ARENA:
+				increaseSpeedArena();
 				continue;
 
 			case SCRIPT_RETURN_FALSE:

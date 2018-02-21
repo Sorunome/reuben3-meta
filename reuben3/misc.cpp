@@ -710,3 +710,108 @@ void battleInstructions() {
 	fade_from_white();
 	text.boxPlayer(STRING_PERSON_DOGGLEN_BATTLE_INSTRUCTIONS_DONE);
 }
+
+const uint8_t maruEnemies1[] = {
+	ENEMY_MOUSE,
+	ENEMY_GECKO,
+	ENEMY_FROG,
+	ENEMY_SMALL_SPIDERS,
+	ENEMY_MOUNTAIN_BEE,
+	ENEMY_MOUNTAIN_SNAKE,
+	ENEMY_MOUNTAIN_BEE,
+	0xFF,
+};
+const uint8_t maruEnemies2[] = {
+	ENEMY_WEIRD_CATERPILLAR_THING,
+	ENEMY_AIR_SNAKE_THING,
+	ENEMY_SLIME_BLOB,
+	ENEMY_EYEBALL_OCTOPUS,
+	0xFF,
+};
+const uint8_t maruEnemies3[] = {
+	ENEMY_EYEBALLS_1_2,
+	ENEMY_EYEBALLS_2_2,
+	ENEMY_PAST_CASTLE_1,
+	ENEMY_PAST_CASTLE_2,
+	0xFF,
+};
+const uint8_t maruEnemies4[] = {
+	ENEMY_CACTUS,
+	ENEMY_CAMEL,
+	ENEMY_DESERTBUG,
+	ENEMY_BIRDEYE_THING_2,
+	0xFF,
+};
+const uint8_t* maruEnemyLUT[] = {
+	maruEnemies1,
+	maruEnemies2,
+	maruEnemies3,
+	maruEnemies4,
+};
+
+void increaseSpeedArena() {
+	text.boxPlayer(STRING_MARU_INTRO);
+	uint8_t reply;
+	uint16_t price = 0;
+	uint8_t new_wait;
+	uint8_t i;
+	if (player.wait > 200) {
+		reply = text.boxPlayer(STRING_MARU_50GOLD);
+		price = 50;
+		new_wait = 200;
+		i = 0;
+	} else if (player.wait > 150) {
+		reply = text.boxPlayer(STRING_MARU_100GOLD);
+		price = 100;
+		new_wait = 150;
+		i = 1;
+	} else if (player.wait > 100) {
+		reply = text.boxPlayer(STRING_MARU_300GOLD);
+		price = 300;
+		new_wait = 100;
+		i = 2;
+	} else if (player.wait > 50) {
+		reply = text.boxPlayer(STRING_MARU_500GOLD);
+		price = 500;
+		new_wait = 50;
+		i = 3;
+	} else {
+		text.boxPlayer(STRING_MARU_NOTEACH);
+		return;
+	}
+	if (!reply) {
+		return;
+	}
+	if (false && !player.payGold(price)) {
+		text.boxPlayer(STRING_NOT_ENOUGH_GOLD);
+		return;
+	}
+	
+	if (text.boxPlayer(STRING_MARU_THANKS_BUYING)) {
+		while(text.boxPlayer(STRING_MARU_RULES));
+	}
+	
+	uint16_t player_hp_backup = player.getHp();
+	player.addHp(player.getHpMax());
+	
+	uint8_t j = 0;
+	bool dead = false;
+	while(maruEnemyLUT[i][j] != 0xFF) {
+		text.boxPlayer(STRING_MARU_ENEMY);
+		dead = !battle.fight(maruEnemyLUT[i][j], true);
+		renderAll();
+		waitCycles(1);
+		if (dead) {
+			break;
+		}
+		j++;
+	}
+	
+	player.setHp(player_hp_backup);
+	if (dead) {
+		text.boxPlayer(STRING_MARU_DEAD);
+		return;
+	}
+	player.wait = new_wait;
+	text.boxPlayer(STRING_MARU_SUCCESS);
+}
