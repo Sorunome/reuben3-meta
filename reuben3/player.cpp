@@ -5,6 +5,7 @@
 #include "misc.h"
 #include "text.h"
 #include "battle.h"
+#include "music.h"
 
 #include "data/area_enemies.h"
 
@@ -211,6 +212,7 @@ void Player::load() {
 	if (isEvent(EVENT_CAN_SWIM)) {
 		getSwimsuit();
 	}
+	music.playArea(board.getAreaId());
 }
 
 void Player::setBattleCounter() {

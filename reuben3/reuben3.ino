@@ -20,10 +20,7 @@ void setup() {
 	gb.begin();
 	gb.save.config(savefileDefaults);
 
-	SerialUSB.begin(115200);
-	
-	
-	gb.sound.play("songs/home.wav", true);
+//	SerialUSB.begin(115200);
 }
 
 void gameLoop() {

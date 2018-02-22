@@ -9,6 +9,7 @@
 #include "script.h"
 #include "text.h"
 #include "misc.h"
+#include "music.h"
 
 #include "data/defines.h"
 #include "data/maps.h"
@@ -166,6 +167,9 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 		waitCycles(1);
 	}
 	gb.display.colorIndex = origPalette;
+	
+	
+	music.playArea(areaId);
 }
 
 
@@ -232,6 +236,7 @@ void Board::scrollLeft() {
 	postload();
 	player.moveX(width*8 - 8);
 	player.focus();
+	music.playArea(areaId);
 }
 
 void Board::scrollRight() {
@@ -261,6 +266,7 @@ void Board::scrollRight() {
 	
 	postload();
 	player.moveX(0);
+	music.playArea(areaId);
 }
 
 void Board::scrollUp() {
@@ -289,6 +295,7 @@ void Board::scrollUp() {
 	
 	postload();
 	player.moveY(height*8 - 8);
+	music.playArea(areaId);
 }
 
 void Board::scrollDown() {
@@ -317,6 +324,7 @@ void Board::scrollDown() {
 	
 	postload();
 	player.moveY(0);
+	music.playArea(areaId);
 }
 
 void Board::postloadHouseAnimation() {
@@ -333,6 +341,7 @@ void Board::postloadHouseAnimation() {
 		waitCycles(1);
 	}
 	postload();
+	music.playArea(areaId);
 }
 
 
