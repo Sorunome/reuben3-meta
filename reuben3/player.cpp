@@ -5,7 +5,7 @@
 #include "misc.h"
 #include "text.h"
 #include "battle.h"
-#include "music.h"
+#include "area.h"
 
 #include "data/area_enemies.h"
 
@@ -212,7 +212,7 @@ void Player::load() {
 	if (isEvent(EVENT_CAN_SWIM)) {
 		getSwimsuit();
 	}
-	music.playArea(board.getAreaId());
+	area.go(board.getAreaId());
 }
 
 void Player::setBattleCounter() {
@@ -507,7 +507,6 @@ void Player::update() {
 		if (getCurItem() == I_ITEM_PROTECT && mp >= 5) {
 			useMp(5);
 		} else {
-			// TODO: die
 			uint8_t e = area_enemies[board.getAreaId()][random(10)];
 			if (!battle.fight(e)) {
 				dead = true;

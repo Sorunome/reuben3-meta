@@ -6,12 +6,14 @@
 #include "text.h"
 #include "data/defines.h"
 #include "battle.h"
+#include "ambient.h"
 #include <Gamebuino-Meta.h>
 #include <utility/Misc.h> // pixel to rgb converters
 
 void waitCycles(uint8_t num) {
 	for (uint8_t i = 0; i < num; i++) {
 		while(!gb.update());
+		ambient.update();
 	}
 }
 
