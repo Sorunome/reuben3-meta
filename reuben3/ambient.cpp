@@ -3,13 +3,14 @@
 const uint8_t lights[][3] = {
 	{0, 80, 0},
 	{3, 35, 3},
+	{79, 65, 13},
 };
 
 const uint8_t areaLUT[] = {
 	   0, // dogglen
 	   1, // forest
 	   1, // forest
-	0xFF,
+	   2, // mountains
 	0xFF,
 	0xFF,
 	0xFF,
@@ -29,9 +30,6 @@ const uint8_t areaLUT[] = {
 };
 
 void Ambient::update() {
-	if (!enable) {
-		return;
-	}
 	flowColor();
 	for (uint8_t y = 0; y < 4; y++) {
 		for (uint8_t x = 0; x < 2; x++) {
@@ -87,24 +85,28 @@ void Ambient::flowColor() {
 	c[0] = gb.createColor(cur_c[0], cur_c[1], cur_c[2]);
 }
 
+void Ambient::on() {
+	memcpy(base_c, back_c, sizeof(base_c));
+}
+
+void Ambient::off() {
+	memset(base_c, 0, sizeof(base_c));
+}
+
 void Ambient::setArea(uint8_t a) {
-	if (a == 0xFF) {
-		enable = false;
-		return;
-	}
 	a = areaLUT[a];
 	if (a == curAmbient) {
 		return;
 	}
+	curAmbient = a;
 	if (a == 0xFF) {
-		enable = false;
+		memset(back_c, 0, sizeof(back_c));
+		off();
 		return;
 	}
-	enable = true;
+	memcpy(base_c, lights[a], sizeof(base_c));
+	memcpy(back_c, base_c, sizeof(base_c));
 	
-	for (uint8_t i = 0; i < 3; i++) {
-		base_c[i] = lights[a][i];
-	}
 	maxRandom = max(base_c[0], max(base_c[1], base_c[2]));
 	
 	

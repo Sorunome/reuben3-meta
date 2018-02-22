@@ -8,6 +8,7 @@
 #include "board.h"
 #include "sprites.h"
 #include "stats.h"
+#include "ambient.h"
 
 #include "data/enemies.h"
 #include "data/largeSprites.h"
@@ -806,12 +807,14 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 	if (_i == 0xFF) {
 		return true;
 	}
+	ambient.off();
 	
 	load(_i);
 	maru = _maru;
 	
 	Battle_Done reply = loop();
 	if (reply == Battle_Done::run) {
+		ambient.on();
 		return true;
 	}
 	
@@ -855,9 +858,11 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 		if (leveldUp) {
 			waitCycles(10);
 		}
+		ambient.on();
 		return true;
 	}
 	// TODO: lose animation
+	ambient.on();
 	return false;
 }
 
