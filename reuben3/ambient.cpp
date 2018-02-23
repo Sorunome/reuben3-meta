@@ -42,9 +42,17 @@ const uint8_t areaLUT[] = {
 
 void Ambient::update() {
 	flowColor();
+	if (!output) {
+		return;
+	}
+	output = false;
 	for (uint8_t y = 0; y < 4; y++) {
 		for (uint8_t x = 0; x < 2; x++) {
-			gb.lights.drawPixel(x, y, c[y*2 + x]);
+			Color cc = c[y*2 + x];
+			if (cc != BLACK) {
+				output = true;
+			}
+			gb.lights.drawPixel(x, y, cc);
 		}
 	}
 }
@@ -88,6 +96,10 @@ void Ambient::flowColor() {
 	}
 	if (!change) {
 		setGotoColor();
+	}
+	
+	if (cur_c[0] || cur_c[1] || cur_c[2]) {
+		output = true;
 	}
 	
 	for (uint8_t i = 7; i > 0; i--) {

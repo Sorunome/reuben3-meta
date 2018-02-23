@@ -16,6 +16,7 @@ class Ambient {
 		uint8_t maxRandom;
 		void setGotoColor();
 		void flowColor();
+		bool output;
 	public:
 		void on();
 		void off();

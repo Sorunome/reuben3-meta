@@ -186,8 +186,10 @@ void Battle::boltAnimation(uint8_t x, uint8_t y) {
 	render();
 	for (uint8_t i = 0; i < 20; i++) {
 		gb.display.clear(WHITE);
+		gb.lights.fill(WHITE);
 		waitCycles(1);
 		render();
+		gb.lights.fill(BLACK);
 		yy = 0;
 		while (yy < yyy) {
 			gb.display.drawImage(x, yy, bolt);
