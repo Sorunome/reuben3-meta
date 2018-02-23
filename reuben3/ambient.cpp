@@ -4,6 +4,17 @@ const uint8_t lights[][3] = {
 	{0, 80, 0},
 	{3, 35, 3},
 	{79, 65, 13},
+	{71, 64, 48},
+	{19, 35, 3},
+	{35, 35, 3},
+	{3, 29, 35},
+	{48, 33, 6},
+	{51, 9, 9},
+	{51, 0, 0},
+	{35, 9, 51},
+	{66, 60, 41},
+	{47, 46, 79},
+	{79, 41, 12},
 };
 
 const uint8_t areaLUT[] = {
@@ -11,22 +22,22 @@ const uint8_t areaLUT[] = {
 	   1, // forest
 	   1, // forest
 	   2, // mountains
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
+	   3, // aerilon
+	   4, // ugana plain
+	   8, // aerilon castle
+	   8, // aerilon castle
+	  12, // eastern peaks
+	  13, // fragile caves
+	   6, // gnah lake
+	   7, // caves
+	  11, // cliff break
+	   4, // ugana plain
+	  10, // antique castle
+	   5, // desert
+	   4, // ugana plain
+	   9, // castle present
+	   9, // castle present
+	   9, // castle past
 };
 
 void Ambient::update() {

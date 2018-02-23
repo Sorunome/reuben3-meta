@@ -4,29 +4,31 @@
 const char* tracks[] = {
 	"songs/home.wav",
 	"songs/lost_in_the_woods.wav",
+	"songs/home2.wav",
+	"songs/dungeon_master.wav",
 };
 
 const uint8_t areaLUT[] = {
 	   0, // dogglen
 	   1, // forest
 	   1, // forest
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
-	0xFF,
+	0xFF, // mountains
+	   2, // aerilon
+	0xFF, // ugana plain
+	   3, // aerilon castle
+	   3, // aerilon castle
+	   3, // eastern peaks
+	   3, // fragile caves
+	   3, // gnah lake
+	0xFF, // caves
+	0xFF, // cliff break
+	0xFF, // ugana plain
+	   3, // antique castle
+	0xFF, // desert
+	0xFF, // ugana plain
+	   3, // castle present
+	   3, // castle present
+	   3, // castle past
 };
 
 void Music::playSong(uint8_t song) {
