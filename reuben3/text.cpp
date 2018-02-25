@@ -2,11 +2,13 @@
 #include "depack.h"
 #include "misc.h"
 #include "player.h"
+#include "data/defines.h"
 #include <Gamebuino-Meta.h>
 
-struct Strings_LUT {
-	const uint16_t offset;
-	const uint8_t chunk;
+struct Strings_MasterLUT {
+	const Gamebuino_Meta::LangCode langCode;
+	const uint8_t* const* decompressionLut;
+	const Strings_LUT* stringLut;
 };
 
 #include "data/strings.h"
@@ -37,6 +39,23 @@ const uint8_t buttonsBuffer[] = {
 };
 Image buttons(buttonsBuffer);
 
+void Text::init() {
+	Gamebuino_Meta::LangCode l = gb.language.getCurrentLang();
+	bool found = false;
+	uint8_t i = 0;
+	for (; i < NUMBER_LANGUAGES; i++) {
+		if (stringsMasterLut[i].langCode == l) {
+			found = true;
+			break;
+		}
+	}
+	if (!found) {
+		i = 0;
+	}
+	decompressionLut = stringsMasterLut[i].decompressionLut;
+	stringLut = stringsMasterLut[i].stringLut;
+}
+
 void Text::drawBox(bool up) {
 	gb.display.setColor(BROWN);
 	gb.display.drawRect(4, up ? 4 : 34, 72, 26);
@@ -46,12 +65,12 @@ void Text::drawBox(bool up) {
 }
 
 int8_t Text::box(uint16_t i, bool up) {
-	aP_depack(_Text_decompression_LUT[stringsLut[i].chunk], decompression_buffer);
+	aP_depack(decompressionLut[stringLut[i].chunk], decompression_buffer);
 	drawBox(up);
 	const uint8_t cursorXStart = (80 - (16*4)) / 2;
 	uint8_t cursorYStart = up ? 8 : 38;
 	gb.display.setCursor(cursorXStart, cursorYStart);
-	uint8_t* textCursor = decompression_buffer + stringsLut[i].offset;
+	uint8_t* textCursor = decompression_buffer + stringLut[i].offset;
 	bool hasOptions = false;
 textloop_entry:
 	uint8_t c = *textCursor++;
@@ -102,7 +121,7 @@ textloop_entry:
 			break;
 		case 0x84:
 			i++;
-			aP_depack(_Text_decompression_LUT[stringsLut[i].chunk], decompression_buffer);
+			aP_depack(decompressionLut[stringLut[i].chunk], decompression_buffer);
 			textCursor = decompression_buffer;
 			goto textloop_entry;
 		default:

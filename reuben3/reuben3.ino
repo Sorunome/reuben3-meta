@@ -3,7 +3,7 @@
 #include "data/defines.h"
 #include "stats.h"
 #include "misc.h"
-
+#include "text.h"
 
 uint8_t decompression_buffer[max(2048, ENEMY_SPRITES_MAX_SIZE)]; // 2048 > 12*8*2*8 = 1536
 
@@ -20,6 +20,7 @@ void setup() {
 	gb.begin();
 	gb.save.config(savefileDefaults);
 
+	text.init();
 //	SerialUSB.begin(115200);
 }
 

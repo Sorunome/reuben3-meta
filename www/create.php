@@ -4,6 +4,7 @@ if((!$security->isLoggedIn() || !($user_info['power']&32)) && $_GET['pwd']!='voh
 	echo $page->getPage('Nope','<script type="text/javascript">getPageJSON("/");</script>Redirecting...',$lang,$pathPartsParsed);
 	die();
 }
+$lang_BACKUP = $lang;
 $sql->switchDb('soru_reuben3_meta');
 include_once(realpath(dirname(__FILE__)).'/functions.php');
 include_once(realpath(dirname(__FILE__)).'/script.php');
@@ -15,6 +16,7 @@ $mapIds = [];
 $mapBlocksPerPage = 26;
 $textBlocksPerPage = 23;
 $bigSpritesPerPage = 65;
+$languages = ['en', 'de'];
 
 
 function dechexpad2($i){
@@ -71,6 +73,7 @@ function compress($hexData, $chunksize = 2){
 }
 
 function getTextASM($s) {
+	$s = mb_convert_encoding($s, 'Windows-1252');
 	$s = str_replace("\r\n", "\n", $s);
 	
 	$s = str_replace("\n\n\n", "\x80", $s); // block wrap
@@ -180,25 +183,6 @@ foreach($spritesInUse as $s){
 		$spritesWithId[] = $s;
 	}
 }
-
-
-//$sql->query("UPDATE `font` SET `use`=0,`asm_id`=0 WHERE 1");
-$texts = $sql->query("SELECT `string` FROM `strings` WHERE 1");
-$charsInUse = [];
-$texts[] = ['string' => '0123456789']; // make sure the numbers get loaded
-foreach($texts as $s){
-	$s = getTextASM($s['string']);
-	for($i = 0;$i < strlen($s);$i++){
-		$c = substr($s,$i,1);
-		if($c == "\x05"){
-			break;
-		}
-		if(!in_array($c,$charsInUse)){
-			$charsInUse[] = $c;
-		}
-	}
-}
-
 
 $mapDimensions = [
 	'width' => 0,
@@ -486,28 +470,36 @@ $html .= $file.'</textarea>';
 
 $html .= '<h1>String Data</h1><textarea style="width:100%;height:500px;">';
 
+
 $file = '';
 $hexData = [];
 $uncompressedSize = 0;
 $compressedSize = 0;
 $bytesCompressed = 0;
-$blocknum = 0;
-$blockLUT = "const uint8_t* const _Text_decompression_LUT[] = {\n";
+$blocknum = [];
+$blockLUT = [];
+$stringLUT = [];
+foreach($languages as $i => $l) {
+	$hexData[$i] = [];
+	$blocknum[$i] = 0;
+	$blockLUT[$i] = "const uint8_t* const _Text_decompression_LUT_${l}[] = {\n";
+	$stringLUT[$i] = "const Strings_LUT stringsLut_${l}[] = {\n";
+}
 
-$compress_string = function($min) use (&$file,&$hexData,&$uncompressedSize,&$compressedSize,&$bytesCompressed,&$blocknum,&$blockLUT,&$file2,&$textBlocksPerPage){
+$compress_string = function($min, $l, $lang) use (&$file,&$hexData,&$uncompressedSize,&$compressedSize,&$bytesCompressed,&$blocknum,&$blockLUT,&$file2,&$textBlocksPerPage){
 	$workData = [];
 	$j = 2047;
 	for($i = 0;$i < $j; $i++){
-		if(!isset($hexData[$i])){
+		if(!isset($hexData[$l][$i])){
 			break;
 		}
-		$workData[] = $hexData[$i];
-		if($hexData[$i] == 'FREEZEBLOCK' || $hexData[$i] == 'UNFREEZEBLOCK'){
+		$workData[] = $hexData[$l][$i];
+		if($hexData[$l][$i] == 'FREEZEBLOCK' || $hexData[$l][$i] == 'UNFREEZEBLOCK'){
 			$j++;
 		}
-		unset($hexData[$i]);
+		unset($hexData[$l][$i]);
 	}
-	//$chunks = array_chunk($hexData,827 + $min);
+	//$chunks = array_chunk($hexData[$l],827 + $min);
 	//echo "precompress length:";
 	//var_dump(sizeof($workData));
 	
@@ -515,7 +507,7 @@ $compress_string = function($min) use (&$file,&$hexData,&$uncompressedSize,&$com
 	if(($i = array_search('FREEZEBLOCK',array_reverse($workData,true))) !== false){
 		
 		$j = sizeof($workData);
-		if(sizeof($hexData) > 0 && array_search('UNFREEZEBLOCK',array_slice($workData,$i)) === false){ // uho, we'll better flip this over
+		if(sizeof($hexData[$l]) > 0 && array_search('UNFREEZEBLOCK',array_slice($workData,$i)) === false){ // uho, we'll better flip this over
 			for($i++;$i < $j;$i++){
 				$chunk_prepend[] = $workData[$i];
 				unset($workData[$i]);
@@ -530,7 +522,7 @@ $compress_string = function($min) use (&$file,&$hexData,&$uncompressedSize,&$com
 	}
 	
 	
-	$hexData = array_merge($chunk_prepend,$hexData);
+	$hexData[$l] = array_merge($chunk_prepend,$hexData[$l]);
 	
 	
 	$uncompressedSize += sizeof($workData);
@@ -541,77 +533,83 @@ $compress_string = function($min) use (&$file,&$hexData,&$uncompressedSize,&$com
 	$hexDataOut = compress($workData);
 	$compressedSize += sizeof($hexDataOut);
 	$bytesCompressed += sizeof($workData) - sizeof($hexDataOut) + 5; // just appriximate the # of strings
-	$f = "const uint8_t _Text_block_${blocknum}[] = {\n\t";
+	$f = "const uint8_t _Text_block_$blocknum[$l]_${lang}[] = {\n\t";
 	for($i = 0;$i < sizeof($hexDataOut);$i++){
 		$f .= $hexDataOut[$i].',';
 	}
 	$f .= "\n};\n";
-	$blockLUT .= "\t_Text_block_$blocknum,\n";
-	$blocknum++;
+	$blockLUT[$l] .= "\t_Text_block_$blocknum[$l]_$lang,\n";
+	$blocknum[$l]++;
 	$file .= $f;
 };
 $defines['first_offpage_textblock'] = $textBlocksPerPage;
-$stringLUT = "const Strings_LUT stringsLut[] = {\n";
-$strings = $sql->query("SELECT `name`,`string`,`compress` FROM `strings` WHERE `compress`=1");
+$strings = $sql->query("SELECT * FROM `strings` WHERE `compress`=1");
 $stringCounter = 0;
-foreach($strings as $s) {
-	$defines['string_'.strtolower($s['name'])] = $stringCounter;
+foreach($strings as $str) {
+	$defines['string_'.strtolower($str['name'])] = $stringCounter;
 	$stringCounter++;
-	$arrayCount = array_count_values($hexData);
-	
-	$min = $arrayCount['FREEZEBLOCK']??0;
-	$min += $arrayCount['UNFREEZEBLOCK']??0;
-	//echo "\n======\n",$s['name']."\n";
-	//var_dump(sizeof($hexData));
-	//var_dump($min);
-	//echo "-----\n";
-	$stringLUT .= "\t{ ".(sizeof($hexData) - $min).", $blocknum },\n";
-	
-	$bs = '';
-	$s = getTextASM($s['string']);
-	for($i = 0; $i < strlen($s); $i++) {
-		$c = substr($s, $i, 1);
-		//if($i == 0){
-		//	echo $c."\n";
-		//}
-		if ($c == "\x83") { // we don't split options accross multiple chunks
-			$bs .= 'FREEZEBLOCK,'.substr($s, $i+1).'UNFREEZEBLOCK,';
-			break;
+	foreach($languages as $l => $lang) {
+		$arrayCount = array_count_values($hexData[$l]);
+		$min = $arrayCount['FREEZEBLOCK']??0;
+		$min += $arrayCount['UNFREEZEBLOCK']??0;
+		
+		//echo "\n======\n",$str['name']."\n";
+		//var_dump(sizeof($hexData));
+		//var_dump($min);
+		//echo "-----\n";
+		$stringLUT[$l] .= "\t{ ".(sizeof($hexData[$l]) - $min).", $blocknum[$l] },\n";
+		$bs = '';
+		$s = getTextASM($str['string_'.$lang]);
+		
+		for($i = 0; $i < strlen($s); $i++) {
+			$c = substr($s, $i, 1);
+			//if($i == 0){
+			//	echo $c."\n";
+			//}
+			if ($c == "\x83") { // we don't split options accross multiple chunks
+				$bs .= 'FREEZEBLOCK,'.substr($s, $i+1).'UNFREEZEBLOCK,';
+				break;
+			}
+			if ($c == "\\" && substr($s, $i+1, 1) == 'x') {
+				$i += 2;
+				$bs .= '0x'.substr($s, $i, 2).',';
+				$i++; // the second increase will happen in the for-loop
+			} else {
+				$bs .= '0x'.dechexpad2(ord($c)).',';
+			}
 		}
-		if ($c == "\\" && substr($s, $i+1, 1) == 'x') {
-			$i += 2;
-			$bs .= '0x'.substr($s, $i, 2).',';
-			$i++; // the second increase will happen in the for-loop
-		} else {
-			$bs .= '0x'.dechexpad2(ord($c)).',';
+		//echo "new length:";
+		//var_dump(sizeof(explode(',',rtrim($bs,','))));
+		$hexData[$l] = array_merge($hexData[$l], explode(',', rtrim($bs, ',')));
+		
+		$arrayCount = array_count_values($hexData[$l]);
+		
+		$min = $arrayCount['FREEZEBLOCK']??0;
+		$min += $arrayCount['UNFREEZEBLOCK']??0;
+		while ((sizeof($hexData[$l]) - $min) >= 2047) { // time to compress this, but first look that everything after our flag is in the same block
+			$compress_string($min, $l, $lang);
 		}
-	}
-	//echo "new length:";
-	//var_dump(sizeof(explode(',',rtrim($bs,','))));
-	$hexData = array_merge($hexData, explode(',', rtrim($bs, ',')));
-	
-	
-	$arrayCount = array_count_values($hexData);
-	
-	$min = $arrayCount['FREEZEBLOCK']??0;
-	$min += $arrayCount['UNFREEZEBLOCK']??0;
-	
-	//echo "data length:";
-	//var_dump(sizeof($hexData) - $min);
-	
-	
-	while ((sizeof($hexData) - $min) >= 2047) { // time to compress this, but first look that everything after our flag is in the same block
-		$compress_string($min);
 	}
 }
-while (sizeof($hexData)) {
-	$compress_string(0);
+foreach($languages as $l => $lang) {
+	while (sizeof($hexData[$l])) {
+		$compress_string(0, $l, $lang);
+	}
 }
 
 $defines['total_strings'] = $stringCounter;
-$blockLUT .= "};\n";
-$stringLUT .= "};\n";
-$file .= "\n$blockLUT\n$stringLUT";
+foreach($languages as $l => $lang) {
+	$blockLUT[$l] .= "};\n";
+	$stringLUT[$l] .= "};\n";
+	$file .= "\n$blockLUT[$l]\n$stringLUT[$l]";
+}
+
+$file .= "\n\nconst Strings_MasterLUT stringsMasterLut[] = {\n";
+foreach($languages as $l => $lang) {
+	$file .= "\t{ LANG_".strtoupper($lang).", _Text_decompression_LUT_$lang, stringsLut_$lang },\n";
+}
+$file .= "};";
+$defines['number_languages'] = sizeof($languages);
 file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/strings.h',$file);
 
 $compressedPercent = (($compressedSize/$uncompressedSize)*100);
@@ -897,4 +895,5 @@ file_put_contents('/var/www/www.sorunome.de/reuben3-meta/out/defines.h',$file);
 $html .= $file.'</textarea><hr><a href="/reuben3-meta">&lt;&lt; Back</a>';
 
 $sql->switchDb('soru_homepage');
+$lang = $lang_BACKUP;
 echo $page->getPage('Create Asm',$html,$lang,$pathPartsParsed);
