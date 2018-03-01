@@ -64,7 +64,7 @@ if(isset($_GET['edit'])){
 	$sql->query("INSERT INTO `strings` () VALUES ()");
 	$html = '<script type="text/javascript">getPageJSON("text?edit='.($sql->insertId()).'")</script>';
 }else{
-	$strings = $sql->query("SELECT `id`,`name` FROM `strings`");
+	$strings = $sql->query("SELECT `id`,`name` FROM `strings` WHERE `compress`=1");
 	foreach($strings as $s){
 		$html .= '<a href="text?edit='.$s['id'].'">'.$s['name'].'</a><br>';
 	}
