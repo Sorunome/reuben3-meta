@@ -39,6 +39,10 @@ const uint8_t buttonsBuffer[] = {
 };
 Image buttons(buttonsBuffer);
 
+const Gamebuino_Meta::Sound_FX sfx_textplop[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,147,-52,24,113,1},
+};
+
 void Text::init() {
 	Gamebuino_Meta::LangCode l = gb.language.getCurrentLang();
 	bool found = false;
@@ -72,6 +76,8 @@ int8_t Text::box(uint16_t i, bool up) {
 	gb.display.setCursor(cursorXStart, cursorYStart);
 	uint8_t* textCursor = decompression_buffer + stringLut[i].offset;
 	bool hasOptions = false;
+	
+	bool textSkip = false;
 textloop_entry:
 	uint8_t c = *textCursor++;
 //	SerialUSB.println(c, HEX);
@@ -127,10 +133,13 @@ textloop_entry:
 		default:
 			gb.display.setColor(BLACK);
 			gb.display.write(c);
+			gb.sound.fx(sfx_textplop);
 			if (gb.buttons.repeat(BUTTON_A, 0) || gb.buttons.repeat(BUTTON_B, 0)) {
-				waitCycles(1);
+				if (textSkip = !textSkip) {
+					waitCycles(1);
+				}
 			} else {
-				waitCycles(5);
+				waitCycles(2);
 			}
 			goto textloop_entry;
 	}

@@ -54,6 +54,7 @@ struct SaveData {
 class Player {
 	private:
 		uint8_t render_cycle;
+		uint8_t fx_cycle;
 		
 		float x;
 		float y;

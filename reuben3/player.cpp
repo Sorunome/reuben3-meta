@@ -100,12 +100,20 @@ const uint8_t reuben_sprite_data[] = {
 	0xEE, 0xE0, 0xDD, 0x00,
 };
 
+const Gamebuino_Meta::Sound_FX sfx_player_walk[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,50,0,0,240,1},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,0,0,-3,50,5},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,50,0,0,224,1},
+};
+
+
 Image reuben_sprite(reuben_sprite_data);
 
 void Player::init(uint8_t _slot) {
 	slot = _slot;
 	
 	render_cycle = 0;
+	fx_cycle = 0;
 	
 	memset(events, 0, sizeof(events));
 	memset(bottles, 0, sizeof(bottles));
@@ -441,6 +449,7 @@ void Player::update() {
 	int8_t _dy = gb.buttons.repeat(BUTTON_DOWN, 0) - gb.buttons.repeat(BUTTON_UP, 0);
 	if (!_dx && !_dy) {
 		// nothing to do
+		fx_cycle = 0;
 		interact();
 		item();
 		return;
@@ -449,6 +458,14 @@ void Player::update() {
 	render_cycle++;
 	if (render_cycle >= 8) {
 		render_cycle = 0;
+	}
+	
+	if (!fx_cycle) {
+		gb.sound.fx(sfx_player_walk);
+	}
+	fx_cycle++;
+	if (fx_cycle >= 8) {
+		fx_cycle = 0;
 	}
 	
 	float v = 1.5f;
