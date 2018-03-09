@@ -183,6 +183,7 @@ void Player::save() {
 
 void Player::load() {
 	if (!gb.save.get(slot*2)) {
+		area.go(board.getAreaId());
 		return;
 	}
 	SaveData s;

@@ -56,9 +56,32 @@
 #define SCRIPT_BATTLE_INSTRUCTIONS 0x2B
 #define SCRIPT_INCREASE_SPEED_ARENA 0x2C
 #define SCRIPT_SEARCHQUEST_PERSON 0x2D
+#define SCRIPT_SFX 0x2E
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
+
+const Gamebuino_Meta::Sound_FX sfx_chest[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,147,0,0,67,5},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,147,0,0,63,5},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,147,0,0,56,13},
+};
+
+const Gamebuino_Meta::Sound_FX sfx_badchest[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,147,0,0,567,4},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,0,0,0,0,3},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,147,0,0,567,10},
+};
+
+struct Script_Sfx {
+	const Gamebuino_Meta::Sound_FX* sfx;
+	const uint16_t delay;
+};
+
+const Script_Sfx script_sfx[] = {
+	{ sfx_chest, 360 },
+	{ sfx_badchest, 340 },
+};
 
 union View32 {
 	uint32_t addr;
@@ -382,7 +405,14 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 			case SCRIPT_SEARCHQUEST_PERSON:
 				searchquestPerson();
 				continue;
-
+			case SCRIPT_SFX:
+			{
+				Script_Sfx fx = script_sfx[getNum()];
+				gb.sound.fx(fx.sfx);
+				delay(fx.delay);
+				continue;
+			}
+			
 			case SCRIPT_RETURN_FALSE:
 				return false;
 			case SCRIPT_RETURN_TRUE:

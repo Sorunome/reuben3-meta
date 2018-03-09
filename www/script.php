@@ -479,6 +479,13 @@ class Parser{
 					return '2D';
 				}
 			],
+			'sfx' => [
+				'args_min' => 1,
+				'args_max' => 1,
+				'fn' => function($args) {
+					return '2E'.$this->getVar($args[0]);
+				}
+			],
 
 			'add_enemy' => [
 				'args_min' => 3,

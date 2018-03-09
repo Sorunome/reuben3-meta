@@ -813,6 +813,10 @@ $defines['script_walk'] = 0;
 $defines['script_action'] = 1;
 $defines['script_bomb'] = 2;
 $defines['script_pushblock'] = 3;
+
+$defines['sound_chest'] = 0;
+$defines['sound_badchest'] = 1;
+
 $scriptfile = '';
 $scriptfileLut = "const uint8_t* scripts[] = {\n";
 $scriptId = 0;
