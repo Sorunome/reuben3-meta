@@ -83,6 +83,7 @@ class Player {
 		
 		uint8_t slot;
 		bool dead;
+		bool swimming;
 	public:
 		uint8_t armor;
 		uint8_t wait;
