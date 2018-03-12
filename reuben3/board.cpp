@@ -148,6 +148,12 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 		
 		waitCycles(1);
 	}
+	gb.display.init("assets/time.gmv");
+	for (uint8_t i = 0; i < gb.display.frames; i++) {
+		waitCycles(1);
+		gb.display.nextFrame();
+	}
+	gb.display.init(80, 64, ColorMode::rgb565);
 	load(_world, _map);
 	player.moveTo(player_x, player_y);
 	player.setDirection(Direction::down);

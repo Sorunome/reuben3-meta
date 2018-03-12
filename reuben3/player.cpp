@@ -531,10 +531,10 @@ void Player::update() {
 		if (getCurItem() == I_ITEM_PROTECT && mp >= 5) {
 			useMp(5);
 		} else {
-			uint8_t e = area_enemies[board.getAreaId()][random(10)];
-			if (!battle.fight(e)) {
-				dead = true;
-			}
+//			uint8_t e = area_enemies[board.getAreaId()][random(10)];
+//			if (!battle.fight(e)) {
+//				dead = true;
+//			}
 		}
 	}
 	
