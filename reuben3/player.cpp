@@ -508,19 +508,23 @@ void Player::update() {
 		}
 	}
 	if (x < -2) {
+		fx_cycle = 0;
 		board.scrollLeft();
 		return;
 	}
 	if (x >= 11*8 + 2) {
+		fx_cycle = 0;
 		board.scrollRight();
 		return;
 	}
 	if (y < -2) {
+		fx_cycle = 0;
 		board.scrollUp();
 		return;
 	}
 	
 	if (y >= 7*8 + 2) {
+		fx_cycle = 0;
 		board.scrollDown();
 		return;
 	}
