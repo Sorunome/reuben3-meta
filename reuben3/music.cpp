@@ -2,10 +2,11 @@
 #include <Gamebuino-Meta.h>
 
 const char* tracks[] = {
-	"songs/home.wav",
-	"songs/lost_in_the_woods.wav",
-	"songs/home2.wav",
-	"songs/dungeon_master.wav",
+	"songs/home.wav",              // 0
+	"songs/lost_in_the_woods.wav", // 1
+	"songs/home2.wav",             // 2
+	"songs/dungeon_master.wav",    // 3
+	"songs/plains.wav",            // 4
 };
 
 const uint8_t areaLUT[] = {
@@ -14,7 +15,7 @@ const uint8_t areaLUT[] = {
 	   1, // forest
 	0xFF, // mountains
 	   2, // aerilon
-	0xFF, // ugana plain
+	   4, // ugana plain
 	   3, // aerilon castle
 	   3, // aerilon castle
 	   3, // eastern peaks
@@ -22,10 +23,10 @@ const uint8_t areaLUT[] = {
 	   3, // gnah lake
 	0xFF, // caves
 	0xFF, // cliff break
-	0xFF, // ugana plain
+	   4, // ugana plain
 	   3, // antique castle
 	0xFF, // desert
-	0xFF, // ugana plain
+	   4, // ugana plain
 	   3, // castle present
 	   3, // castle present
 	   3, // castle past
