@@ -44,8 +44,10 @@ class Board {
 		uint8_t mapId;
 		uint8_t areaId;
 		const Tilemaps_Data* map;
+		bool haveEnemies;
 		uint16_t getDefaultTile();
 	public:
+		bool getHaveEnemies();
 		uint8_t getWorldId();
 		uint8_t getMapId();
 		uint8_t getAreaId();

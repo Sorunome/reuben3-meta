@@ -39,6 +39,10 @@ uint16_t Board::getDefaultTile() {
 	}
 }
 
+bool Board::getHaveEnemies() {
+	return haveEnemies;
+}
+
 uint8_t Board::getWorldId() {
 	return worldId;
 }
@@ -77,6 +81,7 @@ void Board::load() {
 		i++;
 	}
 	areaId = header & 0x3F;
+	haveEnemies = header & 0x80 ? true : false;
 	aP_depack(map->block, decompression_buffer);
 	const Dyn_Data* d = worlds[worldId].dyn;
 	uint8_t* mapbuf = decompression_buffer + (mapsize_bytes*map->chunk);
