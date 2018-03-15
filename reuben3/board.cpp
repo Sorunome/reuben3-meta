@@ -119,12 +119,11 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 	int16_t line_down = portal_y + 5*8;
 	
 	const uint8_t steps = 5*4;
-	Color* origPalette = gb.display.colorIndex;
 	Color palette[16];
-	gb.display.colorIndex = palette;
+	gb.display.setPalette(palette);
 	for (uint8_t i = 0; i <= steps; i++) {
 		for (uint8_t j = 0; j < 16; j++) {
-			uint16_t c = (uint16_t)origPalette[j];
+			uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
 			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
 			rgb.r = rgb.r*(steps - i) / steps;
 			rgb.g = rgb.g*(steps - i) / steps;
@@ -166,7 +165,7 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 	postload();
 	for (uint8_t i = 0; i <= steps; i++) {
 		for (uint8_t j = 0; j < 16; j++) {
-			uint16_t c = (uint16_t)origPalette[j];
+			uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
 			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
 			rgb.r = rgb.r*i / steps;
 			rgb.g = rgb.g*i / steps;
@@ -177,7 +176,7 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 		renderAll();
 		waitCycles(1);
 	}
-	gb.display.colorIndex = origPalette;
+	gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
 	
 	
 	area.go(areaId);

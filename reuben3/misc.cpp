@@ -612,13 +612,12 @@ bool shop(uint16_t ask, uint16_t price, bool bottle) {
 
 void fade_to_white(void (*r)(void)) {
 	const uint8_t steps = 20;
-	Color* origPalette = gb.display.colorIndex;
 	Color palette[16];
-	gb.display.colorIndex = palette;
+	gb.display.setPalette(palette);
 	
 	for (uint8_t i = 0; i <= steps; i++) {
 		for (uint8_t j = 0; j < 16; j++) {
-			uint16_t c = (uint16_t)origPalette[j];
+			uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
 			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
 			rgb.r += (0xFF - rgb.r)*i / steps;
 			rgb.g += (0xFF - rgb.g)*i / steps;
@@ -629,7 +628,8 @@ void fade_to_white(void (*r)(void)) {
 		(*r)();
 		waitCycles(1);
 	}
-	gb.display.colorIndex = origPalette;
+	
+	gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
 }
 
 void fade_to_white() {
@@ -638,13 +638,12 @@ void fade_to_white() {
 
 void fade_from_white(void (*r)(void)) {
 	const uint8_t steps = 20;
-	Color* origPalette = gb.display.colorIndex;
 	Color palette[16];
-	gb.display.colorIndex = palette;
+	gb.display.setPalette(palette);
 	
 	for (uint8_t i = 0; i <= steps; i++) {
 		for (uint8_t j = 0; j < 16; j++) {
-			uint16_t c = (uint16_t)origPalette[j];
+			uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
 			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
 			rgb.r += (0xFF - rgb.r)*(steps - i) / steps;
 			rgb.g += (0xFF - rgb.g)*(steps - i) / steps;
@@ -655,7 +654,7 @@ void fade_from_white(void (*r)(void)) {
 		(*r)();
 		waitCycles(1);
 	}
-	gb.display.colorIndex = origPalette;
+	gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
 }
 
 void fade_from_white() {

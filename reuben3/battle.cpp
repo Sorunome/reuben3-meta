@@ -840,12 +840,11 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 			Image level_up(battle_level_up_data);
 			gb.display.drawImage(43, 56, level_up);
 		}
-		Color* origPalette = gb.display.colorIndex;
 		Color palette[16];
-		gb.display.colorIndex = palette;
+		gb.display.setPalette(palette);
 		for (uint8_t ii = 0; ii <= steps; ii++) {
 			for (uint8_t j = 0; j < 16; j++) {
-				uint16_t c = (uint16_t)origPalette[j];
+				uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
 				Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
 				rgb.r += (0xFF - rgb.r)*ii / steps;
 				rgb.g += (0xFF - rgb.g)*ii / steps;
@@ -856,7 +855,7 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 			gb.display.drawImage(enemies[i].xpos, enemies[i].ypos, enemyImage);
 			waitCycles(1);
 		}
-		gb.display.colorIndex = origPalette;
+		gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
 		if (leveldUp) {
 			waitCycles(10);
 		}
