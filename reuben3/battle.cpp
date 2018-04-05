@@ -824,7 +824,7 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 		bool leveldUp = false;
 		
 		if (!maru) {
-			player.addGold(random(2));
+			player.addGold(random(3));
 			if (player.isEvent(EVENT_ITEM_BOMB) && !random(50)) {
 				player.addBombs(1);
 			}

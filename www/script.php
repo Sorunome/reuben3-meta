@@ -173,7 +173,6 @@ class Parser{
 				'args_min' => 2,
 				'args_max' => 2,
 				'fn' => function($args) {
-					$s = '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
 					return '08'.$this->getVarNum($args[0]).$this->getVar($args[1]);
 				}
 			],

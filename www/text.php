@@ -9,7 +9,7 @@ ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(E_ALL);
 $html = '';
-$languages = ['en', 'de'];
+$languages = ['en', 'fr'];
 
 if(isset($_GET['edit'])){
 	$s = $sql->query("SELECT * FROM `strings` WHERE `id`=%d",[(int)$_GET['edit']],0);
