@@ -2,39 +2,40 @@
 #include "misc.h"
 #include "board.h"
 #include "player.h"
+#include "language.h"
 #include <Gamebuino-Meta.h>
 
 const uint8_t status_icons_data[] = {7, 7, 3, 0, 0, 0xFF, 1, 0x66, 0x6f,0xff, 0xff,0xff, 0x66,0x6f, 0xff,0xff, 0xf0,0x66, 0xff,0xff, 0x09,0x06, 0xff,0xf0, 0x90,0xf6, 0x6f,0x09, 0x0f,0xff, 0x6f,0x00, 0xff,0xff, 0x6f,0xff, 0xfd,0xcf, 0xff,0xff, 0xdc,0xcc, 0xff,0xfd, 0xcd,0xdc, 0xcf,0xfc, 0x55,0xdc, 0xdf,0xc5, 0x55,0xcd, 0xff,0x5c, 0x5c,0xdf, 0xff,0xf5, 0xcf,0xff, 0xff,0xf0, 0x00,0x00, 0xff,0x00, 0x55,0x50, 0x0f,0x05, 0x66,0x65, 0x0f,0x05, 0x60,0x65, 0x0f,0x05, 0x66,0x65, 0x0f,0x00, 0x55,0x50, 0x0f,0xf0, 0x00,0x00, 0xff};
 
 const char* getBottleString(uint8_t i) {
-	const char* strs[] = {
-		"Bottle",
-		"badWater",
-		"Water",
-		"Herb",
-		"Potion",
-		"Ginseng",
-		"Elixir",
+	const MultiLang* strs[] = {
+		lang_bottle_bottle,
+		lang_bottle_badwater,
+		lang_bottle_water,
+		lang_bottle_herb,
+		lang_bottle_potion,
+		lang_bottle_ginseng,
+		lang_bottle_elixir,
 	};
-	return strs[(uint8_t)player.getBottle(i)];
+	return gb.language.get(strs[(uint8_t)player.getBottle(i)]);
 }
 
-const char* areaStrings[] = {
-	"Dogglen",        //  0
-	"Forest",         //  1
-	"East Mountains", //  2
-	"Aerilon",        //  3
-	"Ugana Plain",    //  4
-	"Aerilon Castle", //  5
-	"Eastern Peaks",  //  6
-	"Fragile Caves",  //  7
-	"Gnah Lake",      //  8
-	"Caves",          //  9
-	"Cliff-Break",    // 10
-	"Antique Castle", // 11
-	"Desert",         // 12
-	"Castle Present", // 13
-	"Castle Past",    // 14
+const MultiLang* areaStrings[] = {
+	lang_area_dogglen,        //  0
+	lang_area_forest,         //  1
+	lang_area_east_mountains, //  2
+	lang_area_aerilon,        //  3
+	lang_area_ugana_plain,    //  4
+	lang_area_aerilon_castle, //  5
+	lang_area_eastern_peaks,  //  6
+	lang_area_fragile_caves,  //  7
+	lang_area_gnah_lake,      //  8
+	lang_area_caves,          //  9
+	lang_area_cliff_break,    // 10
+	lang_area_antique_castle, // 11
+	lang_area_desert,         // 12
+	lang_area_castle_present, // 13
+	lang_area_castle_past,    // 14
 };
 
 const uint8_t areaStringsLUT[] = {
@@ -60,13 +61,13 @@ const uint8_t areaStringsLUT[] = {
 	14,
 };
 
-const char* weaponStrings[] = {
-	"none",      // 0
-	"Stick",     // 1
-	"Axe",       // 2
-	"Sword",     // 3
-	"BreadSwrd", // 4
-	"ToxicSwrd", // 5
+const MultiLang* weaponStrings[] = {
+	lang_none,              // 0
+	lang_weapon_stick,      // 1
+	lang_weapon_axe,        // 2
+	lang_weapon_sword,      // 3
+	lang_weapon_breadsword, // 4
+	lang_weapon_toxicsword, // 5
 };
 
 const uint8_t weaponStringsLUT[] = {
@@ -80,10 +81,10 @@ const uint8_t weaponStringsLUT[] = {
 	5,
 };
 
-const char* armorStrings[] = {
-	"Wounds",
-	"none",
-	"Shield",
+const MultiLang* armorStrings[] = {
+	lang_armor_wounds,
+	lang_none,
+	lang_armor_shield,
 };
 
 const uint8_t armorStringsLUT[] = {
@@ -93,16 +94,16 @@ const uint8_t armorStringsLUT[] = {
 	2,
 };
 
-const char* tradequestStrings[] = {
-	"Letter",
-	"Letter 2",
-	"Food",
-	"Fish Rod",
-	"Fish",
-	"Necklace",
-	"Shell",
-	"Rug",
-	"Fox",
+const MultiLang* tradequestStrings[] = {
+	lang_trade_letter,
+	lang_trade_letter_2,
+	lang_trade_food,
+	lang_trade_fish_rod,
+	lang_trade_fish,
+	lang_trade_necklace,
+	lang_trade_shell,
+	lang_trade_rug,
+	lang_trade_fox,
 };
 
 void drawStatsMenuPage(uint8_t i) {
@@ -123,30 +124,34 @@ void drawStatsMenuPage(uint8_t i) {
 			gb.display.printf("%d/%d", player.getMp(), player.getMpMax());
 			
 			gb.display.setCursor(devider + 2, 28);
-			gb.display.printf("Gold:%d", player.getGold());
+			gb.display.print(lang_stats_gold);
+			gb.display.print(player.getGold());
 			
 			if (player.isEvent(EVENT_SEARCH_QUEST)) {
 				gb.display.setCursor(devider + 2, 34);
-				gb.display.printf("Scare:%d", player.fright);
+				gb.display.print(lang_stats_scare);
+				gb.display.print(player.fright);
 			}
 			break;
 		case 1:
 			gb.display.setCursor(devider + 2, 4);
-			gb.display.printf("Level:%d", player.getLvl());
+			gb.display.print(lang_stats_level);
+			gb.display.print(player.getLvl());
 			
 			
 			gb.display.setCursor(devider + 2, 10);
-			gb.display.print("Weapon:");
+			gb.display.print(lang_stats_weapon);
 			gb.display.setCursor(devider + 2, 16);
 			gb.display.print(weaponStrings[weaponStringsLUT[player.sword]]);
 			
 			gb.display.setCursor(devider + 2, 22);
-			gb.display.print("Armor:");
+			gb.display.print(lang_stats_amror);
 			gb.display.setCursor(devider + 2, 28);
 			gb.display.print(armorStrings[armorStringsLUT[player.armor - ARMOR_WOUNDS]]);
 			
 			gb.display.setCursor(devider + 2, 34);
-			gb.display.printf("Speed:%d", player.wait);
+			gb.display.print(lang_stats_speed);
+			gb.display.print(player.wait);
 			break;
 		case 2:
 			
@@ -154,7 +159,7 @@ void drawStatsMenuPage(uint8_t i) {
 			gb.display.printf("EXP:%d", player.getExp());
 			
 			gb.display.setCursor(devider + 2, 10);
-			gb.display.print("Next EXP:");
+			gb.display.print(lang_stats_next_exp);
 			gb.display.setCursor(devider + 2, 16);
 			if (player.getLvl() >= 40) {
 				gb.display.print("---");
@@ -164,7 +169,7 @@ void drawStatsMenuPage(uint8_t i) {
 			
 			if (player.tradequest && player.tradequest < TRADEQUEST_DONE) {
 				gb.display.setCursor(devider + 2, 22);
-				gb.display.print("TradeItm:");
+				gb.display.print(lang_stats_tradeitem);
 				gb.display.setCursor(devider + 2, 28);
 				gb.display.print(tradequestStrings[player.tradequest-1]);
 			}
@@ -219,20 +224,20 @@ void statsMenu() {
 	}
 	if (have_items[4]) {
 		gb.display.setCursor(6, 28);
-		gb.display.print("Hookshot");
+		gb.display.print(lang_item_hookshot);
 	}
 	if (have_items[5]) {
 		gb.display.setCursor(6, 34);
-		gb.display.print("Bombs:");
+		gb.display.print(lang_item_bombs);
 		gb.display.print(player.getBombs());
 	}
 	if (have_items[6]) {
 		gb.display.setCursor(6, 40);
-		gb.display.print("Protect");
+		gb.display.print(lang_item_protect);
 	}
 	
 	gb.display.setCursor(2, gb.display.height()-7);
-	gb.display.print("Area:");
+	gb.display.print(lang_area);
 	gb.display.print(areaStrings[areaStringsLUT[board.getAreaId()]]);
 	
 	Image status_icons(status_icons_data);

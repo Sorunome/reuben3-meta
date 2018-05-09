@@ -9,6 +9,7 @@
 #include "sprites.h"
 #include "stats.h"
 #include "ambient.h"
+#include "language.h"
 
 #include "data/enemies.h"
 #include "data/largeSprites.h"
@@ -547,13 +548,13 @@ void Battle::renderMenu(uint8_t cursor_menu) {
 	gb.display.fillRect(54, 7 + 6*cursor_menu, 6*4 + 1, 7);
 	gb.display.setColor(BLACK);
 	gb.display.setCursor(55, 8);
-	gb.display.println("Attack");
+	gb.display.println(lang_battle_menu_attack);
 	gb.display.setCursorX(55);
-	gb.display.println("Magic");
+	gb.display.println(lang_battle_menu_magic);
 	gb.display.setCursorX(55);
-	gb.display.println("Item");
+	gb.display.println(lang_battle_menu_item);
 	gb.display.setCursorX(55);
-	gb.display.println("Run");
+	gb.display.println(lang_battle_menu_run);
 }
 
 Battle_Done Battle::loop() {
@@ -669,13 +670,13 @@ Battle_Done Battle::loop() {
 					gb.display.fillRect(54, 7 + 6*cursor_magic, 6*4 + 1, 7);
 					gb.display.setColor(BLACK);
 					gb.display.setCursor(55, 8);
-					gb.display.println("Fire");
+					gb.display.println(lang_battle_magic_fire);
 					gb.display.setCursorX(55);
-					gb.display.println("Ice");
+					gb.display.println(lang_battle_magic_ice);
 					gb.display.setCursorX(55);
-					gb.display.println("Bolt");
+					gb.display.println(lang_battle_magic_bolt);
 					gb.display.setCursorX(55);
-					gb.display.println("Stun");
+					gb.display.println(lang_battle_magic_stun);
 					
 					if (gb.buttons.pressed(BUTTON_A)) {
 						render();
