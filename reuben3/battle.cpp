@@ -777,6 +777,7 @@ void Battle::load(uint8_t _i) {
 	e.slots[2] = enemies[i].sl3;
 	e.slots[3] = enemies[i].sl4;
 	e.slots[4] = enemies[i].sl5;
+	e.stuncounter = 0;
 	
 	background_look = &(enemy_background_looks[enemy_backgrounds[board.getAreaId()]]);
 	enemy_backgrounds_image.setFrame(background_look->frame_id);
@@ -806,7 +807,6 @@ void Battle::load(uint8_t _i) {
 }
 
 bool Battle::fight(uint8_t _i, bool _maru) {
-	return true;
 	if (_i == 0xFF) {
 		return true;
 	}

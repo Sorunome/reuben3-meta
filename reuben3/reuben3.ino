@@ -4,6 +4,7 @@
 #include "stats.h"
 #include "misc.h"
 #include "text.h"
+#include "menu.h"
 
 uint8_t decompression_buffer[max(2048, ENEMY_SPRITES_MAX_SIZE)]; // 2048 > 12*8*2*8 = 1536
 
@@ -25,7 +26,7 @@ void setup() {
 }
 
 void gameLoop() {
-	while (!player.isDead()) {
+	while (!player.isDead() && !player.hasWon()) {
 		waitCycles(1);
 		if (gb.buttons.pressed(BUTTON_C)) {
 			statsMenu();
@@ -46,10 +47,20 @@ void gameLoop() {
 			}
 		}
 	}
+	if (player.hasWon()) {
+		gb.display.clear();
+		gb.display.println("Finished Game!!!");
+		gb.display.println("Press A");
+		while(1) {
+			while(!gb.update());
+			if (gb.buttons.pressed(BUTTON_A)) {
+				break;
+			}
+		}
+	}
 }
 
 void loop() {
-	player.init(0);
-	player.load();
+	mainMenu();
 	gameLoop();
 }

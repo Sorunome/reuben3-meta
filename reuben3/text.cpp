@@ -37,7 +37,6 @@ const uint8_t buttonsBuffer[] = {
 	0x55, 0x5F,
 	0xFF, 0xFF,
 };
-Image buttons(buttonsBuffer);
 
 const Gamebuino_Meta::Sound_FX sfx_textplop[] = {
 	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,147,-52,24,113,1},
@@ -116,6 +115,7 @@ textloop_entry:
 }
 
 int8_t Text::box(uint16_t _i, bool up) {
+	Image buttons(buttonsBuffer);
 	load(_i);
 	drawBox(up);
 	static const uint8_t cursorXStart = (80 - (16*4)) / 2;

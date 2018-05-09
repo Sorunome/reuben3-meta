@@ -146,6 +146,7 @@ void Player::init(uint8_t _slot) {
 	tmp_map = 0;
 	dead = false;
 	swimming = false;
+	won = false;
 	
 	board.load(WORLD_OVERWORLD, TILEMAP_37);
 	board.postload();
@@ -187,6 +188,7 @@ void Player::save() {
 
 void Player::load() {
 	if (!gb.save.get(slot*2)) {
+		init(slot); // make sure we have the defaults loaded
 		area.go(board.getAreaId());
 		return;
 	}
@@ -218,6 +220,7 @@ void Player::load() {
 	fright = s.fright;
 	
 	dead = false;
+	won = false;
 	
 	board.load(s.world, s.tilemap);
 	board.postload();
@@ -302,6 +305,14 @@ void Player::setDirection(Direction d) {
 
 bool Player::isDead() {
 	return dead;
+}
+
+bool Player::hasWon() {
+	return won;
+}
+
+void Player::win() {
+	won = true;
 }
 
 void Player::hide() {

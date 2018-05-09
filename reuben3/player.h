@@ -84,6 +84,7 @@ class Player {
 		uint8_t slot;
 		bool dead;
 		bool swimming;
+		bool won;
 	public:
 		uint8_t armor;
 		uint8_t wait;
@@ -111,6 +112,8 @@ class Player {
 		Direction getDirection();
 		void setDirection(Direction d);
 		bool isDead();
+		bool hasWon();
+		void win();
 		
 		void init(uint8_t _slot);
 		void save();
