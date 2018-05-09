@@ -806,6 +806,7 @@ void Battle::load(uint8_t _i) {
 }
 
 bool Battle::fight(uint8_t _i, bool _maru) {
+	return true;
 	if (_i == 0xFF) {
 		return true;
 	}

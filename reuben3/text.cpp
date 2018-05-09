@@ -60,6 +60,13 @@ void Text::init() {
 	stringLut = stringsMasterLut[i].stringLut;
 }
 
+void Text::load(uint16_t _i) {
+	i = _i;
+	hasOptions = false;
+	aP_depack(decompressionLut[stringLut[i].chunk], decompression_buffer);
+	textCursor = decompression_buffer + stringLut[i].offset;
+}
+
 void Text::drawBox(bool up) {
 	gb.display.setColor(BROWN);
 	gb.display.drawRect(4, up ? 4 : 34, 72, 26);
@@ -68,55 +75,18 @@ void Text::drawBox(bool up) {
 
 }
 
-int8_t Text::box(uint16_t i, bool up) {
-	aP_depack(decompressionLut[stringLut[i].chunk], decompression_buffer);
-	drawBox(up);
-	const uint8_t cursorXStart = (80 - (16*4)) / 2;
-	uint8_t cursorYStart = up ? 8 : 38;
-	gb.display.setCursor(cursorXStart, cursorYStart);
-	uint8_t* textCursor = decompression_buffer + stringLut[i].offset;
-	bool hasOptions = false;
-	
+int8_t Text::progress() {
 	bool textSkip = false;
 textloop_entry:
 	uint8_t c = *textCursor++;
 //	SerialUSB.println(c, HEX);
 	switch(c) {
 		case '\n':
-			gb.display.write(c);
-			gb.display.setCursorX(cursorXStart);
-			goto textloop_entry;
+			return 1;
 		case 0x80: // block wrap
-		{
-			buttons.setFrame(1);
-			bool alt = true;
-			do {
-				if (alt) {
-					gb.display.drawImage(cursorXStart + 16*4 - 1, cursorYStart + 2*6 + 4, buttons);
-				} else {
-					gb.display.setColor(BEIGE);
-					gb.display.fillRect(cursorXStart + 16*4 - 1, cursorYStart + 2*6 + 4, 4, 3);
-				}
-				alt = !alt;
-			} while(!waitCyclesButton(5));
-			waitRelease();
-			drawBox(up);
-			gb.display.setCursor(cursorXStart, cursorYStart);
-			goto textloop_entry;
-		}
+			return 2;
 		case 0x81: // page wrap
-		{
-			buttons.setFrame(0);
-			bool alt = true;
-			do {
-				gb.display.drawImage(cursorXStart + 16*4 - 1, cursorYStart + 2*6 + 1 + alt, buttons);
-				alt = !alt;
-			} while(!waitCyclesButton(5));
-			waitRelease();
-			drawBox(up);
-			gb.display.setCursor(cursorXStart, cursorYStart);
-			goto textloop_entry;
-		}
+			return 3;
 		case 0x82: // question
 			hasOptions = true;
 			gb.display.write(' ');
@@ -131,7 +101,6 @@ textloop_entry:
 			textCursor = decompression_buffer;
 			goto textloop_entry;
 		default:
-			gb.display.setColor(BLACK);
 			gb.display.write(c);
 			gb.sound.fx(sfx_textplop);
 			if (gb.buttons.repeat(BUTTON_A, 0) || gb.buttons.repeat(BUTTON_B, 0)) {
@@ -143,6 +112,60 @@ textloop_entry:
 			}
 			goto textloop_entry;
 	}
+	return 0;
+}
+
+int8_t Text::box(uint16_t _i, bool up) {
+	load(_i);
+	drawBox(up);
+	static const uint8_t cursorXStart = (80 - (16*4)) / 2;
+	uint8_t cursorYStart = up ? 8 : 38;
+	gb.display.setCursor(cursorXStart, cursorYStart);
+	
+	gb.display.setColor(BLACK);
+	while (int8_t res = progress()) {
+		switch(res) {
+			case 1: // line wrap
+			{
+				gb.display.write('\n');
+				gb.display.setCursorX(cursorXStart);
+				break;
+			}
+			case 2: // block wrap
+			{
+				buttons.setFrame(1);
+				bool alt = true;
+				do {
+					if (alt) {
+						gb.display.drawImage(cursorXStart + 16*4 - 1, cursorYStart + 2*6 + 4, buttons);
+					} else {
+						gb.display.setColor(BEIGE);
+						gb.display.fillRect(cursorXStart + 16*4 - 1, cursorYStart + 2*6 + 4, 4, 3);
+					}
+					alt = !alt;
+				} while(!waitCyclesButton(5));
+				waitRelease();
+				drawBox(up);
+				gb.display.setCursor(cursorXStart, cursorYStart);
+				break;
+			}
+			case 3: // page wrap
+			{
+				buttons.setFrame(0);
+				bool alt = true;
+				do {
+					gb.display.drawImage(cursorXStart + 16*4 - 1, cursorYStart + 2*6 + 1 + alt, buttons);
+					alt = !alt;
+				} while(!waitCyclesButton(5));
+				waitRelease();
+				drawBox(up);
+				gb.display.setCursor(cursorXStart, cursorYStart);
+				break;
+			}
+		}
+		gb.display.setColor(BLACK);
+	}
+	
 	if (!hasOptions) {
 		return -1;
 	}
@@ -183,8 +206,8 @@ textloop_entry:
 	}
 }
 
-int8_t Text::boxPlayer(uint16_t i) {
-	box(i, player.getY() > 28);
+int8_t Text::boxPlayer(uint16_t _i) {
+	box(_i, player.getY() > 28);
 }
 
 

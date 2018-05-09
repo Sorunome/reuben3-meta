@@ -16,7 +16,7 @@ $mapIds = [];
 $mapBlocksPerPage = 26;
 $textBlocksPerPage = 23;
 $bigSpritesPerPage = 65;
-$languages = ['en', 'de'];
+$languages = ['en', 'de', 'fr'];
 
 
 function dechexpad2($i){

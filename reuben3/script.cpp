@@ -57,6 +57,7 @@
 #define SCRIPT_INCREASE_SPEED_ARENA 0x2C
 #define SCRIPT_SEARCHQUEST_PERSON 0x2D
 #define SCRIPT_SFX 0x2E
+#define SCRIPT_OUTRO 0x2F
 
 #define SCRIPT_RETURN_FALSE 0xFE
 #define SCRIPT_RETURN_TRUE 0xFF
@@ -412,6 +413,9 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 				delay(fx.delay);
 				continue;
 			}
+			case SCRIPT_OUTRO:
+				outro();
+				continue;
 			
 			case SCRIPT_RETURN_FALSE:
 				return false;

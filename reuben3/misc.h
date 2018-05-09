@@ -17,8 +17,13 @@ bool shop(uint16_t ask, uint16_t price, bool bottle);
 void fade_to_white();
 void fade_from_white();
 
+void fade_to_black();
+void fade_from_black();
+
 void battleInstructions();
 void increaseSpeedArena();
 void searchquestPerson();
+
+void outro();
 
 #endif // _MISC_H_

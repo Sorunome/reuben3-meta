@@ -7,6 +7,7 @@
 #include "data/defines.h"
 #include "battle.h"
 #include "ambient.h"
+#include "script.h"
 #include <Gamebuino-Meta.h>
 #include <utility/Misc.h> // pixel to rgb converters
 
@@ -661,6 +662,59 @@ void fade_from_white() {
 	fade_from_white(&renderAll);
 }
 
+
+void fade_to_black(void (*r)(void)) {
+	const uint8_t steps = 20;
+	Color palette[16];
+	gb.display.setPalette(palette);
+	
+	for (uint8_t i = 0; i <= steps; i++) {
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r = rgb.r*(steps - i) / steps;
+			rgb.g = rgb.g*(steps - i) / steps;
+			rgb.b = rgb.b*(steps - i) / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			palette[j] = (Color)c;
+		}
+		(*r)();
+		waitCycles(1);
+	}
+	
+	gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
+}
+
+void fade_to_black() {
+	fade_to_black(&renderAll);
+}
+
+void fade_from_black(void (*r)(void)) {
+	const uint8_t steps = 20;
+	Color palette[16];
+	gb.display.setPalette(palette);
+	
+	for (uint8_t i = 0; i <= steps; i++) {
+		for (uint8_t j = 0; j < 16; j++) {
+			uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
+			Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+			rgb.r = rgb.r*i / steps;
+			rgb.g = rgb.g*i / steps;
+			rgb.b = rgb.b*i / steps;
+			c = Gamebuino_Meta::rgb888Torgb565(rgb);
+			palette[j] = (Color)c;
+		}
+		(*r)();
+		waitCycles(1);
+	}
+	gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
+}
+
+void fade_from_black() {
+	fade_from_black(&renderAll);
+}
+
+
 void renderBattleBar() {
 	battle.render();
 	battle.renderBar();
@@ -862,4 +916,30 @@ void searchquestPerson() {
 	}
 	
 	text.boxPlayer(STRING_PERSON_AERILON_MOVELESS_THANKS);
+}
+
+
+void raft() {
+	
+}
+
+
+extern const uint8_t* scripts[];
+void outro() {
+	static const uint8_t cursorXStart = (80 - (16*4)) / 2;
+	fade_to_black();
+	gb.display.setColor(WHITE);
+	gb.display.setCursor(cursorXStart, (64 - (5*6)) / 2);
+	text.load(STRING_OUTRO);
+	while (int8_t res = text.progress()) {
+		if (res == 1) {
+			gb.display.write('\n');
+			gb.display.setCursorX(cursorXStart);
+		} else {
+			break;
+		}
+	}
+	for (uint8_t i = 0; i < 3; i++) {
+		script.run(scripts[SCRIPT_SLEEP]);
+	}
 }
