@@ -10,6 +10,7 @@
 #include "stats.h"
 #include "ambient.h"
 #include "language.h"
+#include "area.h"
 
 #include "data/enemies.h"
 #include "data/largeSprites.h"
@@ -651,7 +652,7 @@ Battle_Done Battle::loop() {
 								if (maru || !(e.slots[4] & 0x0F)) {
 									break;
 								}
-								if (true || !random(2)) {
+								if (!random(2)) {
 									runAnimation();
 									return Battle_Done::run;
 								}
@@ -822,6 +823,10 @@ void Battle::load(uint8_t _i) {
 	
 	aP_depack(EnemySprites[i], decompression_buffer);
 	enemyImage.init(decompression_buffer);
+	
+	if (!(e.slots[4] & 0x0F)) {
+		area.go(area_battle);
+	}
 }
 
 bool Battle::fight(uint8_t _i, bool _maru) {
@@ -843,7 +848,7 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 	
 	Battle_Done reply = loop();
 	if (reply == Battle_Done::run) {
-		ambient.on();
+		area.go(board.getAreaId());
 		return true;
 	}
 	
@@ -886,7 +891,7 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 		if (leveldUp) {
 			waitCycles(10);
 		}
-		ambient.on();
+		area.go(board.getAreaId());
 		return true;
 	}
 	// TODO: lose animation

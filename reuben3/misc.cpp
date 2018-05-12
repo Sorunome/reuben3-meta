@@ -42,7 +42,7 @@ void renderAll() {
 	player.render();
 //	gb.display.setCursor(0, 0);
 //	gb.display.setColor(BLACK, WHITE);
-//	gb.display.print(gb.getCpuLoad());
+//	gb.display.printf("%d:%d", gb.getCpuLoad(), gb.getFreeRam());
 }
 
 void bombErase(int8_t x, int8_t y) {

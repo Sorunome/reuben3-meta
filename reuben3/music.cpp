@@ -2,12 +2,14 @@
 #include <Gamebuino-Meta.h>
 
 const char* tracks[] = {
-	"songs/home.wav",              // 0
+	"songs/home1.wav",             // 0
 	"songs/lost_in_the_woods.wav", // 1
 	"songs/home2.wav",             // 2
-	"songs/dungeon_master.wav",    // 3
-	"songs/plains.wav",            // 4
+	"songs/dungeon.wav",           // 3
+	"songs/plains2.wav",           // 4
 	"songs/desert.wav",            // 5
+	"songs/battle.wav",            // 6
+	"songs/theme.wav",             // 7
 };
 
 const uint8_t areaLUT[] = {
@@ -31,6 +33,9 @@ const uint8_t areaLUT[] = {
 	   3, // castle present
 	   3, // castle present
 	   3, // castle past
+	
+	   6, // battle
+	   7, // theme
 };
 
 void Music::playSong(uint8_t song) {

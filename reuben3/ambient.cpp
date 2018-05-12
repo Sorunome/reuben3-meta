@@ -38,6 +38,9 @@ const uint8_t areaLUT[] = {
 	   9, // castle present
 	   9, // castle present
 	   9, // castle past
+	
+	   9, // battle
+	0xFF, // theme
 };
 
 void Ambient::update() {

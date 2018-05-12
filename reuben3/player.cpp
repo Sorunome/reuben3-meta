@@ -104,9 +104,9 @@ const uint8_t reuben_sprite_data[] = {
 };
 
 const Gamebuino_Meta::Sound_FX sfx_player_walk[] = {
-	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,50,0,0,240,1},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,70,0,0,240,1},
 	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,0,0,-3,50,5},
-	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,50,0,0,224,1},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,70,0,0,224,1},
 };
 
 
