@@ -106,6 +106,68 @@ bool menuPickSaveSlot(Image& title, Image& cursorImg) {
 	return false;
 }
 
+void menuInstructions() {
+	Image buttonsIcons(Gamebuino_Meta::buttonsIconsData);
+	Image arrowsIcons(Gamebuino_Meta::arrowsIconsData);
+	gb.display.clear(BEIGE);
+	gb.display.setColor(BLACK);
+	gb.display.drawFastHLine(1, 0, gb.display.width()-2);
+	gb.display.drawFastHLine(1, gb.display.height()-1, gb.display.width()-2);
+	gb.display.drawFastVLine(0, 1, gb.display.height()-2);
+	gb.display.drawFastVLine(gb.display.width()-1, 1, gb.display.height()-2);
+	
+	gb.display.setCursor(25, 17);
+	gb.display.print(lang_instruction_move);
+	
+	gb.display.setCursor(25, 32);
+	gb.display.print(lang_instructions_interact);
+	
+	gb.display.setCursor(25, 43);
+	gb.display.print(lang_instructions_use_item);
+	
+	gb.display.setCursor(25, 54);
+	gb.display.print(lang_instructions_stats_menu);
+	
+	const char* instructionsStr = gb.language.get(lang_menu_instructions);
+	while(1) {
+		while(!gb.update());
+		
+		gb.display.setCursor(40 - strlen(instructionsStr)*2, 3);
+		gb.display.print(instructionsStr);
+		
+		// draw arrows
+		static const uint8_t arrowX = 5;
+		static const uint8_t arrowY = 11;
+		uint8_t activeArrow = (gb.frameCount%16)/4;
+		static const uint8_t arrowXOffsets[] = { 5,  0, 10,  5};
+		static const uint8_t arrowYOffsets[] = {10,  5,  5,  0};
+		static const uint8_t arrowMap[] = {1, 3, 2, 0};
+		for (uint8_t i = 0; i < 4; i++) {
+			uint8_t j = arrowMap[i];
+			arrowsIcons.setFrame(j*2 + (activeArrow==i ? 1 : 0));
+			gb.display.drawImage(arrowX + arrowXOffsets[j], arrowY + arrowYOffsets[j], arrowsIcons);
+		}
+		
+		uint8_t activeButton = (gb.frameCount%12)/4;
+		
+		// A icon
+		buttonsIcons.setFrame(0 + (activeButton==0 ? 1 : 0));
+		gb.display.drawImage(9, 30, buttonsIcons);
+		
+		// B icon
+		buttonsIcons.setFrame(2 + (activeButton==1 ? 1 : 0));
+		gb.display.drawImage(9, 41, buttonsIcons);
+		
+		// menu icon
+		buttonsIcons.setFrame(4 + (activeButton==2 ? 1 : 0));
+		gb.display.drawImage(9, 52, buttonsIcons);
+		
+		if (gb.buttons.pressed(BUTTON_A) || gb.buttons.pressed(BUTTON_B) || gb.buttons.pressed(BUTTON_MENU)) {
+			break;
+		}
+	}
+}
+
 void mainMenu() {
 	Image title(title_data);
 	Image cursorImg(cursor_data);
@@ -138,6 +200,9 @@ void mainMenu() {
 					}
 					break;
 				case 1:
+					gb.display.init(80, 64, ColorMode::rgb565);
+					menuInstructions();
+					gb.display.init("assets/fita.gmv");
 					break;
 				case 2:
 					break;

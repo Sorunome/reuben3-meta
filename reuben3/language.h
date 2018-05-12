@@ -75,6 +75,10 @@ extern const MultiLang lang_item_hookshot[];
 extern const MultiLang lang_item_bombs[];
 extern const MultiLang lang_item_protect[];
 extern const MultiLang lang_area[];
+extern const MultiLang lang_instruction_move[];
+extern const MultiLang lang_instructions_interact[];
+extern const MultiLang lang_instructions_use_item[];
+extern const MultiLang lang_instructions_stats_menu[];
 
 
 #endif // _LANGUAGE_H_

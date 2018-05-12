@@ -385,3 +385,25 @@ const MultiLang lang_area[] = {
 	{LANG_DE, "Ort:"},
 	{LANG_FR, "Zone:"},
 };
+
+// instruction strings
+const MultiLang lang_instruction_move[] = {
+	{LANG_EN, "Move"},
+	{LANG_DE, "Bewegen"},
+	{LANG_FR, "Move"},
+};
+const MultiLang lang_instructions_interact[] = {
+	{LANG_EN, "Interact"},
+	{LANG_DE, "Interagieren"},
+	{LANG_FR, "Interact"},
+};
+const MultiLang lang_instructions_use_item[] = {
+	{LANG_EN, "Use item"},
+	{LANG_DE, "Verwende Item"},
+	{LANG_FR, "Use item"},
+};
+const MultiLang lang_instructions_stats_menu[] = {
+	{LANG_EN, "Stats menu"},
+	{LANG_DE, "Statusmenü"},
+	{LANG_FR, "Stats menu"},
+};
