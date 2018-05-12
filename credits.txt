@@ -1,0 +1,51 @@
+Programmed:
+Sorunome
+
+Story:
+Sorunome
+
+Map:
+Sorunome
+Digital
+
+Graphics:
+DJ Omnimaga
+Art_of_camelot
+Sorunome
+naz2a
+ericomont
+Drakker
+Coops
+
+Colorization:
+ericomont
+Drakker
+Sorunome
+
+Music:
+Valden
+
+Sound Effects:
+Sorunome
+
+Special Thanks:
+Geekboy
+Iambian
+Oninoni
+Xeda112358
+Runer112
+p2 (excessive testing)
+
+Translation:
+deeph
+Sorunome
+
+Enemy Sprites:
+http://www.wesnoth.org/units/1.12/mainline/en_US/mainline.html
+http://opengameart.org/content/32x32-fantasy-tileset
+http://opengameart.org/content/10-basic-rpg-enemies
+http://opengameart.org/content/34-view-beetle
+
+
+Original Creator of Reuben Series:
+DJ Omnimaga (reachable at http://codewalr.us)

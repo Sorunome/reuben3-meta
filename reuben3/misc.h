@@ -25,5 +25,6 @@ void increaseSpeedArena();
 void searchquestPerson();
 
 void outro();
+void credits();
 
 #endif // _MISC_H_

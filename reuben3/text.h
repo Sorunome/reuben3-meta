@@ -20,7 +20,7 @@ class Text {
 		void load(uint16_t i);
 		int8_t box(uint16_t i, bool up = false);
 		int8_t boxPlayer(uint16_t i);
-		int8_t progress();
+		int8_t progress(bool audio = true);
 };
 
 extern Text text;

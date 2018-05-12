@@ -924,14 +924,14 @@ void raft() {
 }
 
 
-extern const uint8_t* scripts[];
 void outro() {
 	static const uint8_t cursorXStart = (80 - (16*4)) / 2;
 	fade_to_black();
+	waitRelease();
 	gb.display.setColor(WHITE);
 	gb.display.setCursor(cursorXStart, (64 - (5*6)) / 2);
 	text.load(STRING_OUTRO);
-	while (int8_t res = text.progress()) {
+	while (int8_t res = text.progress(false)) {
 		if (res == 1) {
 			gb.display.write('\n');
 			gb.display.setCursorX(cursorXStart);
@@ -939,9 +939,28 @@ void outro() {
 			break;
 		}
 	}
-	for (uint8_t i = 0; i < 3; i++) {
-		script.run(scripts[SCRIPT_SLEEP]);
-	}
+	waitCycles(30);
 	
 	player.win();
+}
+
+void credits() {
+	gb.display.fill(BLACK);
+	waitCycles(1);
+	waitRelease();
+	static const uint8_t cursorXStart = 4;
+	gb.display.setColor(WHITE);
+	gb.display.setCursor(cursorXStart, 8);
+	text.load(STRING_CREDITS);
+	while (int8_t res = text.progress(false)) {
+		if (res == 1) {
+			gb.display.write('\n');
+			gb.display.setCursorX(cursorXStart);
+		} else if (res == 2) {
+			waitCycles(30);
+			gb.display.fill(BLACK);
+			gb.display.setColor(WHITE);
+			gb.display.setCursor(cursorXStart, 8);
+		}
+	}
 }

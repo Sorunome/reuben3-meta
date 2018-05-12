@@ -74,7 +74,7 @@ void Text::drawBox(bool up) {
 
 }
 
-int8_t Text::progress() {
+int8_t Text::progress(bool audio) {
 	bool textSkip = false;
 textloop_entry:
 	uint8_t c = *textCursor++;
@@ -101,7 +101,9 @@ textloop_entry:
 			goto textloop_entry;
 		default:
 			gb.display.write(c);
-			gb.sound.fx(sfx_textplop);
+			if (audio) {
+				gb.sound.fx(sfx_textplop);
+			}
 			if (gb.buttons.repeat(BUTTON_A, 0) || gb.buttons.repeat(BUTTON_B, 0)) {
 				if (textSkip = !textSkip) {
 					waitCycles(1);
