@@ -202,7 +202,7 @@ const MultiLang lang_area_caves[] = {
 const MultiLang lang_area_cliff_break[] = {
 	{LANG_EN, "Cliff-Break"},
 	{LANG_DE, "Cliff-Break"},
-	{LANG_FR, "Cliff-Break"},
+	{LANG_FR, "Falaise"},
 };
 const MultiLang lang_area_antique_castle[] = {
 	{LANG_EN, "Antique Castle"},
@@ -390,20 +390,20 @@ const MultiLang lang_area[] = {
 const MultiLang lang_instruction_move[] = {
 	{LANG_EN, "Move"},
 	{LANG_DE, "Bewegen"},
-	{LANG_FR, "Move"},
+	{LANG_FR, "Bouger"},
 };
 const MultiLang lang_instructions_interact[] = {
 	{LANG_EN, "Interact"},
 	{LANG_DE, "Interagieren"},
-	{LANG_FR, "Interact"},
+	{LANG_FR, "Interagir"},
 };
 const MultiLang lang_instructions_use_item[] = {
 	{LANG_EN, "Use item"},
 	{LANG_DE, "Verwende Item"},
-	{LANG_FR, "Use item"},
+	{LANG_FR, "Utiliser obj."},
 };
 const MultiLang lang_instructions_stats_menu[] = {
 	{LANG_EN, "Stats menu"},
 	{LANG_DE, "Statusmenü"},
-	{LANG_FR, "Stats menu"},
+	{LANG_FR, "Menu stats"},
 };

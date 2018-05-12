@@ -31,7 +31,7 @@ bool waitCyclesButton(uint8_t num) {
 void waitRelease() {
 	while(1) {
 		waitCycles(1);
-		if (gb.buttons.released(BUTTON_A) || gb.buttons.released(BUTTON_B) || gb.buttons.released(BUTTON_LEFT) || gb.buttons.released(BUTTON_RIGHT)) {
+		if (!gb.buttons.repeat(BUTTON_A, 0) && !gb.buttons.repeat(BUTTON_B, 0) && !gb.buttons.repeat(BUTTON_LEFT, 0) && !gb.buttons.repeat(BUTTON_RIGHT, 0)) {
 			return;
 		}
 	}
