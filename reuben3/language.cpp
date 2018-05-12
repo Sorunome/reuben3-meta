@@ -18,12 +18,22 @@ const MultiLang lang_none[] = {
 	{LANG_DE, "nichts"},
 	{LANG_FR, "rien"},
 };
+const MultiLang lang_hp[] = {
+	{LANG_EN, "HP"},
+	{LANG_DE, "HP"},
+	{LANG_FR, "PV"},
+};
+const MultiLang lang_mp[] = {
+	{LANG_EN, "MP"},
+	{LANG_DE, "MP"},
+	{LANG_FR, "PM"},
+};
 
 // attack menu entries, max 6 chars
 const MultiLang lang_battle_menu_attack[] = {
 	{LANG_EN, "Attack"},
 	{LANG_DE, "Angrif"},
-	{LANG_FR, "Attack"},
+	{LANG_FR, "Attaqu"},
 };
 const MultiLang lang_battle_menu_magic[] = {
 	{LANG_EN, "Magic"},
@@ -33,12 +43,12 @@ const MultiLang lang_battle_menu_magic[] = {
 const MultiLang lang_battle_menu_item[] = {
 	{LANG_EN, "Item"},
 	{LANG_DE, "Item"},
-	{LANG_FR, "Item"},
+	{LANG_FR, "Objets"},
 };
 const MultiLang lang_battle_menu_run[] = {
 	{LANG_EN, "Run"},
 	{LANG_DE, "Fliehe"},
-	{LANG_FR, "Run"},
+	{LANG_FR, "Fuir"},
 };
 
 // magic menu entries, max 6 chars
@@ -55,34 +65,34 @@ const MultiLang lang_battle_magic_ice[] = {
 const MultiLang lang_battle_magic_bolt[] = {
 	{LANG_EN, "Bolt"},
 	{LANG_DE, "Sturm"},
-	{LANG_FR, "Orage"},
+	{LANG_FR, "Éclair"},
 };
 const MultiLang lang_battle_magic_stun[] = {
 	{LANG_EN, "Stun"},
 	{LANG_DE, "Lähmen"},
-	{LANG_FR, "Stun"},
+	{LANG_FR, "Assome"},
 };
 
 // main menu stuff
 const MultiLang lang_menu_delete_savegame[] = {
 	{LANG_EN, "Delete savegame?"},
 	{LANG_DE, "Spielstand löschen?"},
-	{LANG_FR, "Delete savegame?"},
+	{LANG_FR, "Supprimer partie?"},
 };
 const MultiLang lang_menu_load_game[] = {
 	{LANG_EN, "Load Game"},
 	{LANG_DE, "Lade Spiel"},
-	{LANG_FR, "Load Game"},
+	{LANG_FR, "Charger partie"},
 };
 const MultiLang lang_menu_empty_slot[] = {
 	{LANG_EN, "-empty slot-"},
 	{LANG_DE, "-neues Spiel-"},
-	{LANG_FR, "-empty slot-"},
+	{LANG_FR, "-bloc vide-"},
 };
 const MultiLang lang_menu_level[] = {
 	{LANG_EN, "Level "},
 	{LANG_DE, "Level "},
-	{LANG_FR, "Level "},
+	{LANG_FR, "Niveau "},
 };
 const MultiLang lang_menu_start[] = {
 	{LANG_EN, "Start"},
@@ -92,7 +102,7 @@ const MultiLang lang_menu_start[] = {
 const MultiLang lang_menu_instructions[] = {
 	{LANG_EN, "Instructions"},
 	{LANG_DE, "Anleitung"},
-	{LANG_FR, "Instruction"},
+	{LANG_FR, "Instructions"},
 };
 const MultiLang lang_menu_credits[] = {
 	{LANG_EN, "Credits"},
@@ -105,12 +115,12 @@ const MultiLang lang_menu_credits[] = {
 const MultiLang lang_bottle_bottle[] = {
 	{LANG_EN, "Bottle"},
 	{LANG_DE, "Flasche"},
-	{LANG_FR, "Bottle"},
+	{LANG_FR, "Fiole"},
 };
 const MultiLang lang_bottle_badwater[] = {
 	{LANG_EN, "badWater"},
 	{LANG_DE, "Dreckwsr"},
-	{LANG_FR, "badWater"},
+	{LANG_FR, "Eau sale"},
 };
 const MultiLang lang_bottle_water[] = {
 	{LANG_EN, "Water"},
@@ -162,7 +172,7 @@ const MultiLang lang_area_aerilon[] = {
 const MultiLang lang_area_ugana_plain[] = {
 	{LANG_EN, "Ugana Plain"},
 	{LANG_DE, "Ugana Ebene"},
-	{LANG_FR, "Ugana Plaine"},
+	{LANG_FR, "Plaine d'Ugana"},
 };
 const MultiLang lang_area_aerilon_castle[] = {
 	{LANG_EN, "Aerilon Castle"},
@@ -235,12 +245,12 @@ const MultiLang lang_weapon_sword[] = {
 const MultiLang lang_weapon_breadsword[] = {
 	{LANG_EN, "BreadSwrd"},
 	{LANG_DE, "HartSwrt"},
-	{LANG_FR, "BreadSwrd"},
+	{LANG_FR, "Épée dure"},
 };
 const MultiLang lang_weapon_toxicsword[] = {
 	{LANG_EN, "ToxicSwrd"},
 	{LANG_DE, "GiftSwrt"},
-	{LANG_FR, "ToxicSwrt"},
+	{LANG_FR, "ÉpéeToxic"},
 };
 
 // armor strings. Max 9 chars
@@ -274,7 +284,7 @@ const MultiLang lang_trade_food[] = {
 const MultiLang lang_trade_fish_rod[] = {
 	{LANG_EN, "Fish Rod"},
 	{LANG_DE, "Angel"},
-	{LANG_FR, "Charnière"},
+	{LANG_FR, "CannePêch"},
 };
 const MultiLang lang_trade_fish[] = {
 	{LANG_EN, "Fish"},
@@ -319,7 +329,7 @@ const MultiLang lang_stats_scare[] = {
 const MultiLang lang_stats_level[] = {
 	{LANG_EN, "Level:"},
 	{LANG_DE, "Level:"},
-	{LANG_FR, "Level:"},
+	{LANG_FR, "Niveau:"},
 };
 // max 9 chars
 const MultiLang lang_stats_weapon[] = {
@@ -337,26 +347,26 @@ const MultiLang lang_stats_amror[] = {
 const MultiLang lang_stats_speed[] = {
 	{LANG_EN, "Speed:"},
 	{LANG_DE, "Tempo:"},
-	{LANG_FR, "Speed:"},
+	{LANG_FR, "Vit:"},
 };
 // max 9 chars
 const MultiLang lang_stats_next_exp[] = {
 	{LANG_EN, "Next EXP:"},
 	{LANG_DE, "Noch EXP:"},
-	{LANG_FR, "Next EXP:"},
+	{LANG_FR, "ProchEXP:"},
 };
 // max 9 chars
 const MultiLang lang_stats_tradeitem[] = {
 	{LANG_EN, "TradeItm:"},
 	{LANG_DE, "HandlObj:"},
-	{LANG_FR, "TradeItm:"},
+	{LANG_FR, "Obj Troc:"},
 };
 
 // item strings. Max length 8 chars
 const MultiLang lang_item_hookshot[] = {
 	{LANG_EN, "Hookshot"},
 	{LANG_DE, "Hookshot"},
-	{LANG_FR, "Hookshot"},
+	{LANG_FR, "Grapin"},
 };
 const MultiLang lang_item_bombs[] = { // max length 6 chars
 	{LANG_EN, "Bombs:"},

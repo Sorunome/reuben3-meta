@@ -114,12 +114,14 @@ void drawStatsMenuPage(uint8_t i) {
 	switch (i) {
 		case 0:
 			gb.display.setCursor(devider + 2, 4);
-			gb.display.print("HP:");
+			gb.display.print(lang_hp);
+			gb.display.print(":");
 			gb.display.setCursor(devider + 2, 10);
 			gb.display.printf("%d/%d", player.getHp(), player.getHpMax());
 			
 			gb.display.setCursor(devider + 2, 16);
-			gb.display.print("MP:");
+			gb.display.print(lang_mp);
+			gb.display.print(":");
 			gb.display.setCursor(devider + 2, 22);
 			gb.display.printf("%d/%d", player.getMp(), player.getMpMax());
 			
