@@ -41,6 +41,7 @@ const uint8_t areaLUT[] = {
 	
 	   9, // battle
 	0xFF, // theme
+	0xFF, // portal
 };
 
 void Ambient::update() {

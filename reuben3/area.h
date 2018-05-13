@@ -10,5 +10,6 @@ class Area {
 extern Area area;
 extern const uint8_t area_battle;
 extern const uint8_t area_theme;
+extern const uint8_t area_portal;
 
 #endif // _AREA_H_

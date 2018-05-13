@@ -36,6 +36,7 @@ const uint8_t areaLUT[] = {
 	
 	   6, // battle
 	   7, // theme
+	0xFF, // portal
 };
 
 void Music::playSong(uint8_t song) {

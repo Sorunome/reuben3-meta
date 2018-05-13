@@ -152,10 +152,15 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 		
 		waitCycles(1);
 	}
+	area.go(area_portal);
 	gb.display.init("assets/time.gmv");
 	for (uint8_t i = 0; i < gb.display.frames; i++) {
 		waitCycles(1);
 		gb.display.nextFrame();
+		
+		gb.display.setColor(BLACK, WHITE);
+		gb.display.setCursor(0, 0);
+		gb.display.print(gb.getCpuLoad());
 	}
 	gb.display.init(80, 64, ColorMode::rgb565);
 	load(_world, _map);
@@ -163,6 +168,7 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 	player.setDirection(Direction::down);
 	player.focus();
 	postload();
+	area.go(areaId);
 	for (uint8_t i = 0; i <= steps; i++) {
 		for (uint8_t j = 0; j < 16; j++) {
 			uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
@@ -177,9 +183,6 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 		waitCycles(1);
 	}
 	gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
-	
-	
-	area.go(areaId);
 }
 
 
