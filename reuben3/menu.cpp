@@ -19,58 +19,15 @@ const uint8_t cursor_data[] = {
 	0xFF, 0xF5,
 };
 
-uint8_t menuDrawBgGetSlot(File& f, uint8_t& curByte, uint8_t& curByteIndex) __attribute__((optimize("-O3")));
-void menuDrawBg(File& f) __attribute__((optimize("-O3")));
-
-uint8_t menuBgFrame;
-uint16_t menuBgOffset;
-extern uint8_t decompression_buffer[];
-
-uint8_t menuDrawBgGetSlot(File& f, uint8_t& curByte, uint8_t& curByteIndex) {
-	curByteIndex--;
-	if (curByteIndex == 3) {
-		curByte = decompression_buffer[menuBgOffset++];
-	} else {
-		curByte >>= 2;
-	}
-	if (curByteIndex == 0) {
-		curByteIndex = 4;
-	}
-	return curByte & 0b11;
-}
-
 void menuDrawBg(File& f)  {
-	if (menuBgFrame == 47) {
+	if (f.peek() == -1) {
 		f.rewind();
-		menuBgFrame = 0;
 	}
-	if ((menuBgFrame%2) || !menuBgFrame) {
-		// read the next block
-		uint16_t size;
-		f.read(&size, 2);
-		f.read(gb.display._buffer, size);
-		aP_depack(gb.display._buffer, decompression_buffer);
-		menuBgOffset = 0;
-	}
-	menuBgFrame++;
-	
-	uint8_t curByte = 0;
-	uint8_t curByteIndex = 4;
-	static const uint16_t colormap[] = {0x4439, 0x0210, 0x0000};
-	uint16_t iMax = gb.display._width * gb.display._height;
-	for (uint16_t i = 0; i < iMax; i++) {
-		uint8_t num = menuDrawBgGetSlot(f, curByte, curByteIndex);
-		if (num == 3) {
-			uint8_t numLow = menuDrawBgGetSlot(f, curByte, curByteIndex);
-			uint8_t numHigh = menuDrawBgGetSlot(f, curByte, curByteIndex);
-			num = numLow + (numHigh << 2);
-		}
-		uint8_t b = menuDrawBgGetSlot(f, curByte, curByteIndex);
-		for (uint8_t j = 0; j < num; j++, i++) {
-			gb.display._buffer[i] = colormap[b];
-		}
-		gb.display._buffer[i] = colormap[b];
-	}
+	static const uint16_t dispOffset = 80*64/2;
+	uint16_t size;
+	f.read(&size, 2);
+	f.read(&(gb.display._buffer[dispOffset]), size);
+	aP_depack(&(gb.display._buffer[dispOffset]), gb.display._buffer);
 }
 
 void menuAskDeleteSlot(File& f, uint8_t slot, Image& cursorImg) {
@@ -98,6 +55,10 @@ void menuAskDeleteSlot(File& f, uint8_t slot, Image& cursorImg) {
 			gb.save.del(slot*2);
 			return;
 		}
+		
+		gb.display.setColor(BLACK, WHITE);
+		gb.display.setCursor(0, 0);
+		gb.display.print(gb.getCpuLoad());
 	}
 }
 
@@ -230,8 +191,8 @@ void mainMenu() {
 	Image cursorImg(cursor_data);
 	
 	area.go(area_theme);
+	gb.display.init(80, 64, ColorMode::index);
 	File f = SD.open("assets/fita.raw");
-	menuBgFrame = 0;
 	
 	int8_t cursor = 0;
 	static const int8_t cursorMax = 2;
