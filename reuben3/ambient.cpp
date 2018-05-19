@@ -123,6 +123,7 @@ void Ambient::off() {
 void Ambient::setArea(uint8_t a) {
 	a = areaLUT[a];
 	if (a == curAmbient) {
+		on(); // make sure they are on
 		return;
 	}
 	curAmbient = a;
