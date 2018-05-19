@@ -97,7 +97,7 @@ const MultiLang lang_menu_level[] = {
 const MultiLang lang_menu_start[] = {
 	{LANG_EN, "Start"},
 	{LANG_DE, "Starte"},
-	{LANG_FR, "Début"},
+	{LANG_FR, "Commencer"},
 };
 const MultiLang lang_menu_instructions[] = {
 	{LANG_EN, "Instructions"},

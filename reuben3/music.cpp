@@ -10,13 +10,14 @@ const char* tracks[] = {
 	"songs/desert.wav",            // 5
 	"songs/battle.wav",            // 6
 	"songs/theme.wav",             // 7
+	"songs/mountains.wav",         // 8
 };
 
 const uint8_t areaLUT[] = {
 	   0, // dogglen
 	   1, // forest
 	   1, // forest
-	0xFF, // mountains
+	   8, // mountains
 	   2, // aerilon
 	   4, // ugana plain
 	   3, // aerilon castle

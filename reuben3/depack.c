@@ -19,6 +19,10 @@ struct APDSTATE {
 	unsigned int bitcount;
 };
 
+static unsigned int aP_getbit(struct APDSTATE *ud) __attribute__((optimize("-O3")));
+static unsigned int aP_getgamma(struct APDSTATE *ud) __attribute__((optimize("-O3")));
+unsigned int aP_depack(const void *source, void *destination) __attribute__((optimize("-O3")));
+
 static unsigned int aP_getbit(struct APDSTATE *ud)
 {
 	unsigned int bit;

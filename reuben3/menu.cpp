@@ -147,11 +147,10 @@ void menuInstructions() {
 	gb.display.print(lang_instructions_stats_menu);
 	
 	const char* instructionsStr = gb.language.get(lang_menu_instructions);
+	gb.display.setCursor(40 - strlen(instructionsStr)*2, 3);
+	gb.display.print(instructionsStr);
 	while(1) {
 		while(!gb.update());
-		
-		gb.display.setCursor(40 - strlen(instructionsStr)*2, 3);
-		gb.display.print(instructionsStr);
 		
 		// draw arrows
 		static const uint8_t arrowX = 5;
@@ -222,7 +221,10 @@ void mainMenu() {
 					}
 					break;
 				case 1:
+					gb.display.init(80, 64, ColorMode::rgb565);
 					menuInstructions();
+					gb.display.init(80, 64, ColorMode::index);
+					menuDrawBg(f);
 					break;
 				case 2:
 					credits();
@@ -234,5 +236,6 @@ void mainMenu() {
 		gb.display.setCursor(0, 0);
 		gb.display.print(gb.getCpuLoad());
 	}
+	f.close();
 	gb.display.init(80, 64, ColorMode::rgb565);
 }
