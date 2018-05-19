@@ -2547,7 +2547,7 @@ const Tilemaps_Data tilemaps_0[] = {
 	{ 0x9b, 0x81, 6, _tilemaps_data_46 },
 	{ 0xab, 0x82, 7, _tilemaps_data_46 },
 	{ 0xbc, 0x82, 0, _tilemaps_data_54 },
-	{ 0xbb, 0x80, 1, _tilemaps_data_54 },
+	{ 0xbb, 0x02, 1, _tilemaps_data_54 },
 	{ 0xbd, 0x82, 2, _tilemaps_data_54 },
 	{ 0xcd, 0x82, 3, _tilemaps_data_54 },
 	{ 0xcc, 0x82, 4, _tilemaps_data_54 },
