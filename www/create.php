@@ -160,6 +160,7 @@ $spritesLUT = [];
 $idCounter = 0;
 $defines = [];
 
+addSpriteSheet('walk_noswitch');
 addSpriteSheet('Walk');
 addSpriteSheet('Swim');
 addSpriteSheet('Mix_Water');
