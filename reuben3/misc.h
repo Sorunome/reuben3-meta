@@ -27,4 +27,6 @@ void searchquestPerson();
 void outro();
 void credits();
 
+void map();
+
 #endif // _MISC_H_

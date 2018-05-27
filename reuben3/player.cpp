@@ -148,6 +148,7 @@ void Player::init(uint8_t _slot) {
 	swimming = false;
 	won = false;
 	
+	board.setMapTilemap(TILEMAP_37);
 	board.load(WORLD_OVERWORLD, TILEMAP_37);
 	board.postload();
 	focus();
@@ -181,6 +182,7 @@ void Player::save() {
 	
 	s.world = board.getWorldId();
 	s.tilemap = board.getMapId();
+	s.map_tilemap = board.getMapTilemap();
 	
 	gb.save.set(slot*2, 1);
 	gb.save.set(slot*2 + 1, s);
@@ -222,6 +224,7 @@ void Player::load() {
 	dead = false;
 	won = false;
 	
+	board.setMapTilemap(s.map_tilemap);
 	board.load(s.world, s.tilemap);
 	board.postload();
 	focus();
@@ -358,6 +361,12 @@ bool Player::isWalkable(float dx, float dy) {
 	return tile < after_walkable;
 }
 
+void Player::checkMap() {
+	if (gb.buttons.repeat(BUTTON_A, 0) && gb.buttons.repeat(BUTTON_B, 0)) {
+		map();
+	}
+}
+
 void Player::item() {
 	if (!gb.buttons.released(BUTTON_B)) {
 		return;
@@ -466,6 +475,7 @@ void Player::update() {
 	if (!_dx && !_dy) {
 		// nothing to do
 		fx_cycle = 0;
+		checkMap();
 		interact();
 		item();
 		return;
@@ -584,6 +594,7 @@ void Player::update() {
 	focus();
 	
 	// now let's check for actions
+	checkMap();
 	interact();
 	item();
 }

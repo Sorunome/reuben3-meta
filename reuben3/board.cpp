@@ -70,6 +70,9 @@ void Board::load(uint8_t _map) {
 }
 
 void Board::load() {
+	if (worldId == WORLD_OVERWORLD) {
+		setMapTilemap(mapId);
+	}
 	uint8_t i = 0;
 	uint8_t header;
 	while(1) {
@@ -444,6 +447,14 @@ int8_t Board::interact(uint8_t x, uint8_t y) {
 		default:
 			return runScript(x, y, SCRIPT_ACTION);
 	}
+}
+
+void Board::setMapTilemap(uint8_t m) {
+	mapTilemap = m;
+}
+
+uint8_t Board::getMapTilemap() {
+	return mapTilemap;
 }
 
 

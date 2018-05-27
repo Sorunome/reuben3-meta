@@ -45,6 +45,7 @@ class Board {
 		uint8_t areaId;
 		const Tilemaps_Data* map;
 		bool haveEnemies;
+		uint8_t mapTilemap;
 		uint16_t getDefaultTile();
 	public:
 		bool getHaveEnemies();
@@ -73,6 +74,9 @@ class Board {
 		void drawTile(int8_t x, int8_t y, uint16_t tile);
 		int8_t interact(uint8_t x, uint8_t y);
 		int8_t runScript(uint8_t x, uint8_t y, uint8_t trigger);
+		
+		void setMapTilemap(uint8_t m);
+		uint8_t getMapTilemap();
 };
 
 extern Board board;

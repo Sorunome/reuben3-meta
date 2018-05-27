@@ -49,6 +49,8 @@ struct SaveData {
 	
 	uint8_t world;
 	uint8_t tilemap;
+	
+	uint8_t map_tilemap;
 };
 
 class Player {
@@ -63,6 +65,7 @@ class Player {
 		uint8_t events[(TOTAL_EVENTS + 7) / 8];
 		Bottle bottles[4];
 		Direction direction;
+		void checkMap();
 		void item();
 		void interact();
 		bool visible;

@@ -818,8 +818,8 @@ void Battle::load(uint8_t _i) {
 	}
 	
 	
-	p.curwait = p.wait;
-	e.curwait = e.wait;
+	p.curwait = random(p.wait);
+	e.curwait = random(e.wait);
 	
 	aP_depack(EnemySprites[i], decompression_buffer);
 	enemyImage.init(decompression_buffer);
@@ -830,6 +830,7 @@ void Battle::load(uint8_t _i) {
 }
 
 bool Battle::fight(uint8_t _i, bool _maru) {
+	return true;
 	if (_i == 0xFF) {
 		return true;
 	}
