@@ -1,3 +1,4 @@
+#include <RTCZero.h>
 #include "player.h"
 #include "camera.h"
 #include "board.h"
@@ -8,6 +9,8 @@
 #include "area.h"
 
 #include "data/area_enemies.h"
+
+extern RTCZero rtc;
 
 const uint8_t reuben_sprite_data[] = {
 	8, 9,
@@ -148,6 +151,8 @@ void Player::init(uint8_t _slot) {
 	swimming = false;
 	won = false;
 	
+	rtc.setY2kEpoch(0);
+	
 	board.setMapTilemap(TILEMAP_37);
 	board.load(WORLD_OVERWORLD, TILEMAP_37);
 	board.postload();
@@ -183,6 +188,8 @@ void Player::save() {
 	s.world = board.getWorldId();
 	s.tilemap = board.getMapId();
 	s.map_tilemap = board.getMapTilemap();
+	
+	s.time_played = rtc.getY2kEpoch();
 	
 	gb.save.set(slot*2, 1);
 	gb.save.set(slot*2 + 1, s);
@@ -223,6 +230,8 @@ void Player::load() {
 	
 	dead = false;
 	won = false;
+	
+	rtc.setY2kEpoch(s.time_played);
 	
 	board.setMapTilemap(s.map_tilemap);
 	board.load(s.world, s.tilemap);

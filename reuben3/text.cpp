@@ -4,6 +4,9 @@
 #include "player.h"
 #include "data/defines.h"
 #include <Gamebuino-Meta.h>
+#include <RTCZero.h>
+
+extern RTCZero rtc;
 
 struct Strings_MasterLUT {
 	const Gamebuino_Meta::LangCode langCode;
@@ -86,6 +89,32 @@ textloop_entry:
 			return 2;
 		case 0x81: // page wrap
 			return 3;
+		case 0x01: // time
+		{
+			uint32_t t = rtc.getY2kEpoch();
+			uint8_t s = t % 60;
+			t /= 60;
+			uint8_t m = t % 60;
+			uint16_t h = t / 60;
+			char buf[16];
+			snprintf(buf, 16, "%02d:%02d:%02d", h, m, s);
+			char* buff = buf;
+			while(*buff) {
+				gb.display.write(*buff);
+				if (audio) {
+					gb.sound.fx(sfx_textplop);
+				}
+				if (gb.buttons.repeat(BUTTON_A, 0) || gb.buttons.repeat(BUTTON_B, 0)) {
+					if (textSkip = !textSkip) {
+						waitCycles(1);
+					}
+				} else {
+					waitCycles(2);
+				}
+				buff++;
+			}
+			goto textloop_entry;
+		}
 		case 0x82: // question
 			hasOptions = true;
 			gb.display.write(' ');

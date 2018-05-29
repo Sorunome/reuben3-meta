@@ -1,4 +1,5 @@
 #include <Gamebuino-Meta.h>
+#include <RTCZero.h>
 #include "player.h"
 #include "data/defines.h"
 #include "stats.h"
@@ -6,6 +7,7 @@
 #include "text.h"
 #include "menu.h"
 
+RTCZero rtc;
 uint8_t decompression_buffer[max(2048, ENEMY_SPRITES_MAX_SIZE)]; // 2048 > 12*8*2*8 = 1536
 
 const SaveDefault savefileDefaults[] = {
@@ -22,6 +24,8 @@ void setup() {
 	gb.save.config(savefileDefaults);
 
 	text.init();
+	
+	rtc.begin();
 //	SerialUSB.begin(115200);
 }
 

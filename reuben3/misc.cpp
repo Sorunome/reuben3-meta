@@ -1,3 +1,4 @@
+#include <RTCZero.h>
 #include "misc.h"
 
 #include "board.h"
@@ -11,12 +12,25 @@
 #include <Gamebuino-Meta.h>
 #include <utility/Misc.h> // pixel to rgb converters
 
+extern RTCZero rtc;
+
+uint32_t epoch_bak = 0;
+
 void waitCycles(uint8_t num) {
 	for (uint8_t i = 0; i < num; i++) {
 		while(!gb.update());
 		ambient.update();
+		if (gb.buttons.released(BUTTON_HOME)) {
+			epoch_bak = rtc.getY2kEpoch(); // pause RTC during home menu
+		}
 	}
 }
+
+namespace Gamebuino_Meta {
+void Hook_ExitHomeMenu() {
+	rtc.setY2kEpoch(epoch_bak); // reset RTC after home menu
+}
+};
 
 bool waitCyclesButton(uint8_t num) {
 	for (uint8_t i = 0; i < num; i++) {

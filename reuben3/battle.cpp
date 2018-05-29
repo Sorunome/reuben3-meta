@@ -117,11 +117,24 @@ const Gamebuino_Meta::Sound_FX sfx_magic_jump[] = {
 	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,147,0,-10,67,4},
 };
 
+const Gamebuino_Meta::Sound_FX sfx_sword[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,70,36,34,64,7},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,90,-5,-24,32,7},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,90,12,-23,80,17},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,70,59,-58,128,17},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,147,24,-58,64,32},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,147,-9,-2,48,7},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,100,58,-60,142,17},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,55,4,-94,189,5},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,147,15,27,32,30},
+};
+
 
 const uint8_t BATTLE_REUBEN_POS_X = 80 - 16 - 5;
 const uint8_t BATTLE_REUBEN_POS_Y = 64 - 16 - 9;
 
 void Battle::playerAttackAnimation() {
+	gb.sound.fx(sfx_sword);
 	Image reuben_swords(reuben_swords_data);
 	reuben_swords.setFrame(0);
 	gb.display.drawImage(BATTLE_REUBEN_POS_X - 8, BATTLE_REUBEN_POS_Y + 4, reuben_swords);
@@ -424,6 +437,7 @@ void Battle::enemyNormalAttack() {
 	sprintf(text, "%d", damage);
 	
 	Image swoosh(swoosh_buffer);
+	gb.sound.fx(sfx_sword);
 	
 	for (int8_t i = 8; i >= 0; i -= 2) {
 		for (uint8_t j = 0; j < i; j += 2) {
@@ -830,7 +844,6 @@ void Battle::load(uint8_t _i) {
 }
 
 bool Battle::fight(uint8_t _i, bool _maru) {
-	return true;
 	if (_i == 0xFF) {
 		return true;
 	}

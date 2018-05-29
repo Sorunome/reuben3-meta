@@ -51,6 +51,8 @@ struct SaveData {
 	uint8_t tilemap;
 	
 	uint8_t map_tilemap;
+	
+	uint32_t time_played;
 };
 
 class Player {
