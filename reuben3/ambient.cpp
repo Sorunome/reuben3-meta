@@ -62,7 +62,14 @@ void Ambient::update() {
 }
 
 void Ambient::setGotoColor() {
-	int8_t offset = random(maxRandom);
+	uint8_t minDistance = maxRandom / 3;
+	int8_t offset;
+	uint8_t tries = 0;
+	do {
+		offset = random(maxRandom);
+		tries++;
+	} while(tries < 5 && abs(offset - lastRandom) < minDistance);
+	lastRandom = offset;
 	for (uint8_t i = 0; i < 3; i++) {
 		int8_t o = (offset * base_c[i] / 0xFF);
 		if (o > base_c[i]) {

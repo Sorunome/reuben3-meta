@@ -15,7 +15,6 @@ class Text {
 		uint16_t i;
 		bool hasOptions;
 		uint8_t* textCursor;
-		void writeChar(char c, bool audio);
 	public:
 		void init();
 		void load(uint16_t i);

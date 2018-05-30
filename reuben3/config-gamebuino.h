@@ -1,3 +1,4 @@
 #define FOLDER_NAME "reuben3"
 #define LANGUAGE_DEFAULT_SIZE 3
+#define SOUND_CHANNELS 2
 #define SOUND_BUFFERSIZE (2048 + 64)

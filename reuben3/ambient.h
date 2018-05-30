@@ -18,6 +18,7 @@ class Ambient {
 		void flowColor();
 		bool output;
 	public:
+		int8_t lastRandom;
 		void on();
 		void off();
 		void update();
