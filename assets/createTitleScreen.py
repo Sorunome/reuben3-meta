@@ -3,17 +3,26 @@ from PIL import Image
 import sys, struct, subprocess
 
 IN = "fita.bmp"
+LOGO = "title.png"
 WIDTH = 80
 HEIGHT = 64
+LOGO_X = 2
+LOGO_Y = 11
 OUT = "fita.raw"
 
 im = Image.open(IN)
-pix = im.load()
+logo = Image.open(LOGO)
 print("Size:", im.size)
 
 frames = int(im.size[1] / HEIGHT)
 
 print("Frames:", frames)
+
+for fr in range(frames):
+	im.paste(logo, (LOGO_X, LOGO_Y + fr*HEIGHT), logo)
+
+
+pix = im.load()
 
 pix_colors = []
 
@@ -24,7 +33,7 @@ for fr in range(frames):
 			if not p in pix_colors:
 				pix_colors.append(p)
 print("Colors:", pix_colors)
-if len(pix_colors) > 3:
+if len(pix_colors) > 5:
 	print("Too many colors")
 	sys.exit(-1)
 
@@ -45,7 +54,7 @@ with open(OUT, 'wb+') as f:
 		
 		for y in range(HEIGHT):
 			for x in range(WIDTH):
-				p = [0xD, 1, 0][pix_colors.index(pix[x, y + fr*HEIGHT])]
+				p = [0xD, 1, 0, 0xF, 5][pix_colors.index(pix[x, y + fr*HEIGHT])]
 				if x%2:
 					byte |= p
 					byteArray.append(byte)
