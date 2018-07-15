@@ -11,6 +11,8 @@ const char* tracks[] = {
 	"songs/battle.wav",            // 6
 	"songs/theme.wav",             // 7
 	"songs/mountains.wav",         // 8
+	"songs/mountain_village.wav",  // 9
+	"songs/dungeon_old.wav",       //10
 };
 
 const uint8_t areaLUT[] = {
@@ -26,14 +28,14 @@ const uint8_t areaLUT[] = {
 	   3, // fragile caves
 	   3, // gnah lake
 	0xFF, // caves
-	0xFF, // cliff break
+	   9, // cliff break
 	   4, // ugana plain
 	   3, // antique castle
 	   5, // desert
 	   4, // ugana plain
 	   3, // castle present
 	   3, // castle present
-	   3, // castle past
+	  10, // castle past
 	
 	   6, // battle
 	   7, // theme

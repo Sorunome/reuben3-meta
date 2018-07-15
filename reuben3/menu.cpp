@@ -55,9 +55,9 @@ void menuAskDeleteSlot(File& f, uint8_t slot, Image& cursorImg) {
 			return;
 		}
 		
-		gb.display.setColor(BLACK, WHITE);
-		gb.display.setCursor(0, 0);
-		gb.display.print(gb.getCpuLoad());
+//		gb.display.setColor(BLACK, WHITE);
+//		gb.display.setCursor(0, 0);
+//		gb.display.print(gb.getCpuLoad());
 	}
 }
 
@@ -115,9 +115,9 @@ bool menuPickSaveSlot(File& f, Image& cursorImg) {
 			menuLoadSlots(haveSlot, slot);
 		}
 		
-		gb.display.setColor(BLACK, WHITE);
-		gb.display.setCursor(0, 0);
-		gb.display.print(gb.getCpuLoad());
+//		gb.display.setColor(BLACK, WHITE);
+//		gb.display.setCursor(0, 0);
+//		gb.display.print(gb.getCpuLoad());
 	}
 	return false;
 }
@@ -227,9 +227,9 @@ void mainMenu() {
 			}
 		}
 		
-		gb.display.setColor(BLACK, WHITE);
-		gb.display.setCursor(0, 0);
-		gb.display.print(gb.getCpuLoad());
+//		gb.display.setColor(BLACK, WHITE);
+//		gb.display.setCursor(0, 0);
+//		gb.display.print(gb.getCpuLoad());
 	}
 	f.close();
 	gb.display.init(80, 64, ColorMode::rgb565);
