@@ -24,9 +24,13 @@ void battleInstructions();
 void increaseSpeedArena();
 void searchquestPerson();
 
+void intro();
+
 void outro();
 void credits();
 
 void map();
+
+void raft(uint16_t frames);
 
 #endif // _MISC_H_
