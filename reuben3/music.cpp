@@ -13,6 +13,7 @@ const char* tracks[] = {
 	"songs/mountains.wav",         // 8
 	"songs/mountain_village.wav",  // 9
 	"songs/dungeon_old.wav",       //10
+	"songs/caves.wav",             //11
 };
 
 const uint8_t areaLUT[] = {
@@ -27,7 +28,7 @@ const uint8_t areaLUT[] = {
 	   3, // eastern peaks
 	   3, // fragile caves
 	   3, // gnah lake
-	0xFF, // caves
+	  11, // caves
 	   9, // cliff break
 	   4, // ugana plain
 	   3, // antique castle
