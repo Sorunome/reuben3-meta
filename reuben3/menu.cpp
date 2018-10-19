@@ -106,6 +106,9 @@ bool menuPickSaveSlot(File& f, Image& cursorImg) {
 		
 		if (gb.buttons.pressed(BUTTON_A)) {
 			player.init(cursor);
+			if (!haveSlot[cursor]) {
+				intro();
+			}
 			player.load();
 			return true;
 		}
