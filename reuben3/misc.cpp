@@ -10,6 +10,7 @@
 #include "ambient.h"
 #include "script.h"
 #include "area.h"
+#include "music.h"
 #include <Gamebuino-Meta.h>
 #include <utility/Misc.h> // pixel to rgb converters
 
@@ -937,7 +938,62 @@ void searchquestPerson() {
 void intro() {
 	gb.display.init(80, 64, ColorMode::rgb565);
 	area.go(area_rain);
-	raft(200, true);
+	music.play("assets/rain.wav");
+	raft(137, true);
+	for (uint8_t i = 0; i < 6; i++) {
+		gb.display.fill(WHITE);
+		gb.lights.fill(BLACK);
+		waitCycles(1);
+		gb.display.fill(BLACK);
+		gb.lights.fill(WHITE);
+		waitCycles(1);
+	}
+	gb.lights.fill(BLACK);
+	waitCycles(2);
+	
+	// omnimaga presents
+	static const uint8_t cursorXStart = (80 - 16*4) / 2;
+	gb.display.setColor(WHITE);
+	gb.display.setCursor(cursorXStart, (64 - 6*6)/2);
+	text.load(STRING_INTRO_OMNIMAGA_PRESENTS);
+	while (int8_t res = text.progress(false)) {
+		if (res == 1) {
+			gb.display.write('\n');
+			gb.display.setCursorX(cursorXStart);
+		} else if (res == 3) {
+			waitCycles(1);
+			gb.display.write('\n');
+			gb.display.setCursorX(cursorXStart + 4*4);
+		}
+	}
+	waitCycles(10);
+	
+	// load board and fade to it
+	board.load(WORLD_OVERWORLD, TILEMAP_37);
+	board.postload();
+	board.setTile(6, 5, SPRITE_1);
+	board.setTile(7, 3, SPRITE_11);
+	area.go(0);
+	fade_from_black();
+	waitCycles(5);
+	
+	// say stuff
+	text.box(STRING_INTRO_FIND_REUBEN);
+	renderAll();
+	waitCycles(5);
+	
+	// walk home
+	for (uint8_t i = 0; i < 16; i++) {
+		board.drawTile(7*8, 3*8+i, SPRITE_1);
+		board.drawTile(7*8, 3*8+1+i, SPRITE_11);
+		waitCycles(1);
+	}
+	for (uint8_t i = 0; i < 8; i++) {
+		board.drawTile(7*8-i, 5*8, SPRITE_1);
+		board.drawTile(7*8-1-i, 5*8, SPRITE_11);
+		waitCycles(1);
+	}
+	waitCycles(5);
 }
 
 

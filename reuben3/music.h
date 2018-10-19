@@ -11,6 +11,7 @@ class Music {
 	public:
 		void stop();
 		void playArea(uint8_t area);
+		void play(const char* s);
 };
 
 extern Music music;

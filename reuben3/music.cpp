@@ -68,4 +68,10 @@ void Music::playArea(uint8_t area) {
 	playSong(t);
 }
 
+void Music::play(const char* s) {
+	curSong = 0xFF;
+	gb.sound.stop(trackId);
+	trackId = gb.sound.play(s);
+}
+
 Music music;
