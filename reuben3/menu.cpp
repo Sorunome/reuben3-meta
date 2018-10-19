@@ -18,7 +18,7 @@ const uint8_t cursor_data[] = {
 	0xFF, 0xF5,
 };
 
-void menuDrawBg(File& f)  {
+void menuDrawBg(File& f) {
 	if (f.peek() == -1) {
 		f.rewind();
 	}
@@ -27,6 +27,10 @@ void menuDrawBg(File& f)  {
 	f.read(&size, 2);
 	f.read(&(gb.display._buffer[dispOffset]), size);
 	aP_depack(&(gb.display._buffer[dispOffset]), gb.display._buffer);
+}
+
+void menuDrawBg(const File& f) {
+	menuDrawBg((File)f);
 }
 
 void menuAskDeleteSlot(File& f, uint8_t slot, Image& cursorImg) {
@@ -105,6 +109,11 @@ bool menuPickSaveSlot(File& f, Image& cursorImg) {
 		}
 		
 		if (gb.buttons.pressed(BUTTON_A)) {
+			/*auto lambda = ;
+			fade_to_black([](File& f){
+				menuDrawBg(f);
+			});
+			*/
 			player.init(cursor);
 			if (!haveSlot[cursor]) {
 				intro();

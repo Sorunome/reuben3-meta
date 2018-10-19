@@ -18,6 +18,7 @@ void fade_to_white();
 void fade_from_white();
 
 void fade_to_black();
+void fade_to_black(void (*r)(void));
 void fade_from_black();
 
 void battleInstructions();
@@ -31,6 +32,6 @@ void credits();
 
 void map();
 
-void raft(uint16_t frames);
+void raft(uint16_t frames, bool rain);
 
 #endif // _MISC_H_
