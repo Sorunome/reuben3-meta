@@ -7,9 +7,9 @@ void Area::go(uint8_t a) {
 	ambient.setArea(a);
 }
 
-const uint8_t area_battle = 20;
-const uint8_t area_theme = 21;
-const uint8_t area_portal = 22;
-const uint8_t area_rain = 23;
+const uint8_t area_battle = 22;
+const uint8_t area_theme = 23;
+const uint8_t area_portal = 24;
+const uint8_t area_rain = 25;
 
 Area area;

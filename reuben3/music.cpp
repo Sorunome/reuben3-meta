@@ -37,6 +37,8 @@ const uint8_t areaLUT[] = {
 	   3, // castle present
 	   3, // castle present
 	  10, // castle past
+	   2, // aerilon castle entrance
+	   4, // gnah lake overground
 	
 	   6, // battle
 	   7, // theme

@@ -59,6 +59,8 @@ const uint8_t areaStringsLUT[] = {
 	13,
 	13,
 	14,
+	5,
+	8,
 };
 
 const MultiLang* weaponStrings[] = {
