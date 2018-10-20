@@ -585,6 +585,8 @@ void Player::update() {
 		return;
 	}
 	
+	battle.fight(ENEMY_CAMEL);
+	
 	if (battle_counter <= 0) {
 		// time to fight!
 		setBattleCounter();

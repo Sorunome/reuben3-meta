@@ -130,6 +130,12 @@ const Gamebuino_Meta::Sound_FX sfx_sword[] = {
 	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,147,15,27,32,30},
 };
 
+const Gamebuino_Meta::Sound_FX sfx_fire[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,147,0,32,32,4},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,147,0,-32,16,4},
+};
+
+
 
 const uint8_t BATTLE_REUBEN_POS_X = 80 - 16 - 5;
 const uint8_t BATTLE_REUBEN_POS_Y = 64 - 16 - 9;
@@ -196,6 +202,9 @@ void Battle::playerBlink() {
 void Battle::fireAnimation(uint8_t x, uint8_t y) {
 	Image fire(battle_explosion_data);
 	for (uint8_t i = 0; i < 10; i++) {
+		if (!(i%2)) {
+			gb.sound.fx(sfx_fire);
+		}
 		for (uint8_t y = 0; y < 4; y++) {
 			for (uint8_t x = 0; x < 2; x++) {
 				gb.lights.drawPixel(x, y, (x+y+i)%2 ? RED : ORANGE);
