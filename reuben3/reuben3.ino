@@ -41,6 +41,7 @@ void gameLoop() {
 		renderAll();
 	}
 	if (player.isDead()) {
+		player.saveTimeOnly();
 		gb.display.clear();
 		gb.display.println("Game Over");
 		gb.display.println("Press A");
@@ -52,6 +53,7 @@ void gameLoop() {
 		}
 	}
 	if (player.hasWon()) {
+		player.saveTimeOnly();
 		gb.display.clear();
 		gb.display.println("Finished Game!!!");
 		gb.display.println("Press A");

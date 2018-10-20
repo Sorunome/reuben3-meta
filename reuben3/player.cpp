@@ -243,6 +243,13 @@ void Player::load() {
 	area.go(board.getAreaId());
 }
 
+void Player::saveTimeOnly() {
+	uint32_t time_played_bak = rtc.getY2kEpoch();
+	load();
+	rtc.setY2kEpoch(time_played_bak);
+	save();
+}
+
 void Player::setBattleCounter() {
 	battle_counter = random(180) + 80 - 4;
 }

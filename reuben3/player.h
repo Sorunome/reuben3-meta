@@ -123,6 +123,7 @@ class Player {
 		void init(uint8_t _slot);
 		void save();
 		void load();
+		void saveTimeOnly();
 		void hide();
 		void show();
 		void moveTo(int8_t _x, int8_t _y);
