@@ -74,6 +74,13 @@ const Gamebuino_Meta::Sound_FX sfx_badchest[] = {
 	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,147,0,0,567,10},
 };
 
+const Gamebuino_Meta::Sound_FX sfx_screenshake[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,45,0,0,96,5},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,0,0,0,0,2},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,1,45,0,0,112,5},
+	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,0,0,0,0,2},
+};
+
 struct Script_Sfx {
 	const Gamebuino_Meta::Sound_FX* sfx;
 	const uint16_t delay;
@@ -275,6 +282,7 @@ bool Script::run(uint8_t* _script, uint8_t _trigger, bool _isHome) {
 				continue;
 			}
 			case SCRIPT_SHAKE_SCREEN:
+				gb.sound.fx(sfx_screenshake);
 				for (uint8_t i = 0; i < 2; i++) {
 					for (uint8_t j = 0; j < 4; j++) {
 						waitCycles(1);
