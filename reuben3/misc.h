@@ -32,6 +32,6 @@ void credits();
 
 void map();
 
-void raft(uint16_t frames, bool rain);
+void raft();
 
 #endif // _MISC_H_

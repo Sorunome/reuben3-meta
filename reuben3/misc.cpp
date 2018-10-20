@@ -936,20 +936,7 @@ void searchquestPerson() {
 
 
 void intro() {
-	gb.display.init(80, 64, ColorMode::rgb565);
-	area.go(area_rain);
-	music.play("assets/rain.wav");
-	raft(137, true);
-	for (uint8_t i = 0; i < 6; i++) {
-		gb.display.fill(WHITE);
-		gb.lights.fill(BLACK);
-		waitCycles(1);
-		gb.display.fill(BLACK);
-		gb.lights.fill(WHITE);
-		waitCycles(1);
-	}
-	gb.lights.fill(BLACK);
-	waitCycles(2);
+	raft();
 	
 	// omnimaga presents
 	static const uint8_t cursorXStart = (80 - 16*4) / 2;
@@ -1013,6 +1000,8 @@ void outro() {
 		}
 	}
 	waitCycles(30);
+	raft();
+	credits();
 	
 	player.win();
 }
@@ -1093,11 +1082,14 @@ const uint8_t raindrop_data[] = {
 	0b11000000,
 };
 
-void raft(uint16_t frames, bool rain) {
+void raft() {
+	gb.display.init(80, 64, ColorMode::rgb565);
+	area.go(area_rain);
+	music.play("assets/rain.wav");
+	uint16_t frames = 137;
 	Color palette[16];
-	if (rain) {
-		gb.display.setPalette(palette);
-	}
+	gb.display.setPalette(palette);
+	
 	static const uint8_t steps = 20;
 	uint8_t i = 0;
 	
@@ -1106,23 +1098,22 @@ void raft(uint16_t frames, bool rain) {
 	Image raft(reuben_raft_tall_data);
 	float loop = 0;
 	while(frames--) {
-		if (rain) {
-			Color palette[16];
-			gb.display.setPalette(palette);
-			
-			if (i < 10) {
-				for (uint8_t j = 0; j < 16; j++) {
-					uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
-					Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
-					rgb.r = rgb.r*i / steps;
-					rgb.g = rgb.g*i / steps;
-					rgb.b = rgb.b*i / steps;
-					c = Gamebuino_Meta::rgb888Torgb565(rgb);
-					palette[j] = (Color)c;
-				}
-				i++;
+		Color palette[16];
+		gb.display.setPalette(palette);
+		
+		if (i < 10) {
+			for (uint8_t j = 0; j < 16; j++) {
+				uint16_t c = (uint16_t)Gamebuino_Meta::defaultColorPalette[j];
+				Gamebuino_Meta::RGB888 rgb = Gamebuino_Meta::rgb565Torgb888(c);
+				rgb.r = rgb.r*i / steps;
+				rgb.g = rgb.g*i / steps;
+				rgb.b = rgb.b*i / steps;
+				c = Gamebuino_Meta::rgb888Torgb565(rgb);
+				palette[j] = (Color)c;
 			}
+			i++;
 		}
+		
 		waitCycles(1);
 		gb.display.drawImage(0, round(8*(sin(loop)-1)), raft);
 		
@@ -1131,15 +1122,13 @@ void raft(uint16_t frames, bool rain) {
 			loop -= (3.1415926f*2);
 		}
 		
-		if (rain) {
-			gb.display.setColor(WHITE);
-			for (uint8_t i = 0; i < 10; i++) {
-				gb.display.drawBitmap(random(0, 80), random(0, 64), raindrop_data);
-			}
-			
-			if (!thunder && !(gb.frameCount % 30)) {
-				thunder = 8;
-			}
+		gb.display.setColor(WHITE);
+		for (uint8_t i = 0; i < 10; i++) {
+			gb.display.drawBitmap(random(0, 80), random(0, 64), raindrop_data);
+		}
+		
+		if (!thunder && !(gb.frameCount % 30)) {
+			thunder = 8;
 		}
 		
 		if (thunder) {
@@ -1156,10 +1145,19 @@ void raft(uint16_t frames, bool rain) {
 		}
 	}
 	
-	if (rain) {
+	gb.lights.fill(BLACK);
+	gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
+	
+	for (uint8_t i = 0; i < 6; i++) {
+		gb.display.fill(WHITE);
 		gb.lights.fill(BLACK);
-		gb.display.setPalette(Gamebuino_Meta::defaultColorPalette);
+		waitCycles(1);
+		gb.display.fill(BLACK);
+		gb.lights.fill(WHITE);
+		waitCycles(1);
 	}
+	gb.lights.fill(BLACK);
+	waitCycles(2);
 }
 
 /*

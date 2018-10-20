@@ -1,5 +1,6 @@
 #include <Gamebuino-Meta.h>
 #include <RTCZero.h>
+#include "area.h"
 #include "player.h"
 #include "data/defines.h"
 #include "stats.h"
@@ -42,6 +43,7 @@ void gameLoop() {
 	}
 	if (player.isDead()) {
 		player.saveTimeOnly();
+		area.go(area_theme);
 		gb.display.clear();
 		gb.display.println("Game Over");
 		gb.display.println("Press A");
@@ -54,6 +56,7 @@ void gameLoop() {
 	}
 	if (player.hasWon()) {
 		player.saveTimeOnly();
+		area.go(area_theme);
 		gb.display.clear();
 		gb.display.println("Finished Game!!!");
 		gb.display.println("Press A");
