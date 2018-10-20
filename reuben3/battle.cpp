@@ -135,6 +135,13 @@ const Gamebuino_Meta::Sound_FX sfx_fire[] = {
 	{Gamebuino_Meta::Sound_FX_Wave::NOISE,0,147,0,-32,16,4},
 };
 
+const Gamebuino_Meta::Sound_FX sfx_ice[] = {
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,147,0,0,24,4},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,0,0,0,50,6},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,147,0,0,24,4},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,1,0,0,0,50,1},
+	{Gamebuino_Meta::Sound_FX_Wave::SQUARE,0,147,0,13,24,15},
+};
 
 
 const uint8_t BATTLE_REUBEN_POS_X = 80 - 16 - 5;
@@ -225,6 +232,9 @@ void Battle::boltAnimation(uint8_t x, uint8_t y) {
 	uint8_t yyy = 0;
 	render();
 	for (uint8_t i = 0; i < 20; i++) {
+		if (!(i%2)) {
+			gb.sound.fx(sfx_fire);
+		}
 		gb.display.clear(WHITE);
 		gb.lights.fill(WHITE);
 		waitCycles(1);
@@ -246,6 +256,7 @@ void Battle::iceAnimation() {
 	Image ice(battle_ice_data);
 	uint8_t j_end = 1;
 	gb.lights.fill(LIGHTBLUE);
+	gb.sound.fx(sfx_ice);
 	for (uint8_t i = 0; i < 20; i++) {
 		gb.display.clear(LIGHTBLUE);
 		waitCycles(1);
@@ -904,6 +915,9 @@ bool Battle::fight(uint8_t _i, bool _maru) {
 	
 	if (reply == Battle_Done::win) {
 		bool leveldUp = false;
+		
+		aP_depack(EnemySprites[i], decompression_buffer);
+		enemyImage.init(decompression_buffer);
 		
 		if (!maru) {
 			player.addGold(random(3));
