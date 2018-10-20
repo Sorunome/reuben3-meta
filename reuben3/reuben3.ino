@@ -41,31 +41,9 @@ void gameLoop() {
 		
 		renderAll();
 	}
-	if (player.isDead()) {
+	if (player.isDead() || player.hasWon()) {
 		player.saveTimeOnly();
 		area.go(area_theme);
-		gb.display.clear();
-		gb.display.println("Game Over");
-		gb.display.println("Press A");
-		while(1) {
-			while(!gb.update());
-			if (gb.buttons.pressed(BUTTON_A)) {
-				break;
-			}
-		}
-	}
-	if (player.hasWon()) {
-		player.saveTimeOnly();
-		area.go(area_theme);
-		gb.display.clear();
-		gb.display.println("Finished Game!!!");
-		gb.display.println("Press A");
-		while(1) {
-			while(!gb.update());
-			if (gb.buttons.pressed(BUTTON_A)) {
-				break;
-			}
-		}
 	}
 }
 
