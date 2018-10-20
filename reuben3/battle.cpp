@@ -545,9 +545,9 @@ void Battle::render(bool render_reuben, bool render_enemy, int8_t y_offset) {
 		}
 	}
 	
-//	gb.display.setCursor(0, 0);
-//	gb.display.setColor(BLACK, WHITE);
-//	gb.display.print(gb.getCpuLoad());
+	gb.display.setCursor(0, 0);
+	gb.display.setColor(BLACK, WHITE);
+	gb.display.print(gb.getCpuLoad());
 }
 
 void Battle::renderBar() {
@@ -836,7 +836,33 @@ void Battle::load(uint8_t _i) {
 	e.curwait = random(e.wait);
 	
 	aP_depack(EnemySprites[i], decompression_buffer);
+	memcpy((uint8_t*)gb.display._buffer, (const uint8_t*)decompression_buffer, max(2048, ENEMY_SPRITES_MAX_SIZE));
 	enemyImage.init(decompression_buffer);
+	// render the background onto the enemy sprite so that we can drop transparency
+	for (uint8_t y = 2; y < 8;) {
+		for (uint8_t x = 0; x < 10;) {
+			sprites.setFrame(background_look->sprites[0]);
+			enemyImage.drawImage(x*8 - enemies[i].xpos, y*8 - enemies[i].ypos, sprites);
+			x++;
+			sprites.setFrame(background_look->sprites[1]);
+			enemyImage.drawImage(x*8 - enemies[i].xpos, y*8 - enemies[i].ypos, sprites);
+			x++;
+		}
+		y++;
+		for (uint8_t x = 0; x < 10;) {
+			sprites.setFrame(background_look->sprites[2]);
+			enemyImage.drawImage(x*8 - enemies[i].xpos, y*8 - enemies[i].ypos, sprites);
+			x++;
+			sprites.setFrame(background_look->sprites[3]);
+			enemyImage.drawImage(x*8 - enemies[i].xpos, y*8 - enemies[i].ypos, sprites);
+			x++;
+		}
+		y++;
+	}
+	enemy_backgrounds_image.init((const uint8_t*)gb.display._buffer);
+	enemyImage.drawImage(0, 0, enemy_backgrounds_image);
+	enemy_backgrounds_image.init(enemy_backgrounds_data);
+	enemyImage.clearTransparentColor();
 	
 	if (!(e.slots[4] & 0x0F)) {
 		area.go(area_battle);
