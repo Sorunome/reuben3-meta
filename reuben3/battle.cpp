@@ -834,7 +834,6 @@ void Battle::load(uint8_t _i) {
 	e.stuncounter = 0;
 	
 	background_look = &(enemy_background_looks[enemy_backgrounds[board.getAreaId()]]);
-	enemy_backgrounds_image.setFrame(background_look->frame_id);
 	
 	// time to check for dynamic lvl / exp / wait
 	if (e.lvl > 200)  {
@@ -884,6 +883,8 @@ void Battle::load(uint8_t _i) {
 	enemyImage.drawImage(0, 0, enemy_backgrounds_image);
 	enemy_backgrounds_image.init(enemy_backgrounds_data);
 	enemyImage.clearTransparentColor();
+	
+	enemy_backgrounds_image.setFrame(background_look->frame_id);
 	
 	if (!(e.slots[4] & 0x0F)) {
 		area.go(area_battle);
