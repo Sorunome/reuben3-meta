@@ -10,6 +10,7 @@
 #include "text.h"
 #include "misc.h"
 #include "area.h"
+#include "music.h"
 
 #include "data/defines.h"
 #include "data/maps.h"
@@ -157,13 +158,14 @@ void Board::transitionPortal(uint8_t portal_x, uint8_t portal_y, uint8_t _world,
 	}
 	area.go(area_portal);
 	gb.display.init("assets/time.gmv");
+	music.play("assets/time.wav");
 	for (uint8_t i = 0; i < gb.display.frames; i++) {
 		waitCycles(1);
 		gb.display.nextFrame();
 		
-		gb.display.setColor(BLACK, WHITE);
-		gb.display.setCursor(0, 0);
-		gb.display.print(gb.getCpuLoad());
+//		gb.display.setColor(BLACK, WHITE);
+//		gb.display.setCursor(0, 0);
+//		gb.display.print(gb.getCpuLoad());
 	}
 	gb.display.init(80, 64, ColorMode::rgb565);
 	load(_world, _map);

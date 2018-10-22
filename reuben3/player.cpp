@@ -519,6 +519,10 @@ void Player::update() {
 	}
 	float dx = _dx*v;
 	float dy = _dy*v;
+	if (gb.metaMode.isActive()) {
+		dx = -dx;
+		dy = -dy;
+	}
 	
 	int8_t oldtile_x = (x + 2) / 8;
 	int8_t oldtile_y = (y + 4) / 8;
