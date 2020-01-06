@@ -70,7 +70,7 @@ const MultiLang lang_battle_magic_bolt[] = {
 const MultiLang lang_battle_magic_stun[] = {
 	{LANG_EN, "Stun"},
 	{LANG_DE, "Lähmen"},
-	{LANG_FR, "Assome"},
+	{LANG_FR, "Bloque"},
 };
 
 // main menu stuff
